@@ -1,0 +1,18 @@
+.playerdashboard {
+    display: flex;
+    min-height: 100vh;
+    background: #f5f7fb;
+ }
+
+ .main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+ }
+
+ .content {
+    flex: 1;
+    padding: 16px;
+    min-width: 0;
+ }

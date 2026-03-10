@@ -1,0 +1,13 @@
+ <div class="playerdashboard">
+      <app-pl-sidebar
+        [collapsed]="collapsed()"
+        (toggle)="toggleSidebar()"
+      />
+      <div class="main">
+        <app-pl-header (menu)="toggleSidebar()" />
+        <main class="content">
+          <router-outlet />
+        </main>
+        <app-pl-footer />
+      </div>
+    </div>

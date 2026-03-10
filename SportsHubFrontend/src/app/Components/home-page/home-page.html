@@ -1,0 +1,382 @@
+<!-- ================= MODERN NAVBAR ================= -->
+<nav class="custom-navbar sticky-top">
+  <div class="container d-flex justify-content-between align-items-center">
+    <a class="brand" routerLink="/">
+      <img src="assets/image/SportsHub.png" alt="Logo">
+      <span class="brand-text">Sports<span>Hub</span></span>
+    </a>
+
+    <div class="nav-links d-none d-lg-flex">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+      <div class="dropdown-wrapper">
+        <a class="drop-trigger" routerLink="/all-tournaments">Tournaments <i class="bi bi-chevron-down"></i></a>
+        <div class="custom-dropdown">
+          <a routerLink="/teams">Teams</a>
+        </div>
+      </div>
+      <a routerLink="/live-matches" class="live-link">Live Matches</a>
+      <a (click)="scrollToContact()" class="clickable">Contact</a>
+    </div>
+
+    <div class="auth-buttons">
+      <button class="btn-login" routerLink="/login">Login</button>
+      <button class="btn-primary-custom" routerLink="/register">Get Started</button>
+      <button class="menu-toggle d-lg-none" (click)="toggleMobileMenu()">
+        <i class="bi bi-list"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Menu (Overlay) -->
+<div class="mobile-menu-overlay" [class.open]="isMenuOpen">
+  <div class="mobile-menu-content">
+    <button class="close-btn" (click)="toggleMobileMenu()"><i class="bi bi-x-lg"></i></button>
+    <a routerLink="/" (click)="toggleMobileMenu()">Home</a>
+    <a routerLink="/all-tournaments" (click)="toggleMobileMenu()">Tournaments</a>
+    <a routerLink="/teams" (click)="toggleMobileMenu()">Teams</a>
+    <a routerLink="/live-matches" (click)="toggleMobileMenu()">Live Matches</a>
+    <a (click)="scrollToContact(); toggleMobileMenu()">Contact</a>
+  </div>
+</div>
+
+<ng-container *ngIf="!getCurrentUrl()">
+  <div class="sub-page-container">
+    <router-outlet></router-outlet>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="getCurrentUrl()">
+  <!-- ================= LUXURY HERO ================= -->
+  <section class="hero-section">
+    <div class="hero-bg-accent"></div>
+    <div class="container">
+      <div class="hero-content animate-fade-in">
+        <span class="badge-premium mb-3">#1 Tournament Platform</span>
+        <h1 class="hero-title">
+          The Future of <br>
+          <span class="text-gradient">Tournament Management</span>
+        </h1>
+        <p class="hero-subtitle">
+          Experience real-time scores, professional scheduling, and comprehensive team management across all your
+          favorite sports in one elite platform.
+        </p>
+        <div class="hero-actions">
+          <button class="btn-primary-custom btn-hero" (click)="goToTournaments()">
+            Explore Tournaments <i class="bi bi-arrow-right-short"></i>
+          </button>
+          <button class="btn-secondary-custom" routerLink="/live-matches">
+            <span class="pulse-dot"></span> View Live
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LIVE MATCHES AREA ================= -->
+  <section class="matches-section container py-5">
+    <div class="section-heading mb-4 d-flex justify-content-between align-items-end">
+      <div>
+        <h6 class="text-primary text-uppercase fw-bold mb-2">Live Action</h6>
+        <h2 class="fw-bold m-0">In-Play Now</h2>
+      </div>
+      <a routerLink="/live-matches" class="view-all">See All Matches <i class="bi bi-chevron-right"></i></a>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6" *ngFor="let m of runningMatches">
+        <div class="match-card glass-card">
+          <div class="match-card-header">
+            <span class="live-badge"><span class="dot pulse"></span> LIVE</span>
+            <span class="tournament-tag">{{ m.tournamentName ?? m.TournamentName }}</span>
+          </div>
+
+          <div class="match-card-body">
+            <!-- Toss Info -->
+            <div class="toss-info mb-2 text-center small text-muted italic" *ngIf="m.tossWinnerName">
+              <i class="bi bi-coin"></i> {{ m.tossWinnerName }} won toss & opted to {{ m.tossChoice }}
+            </div>
+
+            <div class="team-vs">
+              <div class="team">
+                <div class="logo-wrapper">
+                  <img [src]="'https://localhost:7142'+m.teamALogo" alt="Team A"
+                    onerror="this.src='assets/image/SportsHub.png'">
+                </div>
+                <span class="team-name">{{ m.teamAName }}</span>
+              </div>
+              <div class="vs-divider">VS</div>
+              <div class="team">
+                <div class="logo-wrapper">
+                  <img [src]="'https://localhost:7142'+m.teamBLogo" alt="Team B"
+                    onerror="this.src='assets/image/SportsHub.png'">
+                </div>
+                <span class="team-name">{{ m.teamBName }}</span>
+              </div>
+            </div>
+
+            <div class="score-summary" *ngIf="m.matchStatus !== 'Finished'">
+              <div
+                class="batting-status p-2 rounded-3 bg-primary-subtle text-primary border mb-2 d-flex justify-content-between align-items-center">
+                <span class="fw-bold"><i class="bi bi-megaphone-fill"></i> {{ m.battingTeamName }}</span>
+                <span class="badge bg-primary">{{ m.currentInnings }}st Innings</span>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="score display-6 fw-bold text-dark">{{ m.totalRun }}/{{ m.wicket }}</div>
+                <div class="overs-badge bg-dark text-white rounded-pill px-3 py-1">{{ m.overs }} ov</div>
+              </div>
+
+              <!-- Extra Stats -->
+              <div class="stats-row d-flex gap-3 mb-3 small fw-semibold">
+                <div class="stat-pill" *ngIf="m.target">Target: <span class="text-primary">{{ m.target }}</span></div>
+                <div class="stat-pill">CRR: <span class="text-primary">{{ m.crr }}</span></div>
+                <div class="stat-pill" *ngIf="m.rrr">RRR: <span class="text-danger">{{ m.rrr }}</span></div>
+              </div>
+
+              <!-- High Performers Preview -->
+              <div class="performers-preview p-2 rounded bg-light border-top border-bottom">
+                <div class="performer d-flex justify-content-between align-items-center small mb-1"
+                  *ngIf="m.strikerStats">
+                  <span><i class="bi bi-lightning-fill text-warning"></i> {{ m.strikerStats.Name }}</span>
+                  <span class="fw-bold">{{ m.strikerStats.Runs }}({{ m.strikerStats.Balls }})</span>
+                </div>
+                <div class="performer d-flex justify-content-between align-items-center small"
+                  *ngIf="m.nonStrikerStats">
+                  <span class="text-muted"><i class="bi bi-dot"></i> {{ m.nonStrikerStats.Name }}</span>
+                  <span class="text-muted">{{ m.nonStrikerStats.Runs }}({{ m.nonStrikerStats.Balls }})</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="finished-status" *ngIf="m.matchStatus === 'Finished'">
+              <div class="winner-alert animated-border text-center py-3">
+                <div class="trophy-box mb-2">
+                  <i class="bi bi-trophy-fill text-warning display-4"></i>
+                </div>
+                <h5 class="fw-bold m-0">{{ m.winnerMessage }}</h5>
+                <div class="final-score text-muted mt-2">{{ m.totalRun }}/{{ m.wicket }} ({{ m.overs }} ov)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="match-card-footer mt-3">
+            <button class="btn-primary-custom w-100 py-2" (click)="viewLiveScore(m)">
+              <i class="bi" [class.bi-graph-up-arrow]="m.matchStatus !== 'Finished'"
+                [class.bi-file-earmark-text]="m.matchStatus === 'Finished'"></i>
+              {{ m.matchStatus === 'Finished' ? ' Full Match Summary' : ' Detailed Scorecard' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="col-12 text-center py-5" *ngIf="runningMatches.length === 0">
+        <div class="empty-matches p-5 border rounded-4 bg-light">
+          <i class="bi bi-calendar-x opacity-25 display-1"></i>
+          <h4 class="mt-3 fw-bold text-dark">No Live Battles Today</h4>
+          <p class="text-muted">Currently, there are no matches in progress. <br> Why not check the upcoming schedule?
+          </p>
+          <button class="btn btn-primary rounded-pill mt-2" (click)="goToTournaments()">View Upcoming</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ACTIVE TOURNAMENTS ================= -->
+  <section class="tournaments-section bg-dark-alt py-5">
+    <div class="container">
+      <div class="section-heading mb-5 text-center">
+        <h6 class="text-primary text-uppercase fw-bold mb-2">Competition Hub</h6>
+        <h2 class="display-6 fw-bold">Active Tournaments</h2>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-xl-3 col-lg-4 col-md-6" *ngFor="let g of gallery">
+          <div class="tournament-grid-card">
+            <div class="card-img-box">
+              <img [src]="'https://localhost:7142'+g.image" alt="Tournament"
+                onerror="this.src='assets/image/hero-cricket.jpg'">
+              <div class="status-overlay">
+                <span class="status-badge" [attr.data-status]="g.status">{{ g.status }}</span>
+              </div>
+            </div>
+            <div class="card-info">
+              <h3 class="tournament-title">{{ g.title }}</h3>
+              <div class="location-box">
+                <i class="bi bi-geo-alt"></i> {{ g.location }}
+              </div>
+              <div class="action-grid mt-3">
+                <button class="btn-details" (click)="viewTournament(g)">Overview</button>
+                <div class="sub-actions">
+                  <button class="icon-link" (click)="viewSchedule(g)" title="Schedule"><i
+                      class="bi bi-calendar3"></i></button>
+                  <button class="icon-link" (click)="viewPointsTable(g)" title="Points Table"><i
+                      class="bi bi-table"></i></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= SUPPORT INFO SECTION ================= -->
+  <section id="support-info" class="support-info-section py-5 bg-dark-alt"
+    *ngIf="activeSupportTab && activeSupportTab !== 'help'">
+    <div class="container animate-fade-in">
+      <div class="glass-card p-5 border-0 shadow-lg rounded-4 text-white">
+
+        <!-- Rules & FAQ -->
+        <div *ngIf="activeSupportTab === 'rules'">
+          <div class="d-flex align-items-center mb-4">
+            <div class="icon-circle me-3"><i class="bi bi-journal-text text-primary fs-3"></i></div>
+            <h2 class="fw-bold m-0">Rules & FAQ</h2>
+          </div>
+          <div class="support-content ps-2 border-start border-primary border-3">
+            <p class="mb-4"><strong>1. How do I join a tournament?</strong><br> <span class="text-muted">You can browse
+                active tournaments from
+                the "Explore Tournaments" button. Once you find a tournament you like, click overview and follow the
+                registration steps if you are a team owner.</span></p>
+            <p class="mb-4"><strong>2. What are the scoring rules?</strong><br> <span class="text-muted">We follow
+                standard ICC-sanctioned
+                cricket rules for all our matches. Every match is updated in real-time by our professional
+                umpires.</span></p>
+            <p class="mb-0"><strong>3. Can I cancel my registration?</strong><br> <span class="text-muted">Cancellations
+                are allowed up to 48
+                hours before the registration deadline. Please contact our support for refund processing.</span></p>
+          </div>
+        </div>
+
+        <!-- Terms of Service -->
+        <div *ngIf="activeSupportTab === 'terms'">
+          <div class="d-flex align-items-center mb-4">
+            <div class="icon-circle me-3"><i class="bi bi-shield-check text-primary fs-3"></i></div>
+            <h2 class="fw-bold m-0">Terms of Service</h2>
+          </div>
+          <div class="support-content ps-2 border-start border-primary border-3">
+            <p class="mb-4"><span class="text-muted">Welcome to SportsHub. By using our platform, you agree to comply
+                with and be bound by the
+                following terms and conditions. Our platform is designed to provide professional tournament hosting
+                services.</span></p>
+            <p class="mb-4"><span class="text-muted">Users must provide accurate information during registration. Any
+                fraudulent activity or
+                harassment of other players will result in immediate permanent account suspension.</span></p>
+            <p class="mb-0"><span class="text-muted">Payments for tournament fees are processed securely. SportsHub does
+                not store your full
+                credit card information.</span></p>
+          </div>
+        </div>
+
+        <!-- Privacy Policy -->
+        <div *ngIf="activeSupportTab === 'privacy'">
+          <div class="d-flex align-items-center mb-4">
+            <div class="icon-circle me-3"><i class="bi bi-lock text-primary fs-3"></i></div>
+            <h2 class="fw-bold m-0">Privacy Policy</h2>
+          </div>
+          <div class="support-content ps-2 border-start border-primary border-3">
+            <p class="mb-4"><span class="text-muted">Your privacy is important to us. We only collect data that is
+                necessary for the operation of
+                the tournaments, such as your name, phone number, and team details.</span></p>
+            <p class="mb-4"><span class="text-muted">We do not share your personal data with third-party advertisers.
+                Your information is used
+                strictly to enhance your experience on SportsHub and to contact you regarding your matches.</span></p>
+            <p class="mb-0"><span class="text-muted">You have the right to request deletion of your account and
+                associated data at any time by
+                contacting our help center.</span></p>
+          </div>
+        </div>
+
+        <div class="text-end mt-4">
+          <button class="btn btn-primary rounded-pill px-4 py-2 fw-bold" (click)="activeSupportTab = ''">
+            <i class="bi bi-check2-circle me-2"></i> Got it
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT AREA ================= -->
+  <section id="contact-area" class="contact-section py-5" *ngIf="showContactForm">
+    <div class="container animate-fade-in">
+      <div class="section-heading mb-5 text-center">
+        <h6 class="text-primary text-uppercase fw-bold mb-2">Get In Touch</h6>
+        <h2 class="display-6 fw-bold">Contact Our Support Team</h2>
+        <p class="text-muted">Have questions? We're here to help you succeed.</p>
+      </div>
+
+      <div class="position-relative">
+        <button class="btn-close-contact" (click)="showContactForm = false" title="Close">
+          <i class="bi bi-x-lg"></i>
+        </button>
+        <app-contact-us></app-contact-us>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LUXURY FOOTER ================= -->
+  <footer class="modern-footer">
+    <div class="container">
+      <div class="footer-top row g-4">
+        <div class="col-md-4">
+          <div class="footer-brand mb-3">
+            <span class="brand-text">Sports<span>Hub</span></span>
+          </div>
+          <p class="footer-desc">
+            Redefining sports management through technology. Live scores, professional networking, and tournament
+            logistics seamlessly combined.
+          </p>
+          <div class="footer-social">
+            <a href="https://facebook.com/sportshub" target="_blank"><i class="bi bi-facebook"></i></a>
+            <a href="https://twitter.com/sportshub" target="_blank"><i class="bi bi-twitter-x"></i></a>
+            <a href="https://instagram.com/sportshub" target="_blank"><i class="bi bi-instagram"></i></a>
+            <a href="https://youtube.com/sportshub" target="_blank"><i class="bi bi-youtube"></i></a>
+          </div>
+        </div>
+
+        <div class="col-md-2 col-6">
+          <h5 class="footer-title">Platform</h5>
+          <ul>
+            <li><a routerLink="/all-tournaments">Tournaments</a></li>
+            <li><a routerLink="/teams">Teams</a></li>
+            <li><a routerLink="/live-matches">Live Matches</a></li>
+            <li><a routerLink="/register">Register Team</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-2 col-6">
+          <h5 class="footer-title">Support</h5>
+          <ul>
+            <li><a (click)="showSupportInfo('help')" class="clickable text-muted">Help Center</a></li>
+            <li><a (click)="showSupportInfo('rules')" class="clickable text-muted">Rules & FAQ</a></li>
+            <li><a (click)="showSupportInfo('terms')" class="clickable text-muted">Terms of Service</a></li>
+            <li><a (click)="showSupportInfo('privacy')" class="clickable text-muted">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-4">
+          <h5 class="footer-title">Contact Office</h5>
+          <div class="contact-list">
+            <div class="contact-item">
+              <i class="bi bi-envelope"></i>
+              <span>tshakib25@gmail.com</span>
+            </div>
+            <div class="contact-item">
+              <i class="bi bi-telephone"></i>
+              <span>+880 1610 595016</span>
+            </div>
+            <div class="contact-item">
+              <i class="bi bi-geo-alt"></i>
+              <span>IUBAT, Uttara, Dhaka, Bangladesh</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; {{ year }} SportsHub. All Rights Reserved. Crafted for Champions.</p>
+      </div>
+    </div>
+  </footer>
+</ng-container>

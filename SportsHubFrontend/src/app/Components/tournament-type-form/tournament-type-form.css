@@ -1,0 +1,44 @@
+.form-group {
+  margin-bottom: 16px;
+  max-width: 400px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.form-actions {
+  margin-top: 20px;
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  background-color: #016edc;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #2c6fff;
+  cursor: pointer;
+}
+
+.btn-cancel {
+  margin-left: 10px;
+  background-color: #777;
+}

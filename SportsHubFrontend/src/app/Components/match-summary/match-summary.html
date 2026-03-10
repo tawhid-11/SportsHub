@@ -1,0 +1,40 @@
+<div class="summary-container" *ngIf="summary">
+  <div class="card shadow-lg p-4">
+    <div class="header text-center mb-4">
+      <h1 class="display-5 fw-bold text-primary">Match Summary</h1>
+      <div class="winner-badge p-3 bg-success text-white rounded shadow-sm" *ngIf="summary.winnerMessage">
+        <h2 class="mb-0">{{ summary.winnerMessage }}</h2>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <!-- 1st Innings -->
+      <div class="col-md-6">
+        <div class="innings-card p-3 border rounded bg-light">
+          <h3 class="h5 border-bottom pb-2">{{ summary.innings1TeamName }}</h3>
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <span class="fs-4 fw-bold">{{ summary.innings1.totalRuns }} - {{ summary.innings1.wickets }}</span>
+            <span class="text-muted">({{ summary.innings1.overs }} ov)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2nd Innings -->
+      <div class="col-md-6">
+        <div class="innings-card p-3 border rounded bg-light">
+          <h3 class="h5 border-bottom pb-2">{{ summary.innings2TeamName }}</h3>
+          <div class="d-flex justify-content-between align-items-center mt-3">
+            <span class="fs-4 fw-bold">{{ summary.innings2.totalRuns }} - {{ summary.innings2.wickets }}</span>
+            <span class="text-muted">({{ summary.innings2.overs }} ov)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-5">
+      <button class="btn btn-outline-primary btn-lg px-5" (click)="goBack()">
+        <i class="bi bi-arrow-left me-2"></i> Back to Matches
+      </button>
+    </div>
+  </div>
+</div>

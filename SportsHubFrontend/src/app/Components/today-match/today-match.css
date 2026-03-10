@@ -1,0 +1,28 @@
+/* src/app/components/today-matches/today-matches.component.css */
+
+/* Skeleton Loader */
+.skeleton {
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  height: 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-line {
+  height: 15px;
+  width: 50%;
+  background-color: #ddd;
+  margin: 8px 0;
+  border-radius: 5px;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-line.w-75 {
+  width: 75%;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}

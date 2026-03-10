@@ -1,0 +1,56 @@
+<div class="container-fluid mt-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">Players List</h4>
+  </div>
+
+  <!-- Table -->
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-bordered table-hover table-striped align-middle mb-0">
+      <thead class="table-dark text-center">
+        <tr>
+          <th>Team Name</th>
+          <th>Player Image</th>
+          <th>Full Name</th>
+          <th>Nick Name</th>
+          <th>Nationality</th>
+          <th>Date of Birth</th>
+          <th>Player Role</th>
+          <th>Batting Style</th>
+          <th>Bowling Style</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of players">
+          <td>{{ item.TeamName || '-' }}</td>
+          <td class="text-center">
+            <img *ngIf="item.PlayerImage" [src]="item.PlayerImage" alt="Player Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+            <span *ngIf="!item.PlayerImage" class="text-muted">-</span>
+          </td>
+          <td>{{ item.FullName }}</td>
+          <td>{{ item.NickName || '-' }}</td>
+          <td>{{ item.Nationality || '-' }}</td>
+          <td class="text-center">{{ item.DateOfBirth | date:'dd-MMM-yyyy' }}</td>
+          <td>{{ item.RoleName || '-' }}</td>
+          <td>{{ item.BattingStyle || '-' }}</td>
+          <td>{{ item.BowlingStyle || '-' }}</td>
+          <td class="text-center">
+            <span class="badge bg-success" *ngIf="item.IsActive">Active</span>
+            <span class="badge bg-secondary" *ngIf="!item.IsActive">Inactive</span>
+          </td>
+        </tr>
+
+        <!-- No Data -->
+        <tr *ngIf="players.length === 0">
+          <td colspan="10" class="text-center text-muted py-4">
+            No players available
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

@@ -1,0 +1,34 @@
+<h2>Create Tournament Type</h2>
+
+<form #tForm="ngForm" (ngSubmit)="onSubmit(tForm)">
+
+  <div class="form-group">
+    <label for="name">Tournament Type Name</label>
+
+    <input
+      id="name"
+      type="text"
+      name="name"
+      [(ngModel)]="model.name"
+      required
+      #name="ngModel"
+      placeholder="Enter tournament name"
+    />
+
+    <small class="error" *ngIf="name.invalid && name.touched">
+      Name is required
+    </small>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" [disabled]="tForm.invalid">
+      Save
+    </button>
+
+
+    <button type="button" class="btn-cancel" (click)="onCancel(tForm)">
+      Cancel
+    </button>
+  </div>
+
+</form>

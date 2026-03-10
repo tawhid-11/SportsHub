@@ -1,0 +1,352 @@
+<div *ngIf="matchStep === 1" class="card">
+
+  <h3>Toss won by?</h3>
+  <label>
+    <input type="radio" [(ngModel)]="tossWonBy" name="toss" [value]="teamSchedule?.TeamAID"> {{ teamSchedule?.TeamAName
+    }}
+  </label>
+  <label>
+    <input type="radio" [(ngModel)]="tossWonBy" name="toss" [value]="teamSchedule?.TeamBID"> {{ teamSchedule?.TeamBName
+    }}
+  </label>
+
+  <h3>Opted to?</h3>
+  <label>
+    <input type="radio" [(ngModel)]="optedTo" name="opted" value="Bat"> Bat
+  </label>
+  <label>
+    <input type="radio" [(ngModel)]="optedTo" name="opted" value="Bowl"> Bowl
+  </label>
+
+  <h3>Overs</h3>
+  <input type="number" [(ngModel)]="overs">
+  <h3>Umpire</h3>
+  <input type="text" [(ngModel)]="umpire">
+  <h3>Venue Name</h3>
+  <input type="text" [(ngModel)]="venueName">
+  <button class="btn" (click)="startMatchSetup()">Start Match</button>
+
+</div>
+
+<div *ngIf="matchStep === 2" class="card">
+
+  <h2>Select Opening Players</h2>
+
+  <label>Striker</label>
+  <select [(ngModel)]="striker" name="striker" class="form-control">
+    <option value="">-- Select Striker --</option>
+    <option *ngFor="let p of strickerPlayers" [value]="p.PlayerID">
+      {{ p.FullName }} - {{ p.RoleName }}
+    </option>
+  </select>
+
+  <label>Non-Striker</label>
+  <select [(ngModel)]="nonStriker" name="nonStriker" class="form-control">
+    <option value="">-- Select Non-Striker --</option>
+    <option *ngFor="let p of getNonStriker()" [value]="p.PlayerID" [disabled]="p.PlayerID === striker">
+      {{ p.FullName }} - {{ p.RoleName }}
+    </option>
+  </select>
+
+
+  <label>Opening Bowler</label>
+  <select [(ngModel)]="bowler" name="bowler" class="form-control">
+    <option value="">-- Select Bowler --</option>
+    <option *ngFor="let p of BowlerStrickerPlayers" [value]="p.PlayerID">
+      {{ p.FullName }} - {{ p.RoleName }}
+    </option>
+  </select>
+
+  <button class="btn" (click)="startInnings()">Start Match</button>
+
+</div>
+
+<!-- STEP 3: ACTIVE MATCH WITH TABS -->
+<div *ngIf="matchStep === 3">
+
+  <!-- Tab Navigation -->
+  <div class="tabs-container mb-3">
+    <div class="tab" [class.active]="activeTab === 'info'" (click)="switchTab('info')">INFO</div>
+    <div class="tab" [class.active]="activeTab === 'live'" (click)="switchTab('live')">LIVE</div>
+    <div class="tab" [class.active]="activeTab === 'scorecard'" (click)="switchTab('scorecard')">SCORECARD</div>
+    <div class="tab" [class.active]="activeTab === 'squads'" (click)="switchTab('squads')">SQUADS</div>
+  </div>
+
+  <div class="tab-content">
+
+    <!-- ================= LIVE TAB: SCORING CONTROLS ================= -->
+    <div *ngIf="activeTab === 'live'" class="card scoring animate-fade-in">
+      <h3>{{ getBattingTeamName() }}, {{ cricketMatch?.CurrentInnings === 2 ? '2nd' : '1st' }} Innings</h3>
+      <h1>{{currentScore.runs}} - {{currentScore.wickets}} <small>({{currentScore.overs}})</small></h1>
+
+      <div *ngIf="currentScore.target" class="mt-2 text-center">
+        <div class="h4 text-danger fw-bold border-top border-bottom py-2">
+          TARGET: {{ currentScore.target }}
+        </div>
+        <div class="text-secondary fw-bold mt-2" *ngIf="currentScore.target > currentScore.runs">
+          Need {{ currentScore.target - currentScore.runs }} runs from {{ getRemainingBalls() }} balls
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center gap-4 mt-3">
+        <p class="text-muted">CRR: <strong>{{ currentScore.crr }}</strong></p>
+        <p class="text-primary" *ngIf="cricketMatch?.CurrentInnings === 2">RRR: <strong>{{ currentScore.rrr }}</strong>
+        </p>
+      </div>
+
+      <table class="table-stats mt-3">
+        <thead>
+          <tr class="striker-row">
+            <th>Batter</th>
+            <th>Role</th>
+            <th>R</th>
+            <th>B</th>
+            <th>4s</th>
+            <th>6s</th>
+            <th>SR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="getPlayer(striker) as p" class="striker-row">
+            <td class="player-cell">
+              <img [src]="'https://localhost:7142' + p.PlayerImage" class="player-img"
+                onerror="this.src='assets/default-player.png'">
+              {{ p.FullName }}
+            </td>
+            <td><span class="badge bg-danger">STRIKER</span></td>
+            <td>{{ currentScore.StrikerStats?.Runs }}</td>
+            <td>{{ currentScore.StrikerStats?.Balls }}</td>
+            <td>{{ currentScore.StrikerStats?.Fours }}</td>
+            <td>{{ currentScore.StrikerStats?.Sixes }}</td>
+            <td>{{ currentScore.StrikerStats?.StrikeRate }}</td>
+          </tr>
+          <tr *ngIf="getPlayer(nonStriker) as p">
+            <td class="player-cell">
+              <img [src]="'https://localhost:7142' + p.PlayerImage" class="player-img"
+                onerror="this.src='assets/default-player.png'">
+              {{ p.FullName }}
+            </td>
+            <td><span class="badge bg-secondary">NON-STRIKER</span></td>
+            <td>{{ currentScore.NonStrikerStats?.Runs }}</td>
+            <td>{{ currentScore.NonStrikerStats?.Balls }}</td>
+            <td>{{ currentScore.NonStrikerStats?.Fours }}</td>
+            <td>{{ currentScore.NonStrikerStats?.Sixes }}</td>
+            <td>{{ currentScore.NonStrikerStats?.StrikeRate }}</td>
+          </tr>
+        </tbody>
+        <thead>
+          <tr>
+            <th>Bowler</th>
+            <th>O</th>
+            <th>M</th>
+            <th>R</th>
+            <th>W</th>
+            <th>ER</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="getBowler(bowler) as b">
+            <td class="player-cell">
+              <img [src]="'https://localhost:7142' + b.PlayerImage" class="player-img"
+                onerror="this.src='assets/default-player.png'">
+              {{ b.FullName }}
+            </td>
+            <td>{{ currentScore.BowlerStats?.Overs }}</td>
+            <td>{{ currentScore.BowlerStats?.Maidens }}</td>
+            <td>{{ currentScore.BowlerStats?.Runs }}</td>
+            <td class="fw-bold">{{ currentScore.BowlerStats?.Wickets }}</td>
+            <td>{{ currentScore.BowlerStats?.Economy }}</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4 class="mt-4">Scoring Controls</h4>
+
+      <div class="extras-panel">
+        <label class="extra-item">
+          <input type="checkbox" [(ngModel)]="extras.wide" (change)="onExtraChange('wide')"> Wide
+        </label>
+        <label class="extra-item">
+          <input type="checkbox" [(ngModel)]="extras.noBall" (change)="onExtraChange('noBall')"> No Ball
+        </label>
+        <label class="extra-item">
+          <input type="checkbox" [(ngModel)]="extras.byes" (change)="onExtraChange('byes')"> Byes
+        </label>
+        <label class="extra-item danger">
+          <input type="checkbox" [(ngModel)]="extras.wicket" (change)="onExtraChange('wicket')"> Wicket
+        </label>
+      </div>
+
+      <div *ngIf="showPlayerOutDropdown" class="wicket-panel mt-3">
+        <div class="row">
+          <div class="col-md-4">
+            <label>Player Out</label>
+            <select class="form-control" [(ngModel)]="selectedOutBatsman">
+              <option [ngValue]="null" disabled selected>Select Player Out</option>
+              <option [value]="striker">{{ getPlayer(striker)?.FullName }}</option>
+              <option [value]="nonStriker">{{ getPlayer(nonStriker)?.FullName }}</option>
+            </select>
+          </div>
+          <div class="col-md-4" *ngIf="selectedOutBatsman">
+            <label>Wicket Type</label>
+            <select class="form-control" [(ngModel)]="selectedWicketType">
+              <option [ngValue]="null">Select Wicket Type</option>
+              <option *ngFor="let type of wicketTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
+          <div class="col-md-4" *ngIf="selectedWicketType">
+            <label>New Batsman</label>
+            <select class="form-control" [(ngModel)]="selectedNewBatsman">
+              <option [ngValue]="null">Select New Batsman</option>
+              <option *ngFor="let p of getNewBatsMan()" [value]="p.PlayerID">{{ p.FullName }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="runs-container mt-4">
+        <button class="run-btn" *ngFor="let r of [0,1,2,3,4,5,6]" (click)="scoreBall(r)"
+          [disabled]="showNewBowlerSelection">
+          {{ r }}
+        </button>
+      </div>
+
+      <!-- Bowler Selection Modal -->
+      <div *ngIf="showNewBowlerSelection" class="modal-overlay">
+        <div class="modal-card">
+          <h3>End of Over!</h3>
+          <p class="text-muted">Select bowler for the next over</p>
+          <select #newBowlerSelect class="form-control mb-3">
+            <option value="">-- Select Bowler --</option>
+            <option *ngFor="let p of getAvailableBowlers()" [value]="p.PlayerID">{{ p.FullName }}</option>
+          </select>
+          <button class="btn btn-primary w-100" (click)="selectNewBowler(newBowlerSelect.value)">Start Next
+            Over</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= SCORECARD TAB ================= -->
+    <div *ngIf="activeTab === 'scorecard'" class="card animate-fade-in">
+      <div *ngIf="fullScorecard">
+        <div *ngFor="let inn of [fullScorecard.innings1, fullScorecard.innings2]; let i = index"
+          class="scorecard-section mb-4">
+          <div
+            class="innings-header d-flex justify-content-between align-items-center p-2 bg-light border-start border-4 border-primary">
+            <span class="fw-bold">{{ inn.teamName }}</span>
+            <span class="text-primary fw-bold">{{ inn.totalRuns }}-{{ inn.wickets }} ({{ inn.overs }})</span>
+          </div>
+          <table class="table table-sm mt-2">
+            <thead>
+              <tr>
+                <th>Batter</th>
+                <th class="text-center">R</th>
+                <th class="text-center">B</th>
+                <th class="text-center">4s</th>
+                <th class="text-center">6s</th>
+                <th class="text-center">SR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let b of inn.batting">
+                <td>
+                  <div class="fw-bold">{{ b.playerName }}</div>
+                  <div class="small text-muted">{{ b.dismissal }}</div>
+                </td>
+                <td class="text-center fw-bold">{{ b.runs }}</td>
+                <td class="text-center">{{ b.balls }}</td>
+                <td class="text-center">{{ b.fours }}</td>
+                <td class="text-center">{{ b.sixes }}</td>
+                <td class="text-center">{{ b.strikeRate }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <table class="table table-sm mt-3">
+            <thead>
+              <tr>
+                <th>Bowler</th>
+                <th class="text-center">O</th>
+                <th class="text-center">M</th>
+                <th class="text-center">R</th>
+                <th class="text-center">W</th>
+                <th class="text-center">ER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let bw of inn.bowling">
+                <td>{{ bw.playerName }}</td>
+                <td class="text-center">{{ bw.overs }}</td>
+                <td class="text-center">{{ bw.maidens }}</td>
+                <td class="text-center">{{ bw.runs }}</td>
+                <td class="text-center fw-bold">{{ bw.wickets }}</td>
+                <td class="text-center">{{ bw.economy }}</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="mt-2 p-2 border-top small" *ngIf="inn.fallOfWickets.length > 0">
+            <strong>Fall of Wickets: </strong>
+            <span class="text-muted" *ngFor="let f of inn.fallOfWickets; let last = last">
+              {{ f.runs }}-{{ f.wicketNumber }} ({{ f.playerName }}, {{ f.over }} ov){{ last ? '' : ', ' }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!fullScorecard" class="text-center p-4">Loading scorecard...</div>
+    </div>
+
+    <!-- ================= SQUADS TAB ================= -->
+    <div *ngIf="activeTab === 'squads'" class="card animate-fade-in">
+      <div *ngIf="squads" class="row">
+        <div class="col-md-6 border-end">
+          <h5 class="text-primary border-bottom pb-2">{{ squads.teamAName }}</h5>
+          <div *ngFor="let p of squads.teamAPlayers" class="d-flex align-items-center gap-3 py-2 border-bottom">
+            <img [src]="'https://localhost:7142' + p.playerImage" class="rounded-circle shadow-sm"
+              style="width: 40px; height: 40px; object-fit: cover;" onerror="this.src='assets/default-player.png'">
+            <div>
+              <div class="fw-bold">{{ p.fullName }}</div>
+              <div class="small text-muted">{{ p.roleName }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <h5 class="text-primary border-bottom pb-2">{{ squads.teamBName }}</h5>
+          <div *ngFor="let p of squads.teamBPlayers" class="d-flex align-items-center gap-3 py-2 border-bottom">
+            <img [src]="'https://localhost:7142' + p.playerImage" class="rounded-circle shadow-sm"
+              style="width: 40px; height: 40px; object-fit: cover;" onerror="this.src='assets/default-player.png'">
+            <div>
+              <div class="fw-bold">{{ p.fullName }}</div>
+              <div class="small text-muted">{{ p.roleName }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= INFO TAB ================= -->
+    <div *ngIf="activeTab === 'info'" class="card animate-fade-in">
+      <div class="row mb-3 pb-2 border-bottom">
+        <div class="col-4 text-muted">Venue</div>
+        <div class="col-8 fw-bold">{{ cricketMatch?.Venue || 'TBD' }}</div>
+      </div>
+      <div class="row mb-3 pb-2 border-bottom">
+        <div class="col-4 text-muted">Umpire</div>
+        <div class="col-8 fw-bold">{{ cricketMatch?.Umpire || 'TBD' }}</div>
+      </div>
+      <div class="row mb-3 pb-2 border-bottom">
+        <div class="col-4 text-muted">Toss</div>
+        <div class="col-8 fw-bold">{{ teamSchedule?.TeamAName }} won, opted to {{ cricketMatch?.TossChoice }}</div>
+      </div>
+      <div class="row">
+        <div class="col-4 text-muted">Match Status</div>
+        <div class="col-8">
+          <span class="badge" [ngClass]="cricketMatch?.MatchStatus === 'Live' ? 'bg-danger' : 'bg-success'">
+            {{ cricketMatch?.MatchStatus }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

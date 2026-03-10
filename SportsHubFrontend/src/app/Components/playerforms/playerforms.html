@@ -1,0 +1,127 @@
+<div class="container mt-4">
+  <div class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">{{ isEditMode ? 'Edit Player' : 'Add Player' }}</h5>
+    </div>
+
+    <div class="card-body">
+      <form #playerForm="ngForm" (ngSubmit)="onSubmit(playerForm)">
+
+        <div class="row g-3">
+
+          <!-- Team -->
+          <div class="col-md-6">
+            <label class="form-label">Team</label>
+            <input type="text" class="form-control" [value]="teams.TeamName" readonly>
+
+          </div>
+
+          <!-- Player Role -->
+          <div class="col-md-6">
+            <label class="form-label">Player Role</label>
+            <select class="form-select" name="PlayerRoleID" [(ngModel)]="model.PlayerRoleID" required>
+              <option value="">-- Select Role --</option>
+              <option *ngFor="let role of playerRoles" [value]="role.PlayerRoleID">
+                {{ role.RoleName }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Full Name -->
+          <div class="col-md-6">
+            <label class="form-label">Full Name</label>
+            <input type="text" name="FullName" class="form-control" [(ngModel)]="model.FullName" required>
+          </div>
+
+          <!-- Nickname -->
+          <div class="col-md-6">
+            <label class="form-label">Nick Name</label>
+            <input type="text" class="form-control" name="NickName" [(ngModel)]="model.NickName">
+          </div>
+
+          <!-- Nationality -->
+          <div class="col-md-6">
+            <label class="form-label">Nationality</label>
+            <input type="text" name="Nationality" class="form-control" [(ngModel)]="model.Nationality" required>
+          </div>
+
+          <!-- Phone Number -->
+          <div class="col-md-6" *ngIf="!isEditMode">
+            <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+            <input type="tel" name="Phone" class="form-control" [(ngModel)]="model.Phone" 
+                   placeholder="Enter phone number" required>
+            <small class="text-muted">This will be used for user registration</small>
+          </div>
+
+          <!-- Date of Birth -->
+          <div class="col-md-6">
+            <label class="form-label">Date of Birth</label>
+            <input type="date" class="form-control" name="DateOfBirth" [(ngModel)]="model.DateOfBirth" required>
+          </div>
+
+          <!-- Batting Style -->
+          <div class="col-md-6">
+            <label class="form-label">Batting Style</label>
+            <select class="form-select" name="BattingStyle" [(ngModel)]="model.BattingStyle">
+              <option value="" disabled selected hidden>-- Select --</option>
+              <option>Right Handed Batter</option>
+              <option>Left Handed Batter</option>
+            </select>
+          </div>
+
+          <!-- Bowling Style -->
+          <div class="col-md-6">
+            <label class="form-label">Bowling Style</label>
+            <select class="form-select" name="BowlingStyle" [(ngModel)]="model.BowlingStyle">
+              <option value="" disabled selected hidden>-- Select --</option>
+              <option>Left-Arm Fast Bowler</option>
+              <option>Left-Arm Medium Bowler</option>
+              <option>Right-Arm FastBowler</option>
+              <option>Right-Arm Medium Bowler</option>
+              <option>Off Spinner</option>
+              <option>Leg Spinner</option>
+              <option>Left-Arm Orthodox</option>
+              <option>Left-Arm ChinaMan</option>
+            </select>
+          </div>
+          <!-- Description -->
+          <div class="col-md-6">
+            <label class="form-label">Description</label>
+            <select class="form-select" name="Description" [(ngModel)]="model.Description" required>
+              <option value="" disabled selected hidden>-- Select Role --</option>
+              <option *ngFor="let des of Description" [value]="des.PlayerRoleID">
+                {{ des.Description }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Player Image -->
+          <div class="col-md-6">
+            <label class="form-label">Player Image</label>
+            <input type="file" class="form-control" (change)="onImageSelect($event)">
+            <img *ngIf="model.PlayerImageUrl" [src]="model.PlayerImageUrl" class="img-thumbnail mt-2"
+              style="max-width:150px; max-height:150px;">
+          </div>
+
+
+          <!-- Image Preview -->
+          <div class="col-md-6" *ngIf="model.PlayerImage">
+            <label class="form-label d-block">Preview</label>
+            <img [src]="model.PlayerImage" class="img-thumbnail player-img">
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="mt-4 text-end">
+          <button type="submit" class="btn btn-success" [disabled]="playerForm.invalid">
+            {{ isEditMode ? 'Update' : 'Save' }}
+          </button>
+          <button type="button" class="btn btn-secondary ms-2" (click)="onCancel()">
+            Cancel
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

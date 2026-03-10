@@ -1,0 +1,43 @@
+.player-img {
+  max-height: 120px;
+  border-radius: 6px;
+}
+
+.card {
+  border-radius: 12px;
+}
+
+.form-label {
+  font-weight: 600;
+}
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+.btn-secondary {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #5a6268;
+}
+.form-control {
+  border-radius: 6px;
+}
+.table th, .table td {
+  vertical-align: middle;
+}
+.table-hover tbody tr:hover {
+  background-color: #f1f1f1;
+}
+.table-bordered {
+  border: 1px solid #dee2e6;
+}
+.table-bordered th, .table-bordered td {
+  border: 1px solid #dee2e6;
+}

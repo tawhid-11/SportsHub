@@ -1,0 +1,58 @@
+<div class="container-fluid mt-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">Teams List</h4>
+  </div>
+
+  <!-- Table -->
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-bordered table-hover table-striped align-middle mb-0">
+      <thead class="table-dark text-center">
+        <tr>
+          <th>Team Name</th>
+          <th>Short Name</th>
+          <th>Team Logo</th>
+          <th>Owner Name</th>
+          <th>Owner Email</th>
+          <th>Owner Phone</th>
+          <th>Coach Name</th>
+          <th>Founded Year</th>
+          <th>Total Players</th>
+          <th>Tournament Name</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of teams">
+          <td>{{ item.TeamName }}</td>
+          <td>{{ item.ShortName }}</td>
+          <td class="text-center">
+            <img *ngIf="item.TeamLogo" [src]="'https://localhost:7142'+item.TeamLogo" alt="Team Logo" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+            <span *ngIf="!item.TeamLogo" class="text-muted">-</span>
+          </td>
+          <td>{{ item.TeamOwnerName }}</td>
+          <td>{{ item.TeamOwnerEmail }}</td>
+          <td>{{ item.TeamOwnerPhoneNumber }}</td>
+          <td>{{ item.CoachName }}</td>
+          <td class="text-center">{{ item.FoundedYear }}</td>
+          <td class="text-center">{{ item.TotalPlayers }}</td>
+          <td>{{ item.TournamentName || '-' }}</td>
+          <td class="text-center">
+            <span class="badge bg-success" *ngIf="item.IsActive">Active</span>
+            <span class="badge bg-secondary" *ngIf="!item.IsActive">Inactive</span>
+          </td>
+        </tr>
+
+        <!-- No Data -->
+        <tr *ngIf="teams.length === 0">
+          <td colspan="11" class="text-center text-muted py-4">
+            No teams available
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

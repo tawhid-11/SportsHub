@@ -1,0 +1,72 @@
+.squad-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h3 {
+  margin-top: 30px;
+  color: #4f46e5;
+}
+
+.squad-table {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.team-column {
+  flex: 1 1 45%;
+  background: #f0f4ff;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.team-column h4 {
+  text-align: center;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.team-column div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.team-column img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  margin-right: 10px;
+  object-fit: cover;
+}
+
+.player-name {
+  font-weight: 500;
+  margin-right: 5px;
+}
+
+.player-role {
+  font-size: 0.85rem;
+  color: #555;
+  margin-right: 5px;
+}
+
+.captain {
+  color: #4f46e5;
+  font-weight: bold;
+}
+
+.wk {
+  color: #f97316;
+  font-weight: bold;
+}

@@ -1,0 +1,51 @@
+<div class="squad-container">
+  <h2>{{ matchDetails?.TeamAName }}  vs {{ matchDetails?.TeamBName }} </h2>
+  
+  <!-- Playing XI Section -->
+  <h3>Squad</h3>
+  <div class="squad-table">
+    <div class="team-column">
+      <h4>{{ matchDetails?.TeamAName }}</h4>
+      <div *ngFor="let player of teamAPlayers">
+        <img [src]="'https://localhost:7142'+player.PlayerImage || 'assets/default-player.png'" alt="{{player.PlayerName}}">
+        <span class="player-name">{{ player.PlayerName }}</span>
+        <span class="player-role">{{ player.RoleName }}</span>
+        <!-- <span *ngIf="player.IsCaptain" class="captain">(c)</span>
+        <span *ngIf="player.IsWK" class="wk">(wk)</span> -->
+      </div>
+    </div>
+
+    <div class="team-column">
+      <h4>{{ matchDetails?.TeamBName }}</h4>
+      <div *ngFor="let player of teamBPlayers">
+        <img [src]="'https://localhost:7142'+player.PlayerImage || 'assets/default-player.png'" alt="{{player.PlayerName}}">
+        <span class="player-name">{{ player.PlayerName }}</span>
+        <span class="player-role">{{ player.RoleName }}</span>
+        <!-- <span *ngIf="player.IsCaptain" class="captain">(c)</span>
+        <span *ngIf="player.IsWK" class="wk">(wk)</span> -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Bench Section -->
+  <!-- <h3>Bench</h3>
+  <div class="squad-table">
+    <div class="team-column">
+      <h4>{{ matchDetails?.TeamAName }}</h4>
+      <div *ngFor="let player of teamAPlayers">
+        <img [src]="+'https://localhost:7142'+player.PlayerImage || 'assets/default-player.png'" alt="{{player.PlayerName}}">
+        <span class="player-name">{{ player.PlayerName }}</span>
+        <span class="player-role">{{ player.Role }}</span>
+      </div>
+    </div>
+
+    <div class="team-column">
+      <h4>{{ matchDetails?.TeamBName }}</h4>
+      <div *ngFor="let player of teamBPlayers">
+        <img [src]="'https://localhost:7142'+player.PlayerImage || 'assets/default-player.png'" alt="{{player.PlayerName}}">
+        <span class="player-name">{{ player.PlayerName }}</span>
+        <span class="player-role">{{ player.RoleName }}</span>
+      </div>
+    </div>
+  </div> -->
+</div>

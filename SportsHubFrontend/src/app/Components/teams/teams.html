@@ -1,0 +1,91 @@
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+
+      <div class="card shadow border-0">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0"> Team Registration</h4>
+        </div>
+
+        <div class="card-body">
+
+          <form [formGroup]="teamForm" (ngSubmit)="onSubmit()">
+
+            <!-- Team Name -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Team Name</label>
+              <input type="text" class="form-control" formControlName="TeamName">
+            </div>
+
+            <!-- Short Name -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Short Name</label>
+              <input type="text" class="form-control" formControlName="ShortName">
+            </div>
+
+            <!-- Team Logo URL -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Team Logo </label>
+              <input type="file" class="form-control" (change)="onFileChange($event)">
+            </div>
+
+            <!-- Team Owner ID -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Team Owner Name</label>
+              <input type="text" class="form-control" formControlName="TeamOwnerName">
+            </div>
+              <!-- Team Owner Email -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Team Owner Email</label>
+              <input type="email" class="form-control" formControlName="TeamOwnerEmail">
+            </div>
+              <!-- Team Owner PhoneNumber -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Team Owner Phone Number</label>
+              <input type="tel" class="form-control" formControlName="TeamOwnerPhoneNumber">
+            </div>
+
+            <!-- Coach Name -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Coach Name</label>
+              <input type="text" class="form-control" formControlName="CoachName">
+            </div>
+
+            <!-- Founded Year -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Founded Year</label>
+              <input type="number" class="form-control" formControlName="FoundedYear">
+            </div>
+
+            <!-- Total Players -->
+            <div class="mb-3">
+              <label class="form-label fw-semibold">Total Players</label>
+              <input type="number" class="form-control" formControlName="TotalPlayers">
+            </div>
+
+            <!-- Is Active -->
+            <div class="form-check mb-3">
+              <input type="checkbox" class="form-check-input" formControlName="IsActive">
+              <label class="form-check-label fw-semibold">Active Team</label>
+            </div>
+
+            <!-- Buttons -->
+            <div class="d-flex justify-content-end gap-2">
+              <button type="reset" class="btn btn-outline-secondary" (click)="teamForm.reset()">
+                Reset
+              </button>
+
+              <button type="submit" class="btn btn-success"
+                      >
+                Submit Team
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

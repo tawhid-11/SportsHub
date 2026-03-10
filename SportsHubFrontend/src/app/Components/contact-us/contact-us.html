@@ -1,0 +1,112 @@
+<section id="contact" class="contact-section">
+    <div class="container">
+        <div class="section-header text-center mb-5">
+            <h2 class="display-4 fw-bold">Get In <span class="text-gradient">Touch</span></h2>
+            <p class="lead text-muted">Have questions? We'd love to hear from you. Send us a message and we'll respond
+                as soon as possible.</p>
+        </div>
+
+        <div class="row g-5">
+            <!-- Contact Info Cards -->
+            <div class="col-lg-5">
+                <div class="info-container p-4 rounded-4 shadow-lg h-100">
+                    <h3 class="mb-3 fw-bold text-light">Contact Information</h3>
+                    <p class="text-muted mb-4">SportsHub is your ultimate destination for managing and tracking live
+                        sports tournaments with precision and passion. We bridge the gap between players and fans.</p>
+
+                    <div class="info-item d-flex align-items-center mb-4">
+                        <div class="icon-box me-3">
+                            <i class="bi bi-geo-alt-fill"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 text-light">Our Location</h5>
+                            <p class="mb-0 text-muted">{{contactInfo.address}}</p>
+                        </div>
+                    </div>
+
+                    <div class="info-item d-flex align-items-center mb-4">
+                        <div class="icon-box me-3">
+                            <i class="bi bi-telephone-fill"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 text-light">Phone Number</h5>
+                            <p class="mb-0 text-muted">{{contactInfo.phone}}</p>
+                        </div>
+                    </div>
+
+                    <div class="info-item d-flex align-items-center mb-4">
+                        <div class="icon-box me-3">
+                            <i class="bi bi-envelope-fill"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 text-light">Email Address</h5>
+                            <p class="mb-0 text-muted">{{contactInfo.email}}</p>
+                        </div>
+                    </div>
+
+                    <div class="info-item d-flex align-items-center mb-5">
+                        <div class="icon-box me-3">
+                            <i class="bi bi-globe"></i>
+                        </div>
+                        <div>
+                            <h5 class="mb-0 text-light">Official Website</h5>
+                            <p class="mb-0 text-muted">{{contactInfo.website}}</p>
+                        </div>
+                    </div>
+
+                    <div class="social-links d-flex gap-3 mt-auto">
+                        <a href="#" class="social-btn"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="social-btn"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="social-btn"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="social-btn"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form -->
+            <div class="col-lg-7">
+                <div class="form-container p-4 p-md-5 rounded-4 shadow-lg">
+                    <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        [(ngModel)]="formData.name" placeholder="Name" required>
+                                    <label for="name">Your Name</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        [(ngModel)]="formData.email" placeholder="Email" required>
+                                    <label for="email">Your Email</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="subject" name="subject"
+                                        [(ngModel)]="formData.subject" placeholder="Subject" required>
+                                    <label for="subject">Subject</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-floating mb-4">
+                                    <textarea class="form-control" placeholder="Leave a message here" id="message"
+                                        name="message" [(ngModel)]="formData.message" style="height: 150px"
+                                        required></textarea>
+                                    <label for="message">Your Message</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-submit btn-lg w-100 py-3 fw-bold"
+                                    [disabled]="!contactForm.form.valid">
+                                    Send Message <i class="bi bi-send-fill ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

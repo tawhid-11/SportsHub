@@ -1,0 +1,136 @@
+.points-page {
+  background: #0f172a;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn-back {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  padding: 8px 16px;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  transform: translateX(-5px);
+}
+
+.letter-spacing-1 {
+  letter-spacing: 1px;
+}
+
+.glass-card {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.table-dark-header {
+  background: #1e293b;
+}
+
+.table th {
+  padding: 1.25rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #94a3b8;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+}
+
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.logo-box {
+  width: 40px;
+  height: 40px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.logo-box img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.rank-badge {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #334155;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.rank-badge.qualified {
+  background: #10b981;
+  color: white;
+}
+
+.pts-badge {
+  background: rgba(14, 165, 233, 0.1);
+  color: #0ea5e9;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.nrr-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+}
+
+.legend-box {
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dot-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.top-team {
+  background: rgba(16, 185, 129, 0.03);
+}
+
+.empty-box {
+  background: rgba(30, 41, 59, 0.3);
+  border: 2px dashed rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 768px) {
+  .table th {
+    font-size: 0.65rem;
+    padding: 0.75rem 0.5rem;
+  }
+
+  .table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .logo-box {
+    width: 32px;
+    height: 32px;
+  }
+}

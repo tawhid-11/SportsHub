@@ -1,0 +1,55 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0">Registered Teams</h5>
+    </div>
+
+    <div class="card-body p-0">
+      <table class="table table-hover table-striped align-middle mb-0">
+        <thead class="table-light">
+          <tr class="text-center">
+            <th>SL</th>
+            <th>Logo</th>
+            <th>Team Name</th>
+            <th>Short Name</th>
+            <th>Team Owner</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+
+        <tbody *ngIf="teams.length > 0; else noData">
+          <tr *ngFor="let team of teams; let i = index" class="text-center">
+            <td>{{ i + 1 }}</td>
+
+            <td>
+              <img
+                [src]="'https://localhost:7142' + team.TeamLogo"
+                class="team-logo"
+                alt="Team Logo">
+            </td>
+
+            <td class="fw-semibold">{{ team.TeamName }}</td>
+            <td>{{ team.ShortName }}</td>
+            <td>{{ team.TeamOwnerName }}</td>
+
+            
+            <td>
+              <button class="btn btn-sm btn-outline-primary"
+                      (click)="goToTeamPlayers(team.TeamsID)">
+                View Player
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ng-template #noData>
+        <tr>
+          <td colspan="6" class="text-center py-4 text-muted">
+            No registered teams found
+          </td>
+        </tr>
+      </ng-template>
+    </div>
+  </div>
+</div>

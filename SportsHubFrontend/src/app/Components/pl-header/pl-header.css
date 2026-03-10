@@ -1,0 +1,25 @@
+ .header{
+      height:64px; background:#FF0000; display:flex; align-items:center; gap:12px;
+      padding:0 16px; border-bottom:1px solid #000000;
+      position:sticky; top:0; z-index:10;
+    }
+    .menu{
+      width:40px; height:40px; border-radius:12px;
+      border:1px solid #000000; background:#fff; cursor:pointer;
+    }
+    .search{ flex:1; min-width:120px; }
+    .search input{
+      width:100%; max-width:520px;
+      padding:10px 12px; border-radius:12px;
+      border:1px solid #e6eaf2; outline:none;
+    }
+    .right{ display:flex; align-items:center; gap:12px; }
+    .icon-btn{
+      width:40px; height:40px; border-radius:12px;
+      border:1px solid #000000; background:#feffd1; cursor:pointer;
+    }
+    .user{ display:flex; align-items:center; gap:10px; padding-left:6px; }
+  
+    .meta{ line-height:1.1; }
+    .name{ font-weight:700; font-size:14px; }
+    .role{ font-size:12px; opacity:.65; }

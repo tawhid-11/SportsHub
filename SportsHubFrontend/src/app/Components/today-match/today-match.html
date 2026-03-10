@@ -1,0 +1,37 @@
+<div class="container my-4">
+
+  <h2 class="mb-4 text-center">Today's Matches</h2>
+
+  <!-- Skeleton Loader -->
+  <div *ngIf="loading">
+    <div *ngFor="let i of [1,2,3]" class="card mb-3 p-3 skeleton">
+      <div class="skeleton-line mb-2"></div>
+      <div class="skeleton-line w-75"></div>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="!loading && matches.length">
+    <div class="col-md-6" *ngFor="let match of matches">
+      <div class="card mb-3 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">{{match.TeamAName}} vs {{match.TeamBName}}</h5>
+          <p class="card-text">
+            <strong>Tournament:</strong> {{match.TournamentName}} <br>
+            <strong>Match Date:</strong> {{match.MatchDate | date:'short'}}
+          </p>
+          <button class="btn btn-primary btn-sm" (click)="startMatch(match.TeamScheduleID)">
+            Start Match
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && matches.length === 0" class="alert alert-info text-center">
+    No matches scheduled for today.
+  </div>
+
+  <!-- Players List -->
+ 
+
+</div>

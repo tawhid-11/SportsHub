@@ -1,0 +1,77 @@
+<div class="registration-wrapper d-flex align-items-center justify-content-center min-vh-100">
+  <div class="registration-card shadow-lg p-4">
+
+    <!-- Logo & Header -->
+    <div class="text-center mb-4">
+      <img src="assets/image/SportsHub.png" alt="SportsHub Logo" class="logo-img mb-3">
+      <h3 class="fw-bold">SPORTSHUB</h3>
+      <p class="text-muted small">Create your account</p>
+    </div>
+
+    <!-- Error Message Alert -->
+    <div *ngIf="errorMessage" class="alert alert-danger border-0 rounded-4 shadow-sm mb-4 py-2 small animate-fade-in">
+      <div class="d-flex align-items-center justify-content-center text-center">
+        <i class="bi bi-exclamation-circle-fill me-2"></i>
+        <span>{{ errorMessage }}</span>
+      </div>
+    </div>
+
+    <!-- Registration Form -->
+    <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+
+      <!-- Full Name -->
+      <div class="mb-3">
+        <input type="text" class="form-control form-control-lg rounded-pill px-4" placeholder="Full Name" name="name"
+          [(ngModel)]="registerData.name" required />
+      </div>
+
+      <!-- Email -->
+      <div class="mb-3">
+        <input type="email" class="form-control form-control-lg rounded-pill px-4" placeholder="Email Address"
+          name="email" [(ngModel)]="registerData.email" required />
+      </div>
+
+      <!-- Phone -->
+      <div class="mb-3">
+        <input type="tel" class="form-control form-control-lg rounded-pill px-4" placeholder="Phone Number" name="phone"
+          [(ngModel)]="registerData.phone" required />
+      </div>
+
+      <!-- User Type -->
+      <div class="mb-3">
+        <select class="form-select form-select-lg rounded-pill px-4" name="userType" [(ngModel)]="registerData.userType"
+          required>
+          <option value="" disabled selected hidden>User Type</option>
+          <option value="TeamOwner">Team Owner</option>
+          <option value="player">Player</option>
+        </select>
+      </div>
+
+      <!-- Password -->
+      <div class="mb-3">
+        <input type="password" class="form-control form-control-lg rounded-pill px-4" placeholder="Password"
+          name="password" [(ngModel)]="registerData.password" required />
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="mb-4">
+        <input type="password" class="form-control form-control-lg rounded-pill px-4" placeholder="Confirm Password"
+          name="confirmPassword" [(ngModel)]="confirmPassword" required />
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit" class="btn btn-gradient w-100 btn-lg rounded-pill mb-3 py-3 fw-bold shadow"
+        [disabled]="!registerForm.valid">
+        Create Account
+      </button>
+
+    </form>
+
+    <!-- Footer -->
+    <p class="text-center small mb-0">
+      Already have an account?
+      <a (click)="onRoute()" class="login-link">Login</a>
+    </p>
+
+  </div>
+</div>

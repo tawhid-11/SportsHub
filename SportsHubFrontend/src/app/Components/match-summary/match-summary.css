@@ -1,0 +1,33 @@
+.summary-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.card {
+  border-radius: 15px;
+  border: none;
+  background: white;
+}
+
+.innings-card {
+  transition: transform 0.2s;
+}
+
+.innings-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.winner-badge {
+  display: inline-block;
+  margin: 20px 0;
+  animation: bounceIn 1s;
+}
+
+@keyframes bounceIn {
+  from { opacity: 0; transform: scale(0.3); }
+  50% { opacity: 1; transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  to { transform: scale(1); }
+}

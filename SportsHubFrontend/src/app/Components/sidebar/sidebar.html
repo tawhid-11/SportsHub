@@ -1,0 +1,36 @@
+<aside class="sidebar" [class.collapsed]="collapsed">
+      <div class="brand">
+        <div class="logo">
+          <img src="assets/image/SportsHub.png" height="40" alt="SportsHub Logo">
+        </div>
+        <div class="title" *ngIf="!collapsed">SportsHub</div>
+
+        <button class="collapse-btn" (click)="toggle.emit()"
+          [attr.aria-label]="collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
+          {{ collapsed ? '»' : '«' }}
+        </button>
+      </div>
+      <nav class="nav">
+        <a
+          class="nav-item"
+          *ngFor="let item of nav"
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <span class="icon">{{ item.icon || '•' }}</span>
+          <span class="label" *ngIf="!collapsed">{{ item.label }}</span>
+        </a>
+        <a class="nav-item" (click)="logout()" 
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }">
+        <span class="icon">🚪</span>
+          <span class="label" *ngIf="!collapsed">LogOut</span>
+
+      </a>
+      </nav>
+
+      <div class="bottom" *ngIf="!collapsed">
+        <small>Md. Tauhid Islam</small>
+      </div>
+    </aside>

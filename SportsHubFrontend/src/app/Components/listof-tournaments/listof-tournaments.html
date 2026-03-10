@@ -1,0 +1,90 @@
+<div class="container-fluid mt-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">Tournament List</h4>
+
+    <button class="btn btn-success" (click)="onNew()">
+      <i class="bi bi-plus-circle"></i> Add New
+    </button>
+  </div>
+
+  <!-- Table -->
+  <div class="table-responsive shadow-sm rounded">
+    <table class="table table-bordered table-hover table-striped align-middle mb-0">
+      <thead class="table-dark text-center">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Prize</th>
+          <th>Type</th>
+          <th>Start</th>
+          <th>End</th>
+          <th>Location</th>
+          <th>Deadline</th>
+          <th>Status</th>
+          <th>Total</th>
+          <th>Match</th>
+          <th>Extra</th>
+          <th>Reg Fee</th>
+          <th>Field Fee</th>
+          <th>Max Teams</th>
+          <th>Contact</th>
+          <th style="width: 120px;">Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let item of tournaments">
+          <td class="text-center">{{ item.TournamentID }}</td>
+          <td>{{ item.TournamentName }}</td>
+          <td>{{ item.Prize }}</td>
+          <td>{{ item.TournamentTypeName }}</td>
+          <td>{{ item.StartDate | date:'dd-MMM-yyyy' }}</td>
+          <td>{{ item.EndDate | date:'dd-MMM-yyyy' }}</td>
+          <td>{{ item.Location }}</td>
+          <td>{{ item.RegistrationDeadLine | date:'dd-MMM-yyyy' }}</td>
+
+          <td class="text-center">
+            <span class="badge bg-success" *ngIf="item.Status === 'Active'">Active</span>
+            <span class="badge bg-secondary" *ngIf="item.Status !== 'Active'">
+              {{ item.Status }}
+            </span>
+          </td>
+
+          <td class="text-center">{{ item.TotalPlayer }}</td>
+          <td class="text-center">{{ item.MatchPlayer }}</td>
+          <td class="text-center">{{ item.ExtraPlayer }}</td>
+          <td class="text-end">{{ item.RegistrationFee }}</td>
+          <td class="text-end">{{ item.FieldFee }}</td>
+          <td class="text-center">{{ item.MaxTeams }}</td>
+          <td>0{{ item.ContactNumber }}</td>
+
+          <td class="text-center">
+            <button
+              class="btn btn-sm btn-primary me-1"
+              (click)="onEdit(item.TournamentID)">
+              Edit
+            </button>
+  <button *ngIf="item.Status !='Upcoming'" class="btn btn-sm btn-outline-primary" (click)="goToSchedule(item.TournamentID)">
+                  Schedule
+                </button>
+            <button *ngIf="item.Status =='Upcoming'"
+              class="btn btn-sm btn-danger"
+              (click)="onDelete(item.TournamentID)">
+              Delete
+            </button>
+          </td>
+        </tr>
+
+        <!-- No Data -->
+        <tr *ngIf="tournaments.length === 0">
+          <td colspan="16" class="text-center text-muted py-4">
+            No tournaments available
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

@@ -1,0 +1,99 @@
+<div class="container py-4">
+
+  <!-- PAGE HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">🏆 Tournaments</h2>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div *ngIf="tournaments.length === 0" class="alert alert-warning text-center">
+    No tournaments found.
+  </div>
+
+  <!-- TOURNAMENT CARDS -->
+  <div class="row g-4" *ngIf="tournaments.length > 0">
+
+    <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12"
+         *ngFor="let t of tournaments">
+
+      <div class="card h-100 shadow-sm border-0">
+
+        <!-- TOURNAMENT IMAGE -->
+        <!-- CARD BODY -->
+        <div class="card-body">
+
+          <h5 class="card-title fw-bold text-truncate">
+            {{ t.name }}
+          </h5>
+
+          <p class="mb-1 text-muted">
+            <strong>TournamentName:</strong> {{ t.TournamentName || 'N/A' }}
+          </p>
+
+          <p class="mb-1 text-muted">
+            <strong>TournamentTypeName:</strong> {{ t.TournamentTypeName || 'N/A' }}
+          </p>
+
+          <p class="mb-2 text-muted">
+            <strong>StartDate:</strong> {{ t.StartDate | date:'mediumDate' }}
+          </p>
+
+          <p class="mb-2 text-muted">
+            <strong>EndDate:</strong> {{ t.EndDate | date:'mediumDate' }}
+          </p>
+
+          <p class="mb-2 text-muted">
+            <strong>Location:</strong> {{ t.Location || 'N/A' }}
+          </p>
+
+          <p class="mb-2 text-muted">
+            <strong>RegistrationDeadLine:</strong> {{ t.RegistrationDeadLine | date:'mediumDate' }}
+          </p>
+
+          <p class="mb-2 text-muted">
+            <strong>Status:</strong> {{ t.Status || 'N/A' }}
+          </p>
+
+          <p class="mb-2 text-muted">
+            <strong>RegistrationFee:</strong> {{ t.RegistrationFee || 'N/A' }}
+          </p>
+
+          <p class="mb-2 text-muted">
+            <strong>FieldFee:</strong> {{ t.FieldFee || 'N/A' }}
+          </p>
+
+          <p class="mb-2 text-muted">
+            <strong>MaxTeams:</strong> {{ t.MaxTeams || 'N/A' }}
+          </p>
+          <p class="mb-2 text-muted">
+            <strong>TotalPlayer:</strong> {{ t.TotalPlayer || 'N/A' }}
+          </p>
+          <p class="mb-2 text-muted">
+            <strong>MatchPlayer:</strong> {{ t.MatchPlayer || 'N/A' }}
+          </p>
+          <p class="mb-2 text-muted">
+            <strong>ExtraPlayer:</strong> {{ t.ExtraPlayer || 'N/A' }}
+          </p>
+
+          <p class="mb-2 text-muted">
+            <strong>ContactNumber:</strong> {{ t.ContactNumber || 'N/A' }}
+          </p>
+
+        </div>
+
+        <!-- CARD FOOTER -->
+        <div class="card-footer bg-white border-0">
+          <div class="d-grid">
+            <button
+              class="btn btn-primary"
+              (click)="registerNow(t)">
+              Register Now
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>

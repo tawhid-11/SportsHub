@@ -1,0 +1,31 @@
+<div class="table-header">
+  <h2>Tournament Types</h2>
+
+  <button class="btn-new" (click)="onNew()">
+    + New
+  </button>
+</div>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of tournamentTypes">
+      <td>{{ item.Id }}</td>
+      <td>{{ item.Name }}</td>
+      <td>
+        <button class="btn-edit btn btn-primary" (click)="onEdit(item.Id)" >Edit</button>
+        <button class="btn-delete btn btn-danger" (click)="onDelete(item.Id)">Delete</button>
+      </td>
+    </tr>
+
+    <tr *ngIf="tournamentTypes.length === 0">
+      <td colspan="2" class="no-data">No data available</td>
+    </tr>
+  </tbody>
+</table>

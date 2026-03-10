@@ -1,0 +1,261 @@
+<div class="header">
+  <span class="back">←</span>
+  <span class="title">{{ matchTitle }}</span>
+</div>
+
+<!-- Tab Navigation -->
+<div class="tabs-container">
+  <div class="tab" [class.active]="activeTab === 'info'" (click)="switchTab('info')">INFO</div>
+  <div class="tab" [class.active]="activeTab === 'live'" (click)="switchTab('live')">LIVE</div>
+  <div class="tab" [class.active]="activeTab === 'scorecard'" (click)="switchTab('scorecard')">SCORECARD</div>
+  <div class="tab" [class.active]="activeTab === 'squads'" (click)="switchTab('squads')">SQUADS</div>
+</div>
+
+<div class="content-area">
+
+  <!-- ================= LIVE TAB ================= -->
+  <div *ngIf="activeTab === 'live'">
+    <!-- Match Result Card -->
+    <div class="result-card" *ngIf="score.matchStatus === 'Finished' && score.winnerMessage">
+      <div class="result-label">MATCH FINISHED</div>
+      <div class="winner-message">{{ score.winnerMessage }}</div>
+    </div>
+
+    <div class="score-box">
+      <div class="score-left">
+        <div class="team">{{ score.team }}</div>
+        <div class="runs">
+          {{ score.runs }}-{{ score.wickets }}
+          <span class="overs">({{ score.overs }})</span>
+        </div>
+      </div>
+
+      <div class="score-right">
+        <div class="mb-2">
+          <span class="badge" [ngClass]="score.matchStatus === 'Live' ? 'bg-danger' : 'bg-success'">
+            {{ score.matchStatus }}
+          </span>
+        </div>
+        <div>CRR <b>{{ score.crr }}</b></div>
+        <div *ngIf="score.currentInnings === 2">RRR <b>{{ score.rrr }}</b></div>
+      </div>
+    </div>
+
+    <div class="note text-danger fw-bold h5 text-center p-3 border-top border-bottom" *ngIf="score.target">
+      TARGET: {{ score.target }}
+      <div class="text-secondary small mt-1" *ngIf="score.target > score.runs">
+        Need {{ score.target - score.runs }} runs
+      </div>
+    </div>
+
+    <!-- This Over Section -->
+    <div class="this-over-section p-3 border-bottom" *ngIf="recentBalls.length > 0">
+      <div class="d-flex align-items-center gap-2 overflow-auto">
+        <span class="text-muted small fw-bold">THIS OVER:</span>
+        <div class="balls-container d-flex gap-2">
+          <div *ngFor="let ball of recentBalls" class="ball-circle" [ngClass]="getBallClass(ball)">
+            {{ ball }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <h4>Batting</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Batter</th>
+            <th>Current</th>
+            <th>R</th>
+            <th>B</th>
+            <th>4s</th>
+            <th>6s</th>
+            <th>SR</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let b of batting" [class.striker-row]="b.isStriker">
+            <td class="player-cell">
+              <img [src]="'https://localhost:7142' + b.image" class="player-img"
+                onerror="this.src='assets/default-player.png'">
+              {{ b.name }}
+            </td>
+            <td>
+              <span class="badge" [ngClass]="b.isStriker ? 'bg-danger' : 'bg-secondary'">
+                {{ b.isStriker ? 'Striker' : 'Non-Striker' }}
+              </span>
+            </td>
+            <td>{{ b.runs }}</td>
+            <td>{{ b.balls }}</td>
+            <td>{{ b.fours }}</td>
+            <td>{{ b.sixes }}</td>
+            <td>{{ b.strikeRate }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h4>Bowling</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Bowler</th>
+            <th>O</th>
+            <th>M</th>
+            <th>R</th>
+            <th>W</th>
+            <th>ER</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bw of bowling">
+            <td class="player-cell">
+              <img [src]="'https://localhost:7142' + bw.image" class="player-img"
+                onerror="this.src='assets/default-player.png'">
+              {{ bw.name }}
+            </td>
+            <td>{{ bw.overs }}</td>
+            <td>{{ bw.maidens }}</td>
+            <td>{{ bw.runs }}</td>
+            <td>{{ bw.wickets }}</td>
+            <td>{{ bw.economy }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ================= SCORECARD TAB ================= -->
+  <div *ngIf="activeTab === 'scorecard'" class="animate-fade-in">
+    <div *ngIf="fullScorecard">
+
+      <!-- Innings Sections -->
+      <div *ngFor="let inn of [fullScorecard.innings1, fullScorecard.innings2]; let i = index"
+        class="scorecard-innings">
+        <div class="innings-header" *ngIf="inn.teamName">
+          <span class="team-name">{{ inn.teamName }}</span>
+          <span class="innings-score">{{ inn.totalRuns }}-{{ inn.wickets }} ({{ inn.overs }} ov)</span>
+        </div>
+
+        <div class="section no-margin" *ngIf="inn.batting.length > 0">
+          <table class="card-table">
+            <thead>
+              <tr>
+                <th>Batter</th>
+                <th class="text-center">R</th>
+                <th class="text-center">B</th>
+                <th class="text-center">4s</th>
+                <th class="text-center">6s</th>
+                <th class="text-center">SR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let b of inn.batting">
+                <td class="player-info">
+                  <div class="name">{{ b.playerName }}</div>
+                  <div class="dismissal text-muted">{{ b.dismissal }}</div>
+                </td>
+                <td class="text-center fw-bold">{{ b.runs }}</td>
+                <td class="text-center">{{ b.balls }}</td>
+                <td class="text-center">{{ b.fours }}</td>
+                <td class="text-center">{{ b.sixes }}</td>
+                <td class="text-center">{{ b.strikeRate }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section no-margin mt-3" *ngIf="inn.bowling.length > 0">
+          <table class="card-table">
+            <thead>
+              <tr>
+                <th>Bowler</th>
+                <th class="text-center">O</th>
+                <th class="text-center">M</th>
+                <th class="text-center">R</th>
+                <th class="text-center">W</th>
+                <th class="text-center">ER</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let bw of inn.bowling">
+                <td>{{ bw.playerName }}</td>
+                <td class="text-center">{{ bw.overs }}</td>
+                <td class="text-center">{{ bw.maidens }}</td>
+                <td class="text-center">{{ bw.runs }}</td>
+                <td class="text-center fw-bold">{{ bw.wickets }}</td>
+                <td class="text-center">{{ bw.economy }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="fow-section section no-margin mt-3" *ngIf="inn.fallOfWickets.length > 0">
+          <div class="fow-title">Fall of Wickets</div>
+          <div class="fow-list text-muted small">
+            <span *ngFor="let f of inn.fallOfWickets; let last = last">
+              {{ f.runs }}-{{ f.wicketNumber }} ({{ f.playerName }}, {{ f.over }} ov){{ last ? '' : ', ' }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div *ngIf="!fullScorecard" class="p-5 text-center text-muted">
+      Loading scorecard...
+    </div>
+  </div>
+
+  <!-- ================= SQUADS TAB ================= -->
+  <div *ngIf="activeTab === 'squads'" class="animate-fade-in">
+    <div *ngIf="squads" class="squads-container">
+      <div class="squad-column">
+        <h5 class="team-label">{{ squads.teamAName }}</h5>
+        <div *ngFor="let p of squads.teamAPlayers" class="player-item">
+          <img [src]="'https://localhost:7142' + p.playerImage" class="avatar"
+            onerror="this.src='assets/default-player.png'">
+          <div class="info">
+            <div class="name">{{ p.fullName }}</div>
+            <div class="role">{{ p.roleName }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="squad-column">
+        <h5 class="team-label">{{ squads.teamBName }}</h5>
+        <div *ngFor="let p of squads.teamBPlayers" class="player-item">
+          <img [src]="'https://localhost:7142' + p.playerImage" class="avatar"
+            onerror="this.src='assets/default-player.png'">
+          <div class="info">
+            <div class="name">{{ p.fullName }}</div>
+            <div class="role">{{ p.roleName }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= INFO TAB ================= -->
+  <div *ngIf="activeTab === 'info'" class="animate-fade-in">
+    <div class="section info-card">
+      <div class="info-row">
+        <span class="label">Match</span>
+        <span class="value">{{ matchTitle }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Toss</span>
+        <span class="value">{{ score.winnerMessage || 'Pending' }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Status</span>
+        <span class="value">{{ score.matchStatus }}</span>
+      </div>
+      <div class="info-row">
+        <span class="label">Innings</span>
+        <span class="value">{{ score.currentInnings }}</span>
+      </div>
+    </div>
+  </div>
+
+</div>

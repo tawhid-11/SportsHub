@@ -1,0 +1,81 @@
+<div class="container-fluid py-4">
+
+  <!-- Page Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0">🏆 You can Resgister the tournament Tournaments</h4>
+  </div>
+
+  <!-- Table Card -->
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+
+          <thead class="table-dark">
+            <tr>
+              <th>SL</th>
+              <th>Tournament Name</th>
+              <th>Location</th>
+              <th>Start</th>
+              <th>End</th>
+              <th>Type</th>
+              <th>Registration Deadline</th>
+              <th>Registration Fee</th>
+              <th>Field Fee</th>
+              <th>Max Teams</th>
+              <th>Total Player</th>
+              <th>Match Player</th>
+              <th>Extra Player</th>
+              <th>Status</th>
+              <th>Contact</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+
+          <tbody *ngIf="tournaments.length > 0; else noData">
+            <tr *ngFor="let t of tournaments; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td class="fw-semibold">{{ t.TournamentName }}</td>
+              <td>{{ t.Location }}</td>
+              <td>{{ t.StartDate | date:'dd MMM yyyy' }}</td>
+              <td>{{ t.EndDate | date:'dd MMM yyyy' }}</td>
+              <td>{{ t.tournamentTypeID }}</td>
+              <td>{{ t.RegistrationDeadLine | date:'dd MMM yyyy' }}</td>
+              <td>৳{{ t.RegistrationFee }}</td>
+              <td>৳{{ t.FieldFee }}</td>
+              <td>{{ t.MaxTeams }}</td>
+              <td>{{ t.TotalPlayer }}</td>
+              <td>{{ t.MatchPlayer }}</td>
+              <td>{{ t.ExtraPlayer }}</td>
+              <td>
+                <span class="badge" [ngClass]="{
+                        'bg-success': t.Status === 'Active',
+                        'bg-secondary': t.Status !== 'Active'
+                      }">
+                  {{ t.Status }}
+                </span>
+              </td>
+              <td>{{ t.ContactNumber }}</td>
+              <td class="text-center">
+                <button class="btn btn-sm btn-outline-primary" (click)="goToRegister(t.TournamentID)">
+                  Register Now
+                </button>
+              </td>
+            </tr>
+          </tbody>
+
+        </table>
+      </div>
+
+      <!-- No data -->
+      <ng-template #noData>
+        <div class="text-center py-5 text-muted">
+          No tournaments found.
+        </div>
+      </ng-template>
+
+    </div>
+  </div>
+
+</div>

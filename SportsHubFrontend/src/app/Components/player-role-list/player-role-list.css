@@ -1,0 +1,26 @@
+table th,
+table td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+.badge {
+  font-size: 0.85rem;
+}
+.button-group {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.button-group button {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.85rem;
+}
+.table-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
+}

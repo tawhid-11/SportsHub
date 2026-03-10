@@ -1,0 +1,38 @@
+/* Table spacing & readability */
+.table th,
+.table td {
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+/* Header title */
+h4 {
+  font-weight: 600;
+}
+
+/* Player image hover */
+.table img {
+  transition: transform 0.2s ease-in-out;
+}
+
+.table img:hover {
+  transform: scale(1.1);
+}
+
+/* Action buttons spacing */
+.btn i {
+  font-size: 14px;
+}
+
+/* Empty state */
+.text-muted {
+  font-size: 15px;
+}
+
+/* Responsive fix for small screens */
+@media (max-width: 768px) {
+  .table th,
+  .table td {
+    white-space: nowrap;
+  }
+}

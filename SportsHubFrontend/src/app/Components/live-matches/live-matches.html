@@ -1,0 +1,82 @@
+<div class="live-matches-page animate-fade-in">
+    <div class="container py-5">
+        <div class="page-header mb-5">
+            <h1 class="display-4 fw-bold">Live <span class="text-gradient">Matches</span></h1>
+            <p class="text-muted lead">Follow all the ongoing and recently concluded matches in real-time.</p>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+
+        <!-- Matches Grid -->
+        <div class="row g-4" *ngIf="!loading">
+            <div class="col-lg-6" *ngFor="let m of liveMatches">
+                <div class="match-item-card glass-card" [class.finished]="m.matchStatus === 'Finished'">
+                    <div class="card-top">
+                        <span class="status-indicator" [class.live]="m.matchStatus !== 'Finished'">
+                            <span class="pulse" *ngIf="m.matchStatus !== 'Finished'"></span>
+                            {{ m.matchStatus === 'Finished' ? 'FINISHED' : 'LIVE' }}
+                        </span>
+                        <span class="tournament-name">{{ m.tournamentName || 'Tournament' }}</span>
+                    </div>
+
+                    <div class="card-main">
+                        <div class="teams-display">
+                            <div class="team-unit">
+                                <div class="logo-box">
+                                    <img [src]="'https://localhost:7142'+m.teamALogo" alt="Team A">
+                                </div>
+                                <span class="name">{{ m.teamAName }}</span>
+                            </div>
+
+                            <div class="score-center">
+                                <ng-container *ngIf="m.matchStatus !== 'Finished'">
+                                    <div class="current-score">{{ m.totalRun }}/{{ m.wicket }}</div>
+                                    <div class="overs">({{ m.overs }} Overs)</div>
+                                    <div class="batting-now">Batting: {{ m.battingTeamName }}</div>
+                                </ng-container>
+
+                                <ng-container *ngIf="m.matchStatus === 'Finished'">
+                                    <div class="vs-text">VS</div>
+                                </ng-container>
+                            </div>
+
+                            <div class="team-unit">
+                                <div class="logo-box">
+                                    <img [src]="'https://localhost:7142'+m.teamBLogo" alt="Team B">
+                                </div>
+                                <span class="name">{{ m.teamBName }}</span>
+                            </div>
+                        </div>
+
+                        <div class="match-verdict" *ngIf="m.matchStatus === 'Finished'">
+                            <div class="winner-box">
+                                <i class="bi bi-trophy-fill"></i> {{ m.winnerMessage || 'Match Concluded' }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-bottom">
+                        <button class="btn-action" (click)="viewDetail(m.cricketMatchID)">
+                            {{ m.matchStatus === 'Finished' ? 'View Full Summary' : 'View Live Commentary' }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- No Matches State -->
+            <div class="col-12 text-center py-5" *ngIf="liveMatches.length === 0">
+                <div class="empty-state p-5 rounded-4">
+                    <i class="bi bi-cup-hot opacity-25" style="font-size: 5rem;"></i>
+                    <h3 class="mt-4 fw-bold">No matches right now</h3>
+                    <p class="text-muted">Take a break! There are no live matches scheduled at this moment.</p>
+                    <button class="btn btn-primary-custom mt-3" routerLink="/">Go Back Home</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

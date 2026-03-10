@@ -1,0 +1,232 @@
+/* ================= ADMIN START MATCH STYLES ================= */
+
+.card {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 24px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
+}
+
+h3 {
+  font-weight: 800;
+  color: #1a202c;
+  margin-bottom: 20px;
+}
+.btn{
+  background-color: #3122fc;
+  font-weight: bold;
+}
+
+/* ================= TABS ================= */
+.tabs-container {
+  display: flex;
+  background: #f8fafc;
+  padding: 4px;
+  border-radius: 12px;
+  gap: 4px;
+  max-width: 800px;
+  margin: 0 auto;
+  border: 1px solid #e2e8f0;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.tab.active {
+  background: #f87f7f;
+  color: white;
+  box-shadow: 0 4px 6px -1px rgba(248, 127, 127, 0.4);
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ================= SCORING UI ================= */
+.scoring h1 {
+  font-size: 48px;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #1a202c;
+}
+
+.scoring h1 small {
+  font-size: 20px;
+  color: #64748b;
+  font-weight: 400;
+}
+
+.table-stats {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+.table-stats th {
+  background: #f8fafc;
+  padding: 12px 8px;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #64748b;
+  text-align: left;
+}
+
+.table-stats td {
+  padding: 14px 8px;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 14px;
+}
+
+.striker-row {
+  background: #fffafa;
+}
+
+.player-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 700;
+}
+
+.player-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #f87f7f;
+}
+
+/* ================= CONTROLS ================= */
+.extras-panel {
+  display: flex;
+  justify-content: space-around;
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: 12px;
+  margin-top: 16px;
+  border: 1px solid #e2e8f0;
+}
+
+.extra-item {
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.extra-item.danger {
+  color: #ef4444;
+}
+
+.runs-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.run-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: 2px solid #e2e8f0;
+  background: white;
+  font-weight: 800;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.run-btn:hover:not(:disabled) {
+  background: #f87f7f;
+  color: white;
+  border-color: #f87f7f;
+  transform: scale(1.1);
+}
+
+.run-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ================= MODAL ================= */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background: white;
+  padding: 32px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* ================= FORM ELEMENTS ================= */
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.btn-primary {
+  background: #f87f7f;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+/* ================= SCORECARD SPECIFIC ================= */
+.innings-header {
+  border-left-width: 4px !important;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+}

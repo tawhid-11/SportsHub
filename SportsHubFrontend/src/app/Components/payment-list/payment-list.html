@@ -1,0 +1,94 @@
+<div class="payment-list-container">
+  <div class="header-section">
+    <h2 class="page-title">
+      Payment Records
+    </h2>
+  </div>
+
+  <!-- Filter Section -->
+  <div class="filter-section">
+    <div class="btn-group" role="group">
+      <button type="button" class="btn btn-outline-secondary" [class.active]="selectedStatus === 'all'"
+        (click)="filterByStatus('all')">
+        All Payments
+      </button>
+      <button type="button" class="btn btn-outline-success" [class.active]="selectedStatus === 'paid'"
+        (click)="filterByStatus('paid')">
+        Paid
+      </button>
+      <button type="button" class="btn btn-outline-warning" [class.active]="selectedStatus === 'pending'"
+        (click)="filterByStatus('pending')">
+        Pending
+      </button>
+      <button type="button" class="btn btn-outline-danger" [class.active]="selectedStatus === 'failed'"
+        (click)="filterByStatus('failed')">
+        Failed
+      </button>
+    </div>
+  </div>
+ 
+  <!-- Payment Table -->
+  <div *ngIf="!loading && !errorMessage && filteredPayments.length > 0" class="table-responsive">
+    <table class="table table-hover table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Tournament Name</th>
+          <th scope="col">Team Name</th>
+          <th scope="col">Registration Fee (BDT)</th>
+          <th scope="col">Payment Status</th>
+          <th scope="col">Transaction ID</th>
+          <th scope="col">Created Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let payment of filteredPayments; let i = index">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ payment.TournamentName || payment.tournamentName || 'N/A' }}</td>
+          <td>{{ payment.TeamName || payment.teamName || 'N/A' }}</td>
+          <td class="text-end fw-bold">৳{{ formatAmount(payment.RegistrationFee || payment.amount) }}</td>
+          <td>
+            <span [ngClass]="getStatusClass(payment.PaymentStatus || payment.paymentStatus)">
+              {{ (payment.PaymentStatus || payment.paymentStatus || 'Unknown') | titlecase }}
+            </span>
+          </td>
+          <td class="text-truncate" style="max-width: 150px;"
+            [title]="payment.bkashTransactionId || payment.bkashPaymentId || 'N/A'">
+            {{ payment.bkashTransactionId || payment.bkashPaymentId || 'N/A' }}
+          </td>
+          <td class="text-nowrap">{{ formatDate(payment.CreatedDate) }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Summary Section -->
+  <div *ngIf="!loading && filteredPayments.length > 0" class="summary-section">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card bg-light">
+          <div class="card-body">
+            <h6 class="text-muted">Total Payments</h6>
+            <h3 class="mb-0">{{ filteredPayments.length }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-success text-white">
+          <div class="card-body">
+            <h6>Completed</h6>
+            <h3 class="mb-0">{{ getCompletedCount() }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-warning text-dark">
+          <div class="card-body">
+            <h6>Pending</h6>
+            <h3 class="mb-0">{{ getPendingCount() }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

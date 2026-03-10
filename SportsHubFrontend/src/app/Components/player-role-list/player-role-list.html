@@ -1,0 +1,62 @@
+<div class="container mt-4">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="fw-bold">Player Roles</h4>
+    <button class="btn btn-primary" (click)="onAddNew()">
+      + Add New
+    </button>
+  </div>
+
+  <!-- Table -->
+  <div class="card shadow-sm">
+    <div class="card-body table-responsive">
+      <table class="table table-bordered table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>PlayerRoleID</th>
+            <th>Role Name</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th width="160">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of playerRoles">
+            <td>{{ item.PlayerRoleID }}</td>
+            <td>{{ item.RoleName }}</td>
+            <td>{{ item.Description }}</td>
+            <td>
+              <span
+                class="badge"
+                [ngClass]="item.IsActive ? 'bg-success' : 'bg-danger'">
+                {{ item.IsActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td>
+              <button
+                class="btn btn-sm btn-primary me-2"
+                (click)="onEdit(item)">
+                Edit
+              </button>
+
+              <button
+                class="btn btn-sm btn-danger"
+                (click)="onDelete(item.PlayerRoleID)">
+                Delete
+              </button>
+            </td>
+          </tr>
+
+          <tr *ngIf="playerRoles.length === 0">
+            <td colspan="6" class="text-center text-muted">
+              No player roles found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

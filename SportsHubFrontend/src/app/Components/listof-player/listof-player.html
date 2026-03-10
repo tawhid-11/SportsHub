@@ -1,0 +1,78 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="mb-0">Player List</h4>
+
+  <button class="btn btn-success" (click)="onNew()">
+    <i class="bi bi-plus-circle"></i> New Player
+  </button>
+</div>
+
+<div class="table-responsive">
+  <table class="table table-bordered table-hover align-middle">
+    <thead class="table-dark text-center">
+      <tr>
+        <th>SL</th>
+        <th>Teams</th>
+        <th>PlayerRole</th>
+        <th>PlayerImage</th>
+        <th>FullName</th>
+        <th>Nationality</th>
+        <th>DateOfBirth</th>
+        <th>NickName</th>
+        <th>BattingStyle</th>
+        <th>BowlingStyle</th>
+        <th> Description</th>
+        <th style="width: 160px;">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let player of players; let i = index">
+        <td class="text-center">{{ i + 1 }}</td>
+         <td class="text-center">{{ player.TeamName }}</td>
+         <td class="text-center">{{ player.RoleName }}</td>
+
+        <td class="text-center">
+          <img
+            [src]="player.PlayerImage"
+            class="rounded-circle border"
+            width="60"
+            height="60"
+            alt="Player">
+        </td>
+
+        <td>{{ player.FullName }}</td>
+        <td>{{ player.Nationality }}</td>
+        
+
+        <td class="text-center">
+          {{ player.DateOfBirth | date:'dd-MMM-yyyy' }}
+        </td>
+         <td>{{ player.NickName }}</td>
+        <td>{{ player.BattingStyle }}</td>
+        <td>{{ player.BowlingStyle }}</td>
+        <td>{{ player.Description }}</td>
+
+
+        <td class="text-center">
+          <button
+            class="btn btn-sm btn-primary me-1"
+            (click)="onEdit(player.PlayerID)">
+            <i class="bi bi-pencil"></i>
+          </button>
+
+          <button
+            class="btn btn-sm btn-danger"
+            (click)="onDelete(player.PlayerID)">
+            <i class="bi bi-trash"></i>
+          </button>
+        </td>
+      </tr>
+
+      <tr *ngIf="players.length === 0">
+        <td colspan="10" class="text-center text-muted py-4">
+          No players found
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

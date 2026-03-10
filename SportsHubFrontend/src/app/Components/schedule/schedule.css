@@ -1,0 +1,132 @@
+.schedule-page {
+  background: #0f172a;
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+.glass-card {
+  background: rgba(30, 41, 59, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.glass-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(14, 165, 233, 0.3);
+  background: rgba(30, 41, 59, 0.8);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.phase-icon {
+  width: 44px;
+  height: 44px;
+  background: rgba(14, 165, 233, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.border-light-opacity {
+  border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+.flex-1 {
+  flex: 1;
+  min-width: 0;
+}
+
+.mini-logo {
+  width: 60px;
+  height: 60px;
+  background: #fff;
+  border-radius: 15px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.mini-logo img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.vs-badge {
+  background: #1e293b;
+  color: #94a3b8;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.empty-container {
+  background: rgba(30, 41, 59, 0.3);
+  border: 2px dashed rgba(255, 255, 255, 0.1);
+  padding: 80px 20px;
+}
+
+.letter-spacing-1 {
+  letter-spacing: 1.5px;
+}
+
+.match-finished {
+  background: rgba(30, 41, 59, 0.3) !important;
+}
+
+.winner .mini-logo {
+  border: 2px solid #fbbf24;
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+}
+
+.winner-trophy {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: #1e293b;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #fbbf24;
+  font-size: 0.8rem;
+  z-index: 2;
+}
+
+.vs-text {
+  font-weight: 900;
+  font-style: italic;
+  color: #334155;
+  font-size: 1.2rem;
+}
+
+.bg-dark-subtle-hover:hover {
+  background: rgba(14, 165, 233, 0.1);
+}
+
+@media (max-width: 576px) {
+  .mini-logo {
+    width: 50px;
+    height: 50px;
+    padding: 8px;
+  }
+
+  .mini-name {
+    font-size: 0.85rem;
+  }
+
+  .vs-badge {
+    font-size: 0.65rem;
+    padding: 3px 8px;
+  }
+}

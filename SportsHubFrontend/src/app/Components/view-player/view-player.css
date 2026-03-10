@@ -1,0 +1,16 @@
+.player-img {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #dee2e6;
+}
+
+table th {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+table td {
+  vertical-align: middle;
+}

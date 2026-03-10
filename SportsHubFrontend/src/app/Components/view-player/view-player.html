@@ -1,0 +1,57 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Team Players</h5>
+      <button class="btn btn-sm btn-outline-light" (click)="goBack()">
+        Back
+      </button>
+    </div>
+
+    <div class="card-body p-0">
+      <table class="table table-hover table-striped align-middle mb-0">
+        <thead class="table-light">
+          <tr class="text-center">
+            <th>SL</th>
+            <th>Player</th>
+            <th>Full Name</th>
+            <th>Role</th>
+            <th>Date of Birth</th>
+            <th>Batting Style</th>
+            <th>Bowling Style</th>
+          </tr>
+        </thead>
+
+        <tbody *ngIf="players.length > 0; else noData">
+          <tr *ngFor="let p of players; let i = index" class="text-center">
+            <td>{{ i + 1 }}</td>
+
+            <td>
+              <img
+                [src]="'https://localhost:7142' + p.PlayerImage"
+                class="player-img"
+                alt="Player">
+            </td>
+
+            <td class="fw-semibold">{{ p.FullName }}</td>
+            <td>
+              <span class="badge bg-primary">
+                {{ p.RoleName }}
+              </span>
+            </td>
+            <td>{{ p.DateOfBirth | date:'dd MMM yyyy' }}</td>
+            <td>{{ p.BattingStyle }}</td>
+            <td>{{ p.BowlingStyle }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <ng-template #noData>
+        <tr>
+          <td colspan="7" class="text-center py-4 text-muted">
+            No players found
+          </td>
+        </tr>
+      </ng-template>
+    </div>
+  </div>
+</div>

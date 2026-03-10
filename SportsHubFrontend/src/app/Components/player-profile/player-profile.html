@@ -1,0 +1,123 @@
+<div class="profile-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3 text-muted">Loading profile...</p>
+  </div>
+
+  <!-- Profile Content -->
+  <div *ngIf="!loading && userInfo" class="profile-content">
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <h2 class="mb-0">Player Profile</h2>
+      <p class="text-muted mb-0">Your account information</p>
+    </div>
+
+    <!-- Profile Card -->
+    <div class="profile-card">
+      <div class="row">
+        <!-- Left Column - Profile Picture & Basic Info -->
+        <div class="col-md-4">
+          <div class="profile-picture-section text-center">
+            <div class="profile-avatar">
+              <i class="bi bi-person-circle"></i>
+            </div>
+            <h4 class="mt-3 mb-1">{{ getUserField('Name') }}</h4>
+            <p class="text-muted mb-3">{{ getUserField('UserType') }}</p>
+            <div class="status-badge">
+              <span class="badge bg-success">Active</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column - Detailed Information -->
+        <div class="col-md-8">
+          <div class="profile-details">
+            <h5 class="section-title">Personal Information</h5>
+            <div class="info-grid">
+              <div class="info-item">
+                <div class="info-label">
+                  <i class="bi bi-person-fill"></i>
+                  Full Name
+                </div>
+                <div class="info-value">{{ getUserField('Name') }}</div>
+              </div>
+
+              <div class="info-item">
+                <div class="info-label">
+                  <i class="bi bi-envelope-fill"></i>
+                  Email Address
+                </div>
+                <div class="info-value">{{ getUserField('Email') }}</div>
+              </div>
+
+              <div class="info-item">
+                <div class="info-label">
+                  <i class="bi bi-telephone-fill"></i>
+                  Phone Number
+                </div>
+                <div class="info-value">{{ getUserField('Phone') }}</div>
+              </div>
+
+              <div class="info-item">
+                <div class="info-label">
+                  <i class="bi bi-person-badge-fill"></i>
+                  User Type
+                </div>
+                <div class="info-value">
+                  <span class="badge bg-primary">{{ getUserField('UserType') }}</span>
+                </div>
+              </div>
+
+              <div class="info-item" *ngIf="getUserField('UserID') !== 'N/A'">
+                <div class="info-label">
+                  <i class="bi bi-hash"></i>
+                  User ID
+                </div>
+                <div class="info-value">{{ getUserField('UserID') || getUserField('ID') }}</div>
+              </div>
+
+              <div class="info-item" *ngIf="getUserField('CreatedDate') !== 'N/A'">
+                <div class="info-label">
+                  <i class="bi bi-calendar-check-fill"></i>
+                  Member Since
+                </div>
+                <div class="info-value">{{ getUserField('CreatedDate') | date:'mediumDate' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Information Card -->
+    <div class="additional-info-card" *ngIf="getUserField('ID') !== 'N/A'">
+      <h5 class="section-title">Account Details</h5>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="detail-item">
+            <span class="detail-label">Account Status:</span>
+            <span class="detail-value badge bg-success">Active</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="detail-item">
+            <span class="detail-label">Profile Type:</span>
+            <span class="detail-value">{{ getUserField('UserType') }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- No User Info State -->
+  <div *ngIf="!loading && !userInfo" class="no-data-state">
+    <div class="text-center py-5">
+      <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 3rem;"></i>
+      <h4 class="mt-3">No User Information Found</h4>
+      <p class="text-muted">Please log in to view your profile.</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,131 @@
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h5 class="mb-0">Add Tournament</h5>
+    </div>
+
+    <div class="card-body">
+      <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+
+        <!-- Error Message Alert -->
+        <div *ngIf="errorMessage"
+          class="alert alert-warning border-start border-4 border-warning mb-4 animate-fade-in shadow-sm">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+            <span>{{ errorMessage }}</span>
+          </div>
+        </div>
+
+        <div class="row g-3">
+          <!-- Tournament Name -->
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Tournament Name <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="TournamentName" [(ngModel)]="model.TournamentName" required
+              #name="ngModel" [class.is-invalid]="f.submitted && name.invalid">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Prize <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" name="Prize" [(ngModel)]="model.Prize" required #prize="ngModel"
+              [class.is-invalid]="f.submitted && prize.invalid">
+          </div>
+
+          <!-- Tournament Type -->
+          <div class="col-md-6">
+            <label class="form-label fw-bold">Tournament Type <span class="text-danger">*</span></label>
+            <select class="form-select" name="TournamentTypeName" [(ngModel)]="model.tournamentTypeID" required
+              #type="ngModel" [class.is-invalid]="f.submitted && type.invalid">
+              <option value="" disabled selected hidden>-- Select Tournament Type --</option>
+              <option *ngFor="let tournamentType of tournamentTypes" [value]="tournamentType.Id">{{ tournamentType.Name
+                }}</option>
+            </select>
+          </div>
+
+          <!-- Dates Row -->
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Start Date <span class="text-danger">*</span></label>
+            <input type="date" class="form-control" name="StartDate" [(ngModel)]="model.StartDate" required
+              #start="ngModel" [class.is-invalid]="f.submitted && start.invalid">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">End Date <span class="text-danger">*</span></label>
+            <input type="date" class="form-control" name="EndDate" [(ngModel)]="model.EndDate" required #endD="ngModel"
+              [class.is-invalid]="f.submitted && endD.invalid">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Registration Deadline</label>
+            <input type="date" class="form-control" name="RegistrationDeadLine"
+              [(ngModel)]="model.RegistrationDeadLine">
+          </div>
+
+          <!-- Fees & Capacity -->
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Registration Fee (BDT)</label>
+            <input type="number" class="form-control" name="RegistrationFee" [(ngModel)]="model.RegistrationFee"
+              min="0">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Field Fee (BDT)</label>
+            <input type="number" class="form-control" name="FieldFee" [(ngModel)]="model.FieldFee" min="0">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-bold">Max Teams <span class="text-danger">*</span></label>
+            <input type="number" class="form-control" name="MaxTeams" [(ngModel)]="model.MaxTeams" required min="1">
+          </div>
+
+          <!-- Player Setup -->
+          <div class="col-md-4">
+            <label class="form-label">Total Squad Size</label>
+            <input type="number" class="form-control" name="TotalPlayer" [(ngModel)]="model.TotalPlayer" min="1">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Match XI Count</label>
+            <input type="number" class="form-control" name="MatchPlayer" [(ngModel)]="model.MatchPlayer" min="1">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Extra Player Limit</label>
+            <input type="number" class="form-control" name="ExtraPlayer" [(ngModel)]="model.ExtraPlayer" min="0">
+          </div>
+
+          <!-- Group Stage Config (Conditional) -->
+          <div class="col-12" *ngIf="isGroupStage()">
+            <div class="group-config-highlight row g-3">
+              <div class="col-md-6">
+                <label class="form-label text-primary fw-bold">Number of Groups</label>
+                <input type="number" class="form-control border-primary shadow-sm" name="NumberOfGroups"
+                  [(ngModel)]="model.NumberOfGroups" placeholder="Default is 2" min="1">
+                <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Total groups for initial stage</small>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label text-primary fw-bold">Teams Per Group</label>
+                <input type="number" class="form-control border-primary shadow-sm" name="TeamsPerGroup"
+                  [(ngModel)]="model.TeamsPerGroup" placeholder="Default is 4" min="2">
+                <small class="text-muted"><i class="bi bi-info-circle me-1"></i>Expected teams in each group</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Misc -->
+          <div class="col-md-6">
+            <label class="form-label">Location</label>
+            <input type="text" class="form-control" name="Location" [(ngModel)]="model.Location">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Contact Number</label>
+            <input type="text" class="form-control" name="ContactNumber" [(ngModel)]="model.ContactNumber"
+              placeholder="e.g. 01712345678">
+          </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex justify-content-end gap-3 mt-5">
+          <button type="submit" class="btn btn-primary px-5 fw-bold shadow-sm" [disabled]="f.invalid">
+            <i class="bi bi-check-circle me-2"></i> {{ id > 0 ? 'Update' : 'Create' }} Tournament
+          </button>
+          <button type="button" class="btn btn-outline-secondary px-4 fw-bold" (click)="onCancel()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
