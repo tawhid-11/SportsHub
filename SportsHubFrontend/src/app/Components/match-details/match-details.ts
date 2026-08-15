@@ -19,7 +19,6 @@ export class MatchDetails  implements OnInit {
   constructor(private route: ActivatedRoute, private http: Httpclientservice,private cdr:ChangeDetectorRef) {}
 
   ngOnInit() {
-    debugger
     // Get the schedule ID from route
     this.matchId = Number(this.route.snapshot.paramMap.get('id'));
     this.matchDetails = {
@@ -32,7 +31,6 @@ export class MatchDetails  implements OnInit {
   getMatchDetails() {
     this.http.GetData(`TeamSchedule/GetPlayerListByTeamScheduleId?teamScheduleId=${this.matchId}`)
       .subscribe((players:any) => {
-        debugger
         // Separate players by TeamSide
         this.teamAPlayers = players.data.filter((p:any) => p.TeamSide === 'TeamA');
         this.teamBPlayers = players.data.filter((p:any) => p.TeamSide === 'TeamB');

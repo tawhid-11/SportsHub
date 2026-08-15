@@ -33,8 +33,7 @@ export class PlayingTournament implements OnInit {
         error: err => console.error('Failed to load tournaments', err)
       });
   }
- goToViewTeams(tournamentId: number) {
-  debugger;
+  goToViewTeams(tournamentId: number) {
     this.router.navigate(['/teamownerlayout/registeredteams', tournamentId]);
   }
   goToSchedule(tournamentId: number) {

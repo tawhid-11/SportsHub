@@ -20,16 +20,13 @@ export class ListofTournamentForms {
   constructor(private http: Httpclientservice, private router: Router, private route: ActivatedRoute, private cdr: ChangeDetectorRef, private datePipe: DatePipe) {
     this.getData();
     this.route.queryParams.subscribe(params => {
-      debugger;
       const id = params['id'];
 
       if (id) {
         this.id = id;
         // Fetch existing data for editing
         this.http.GetData(`Tournaments/GetTournamentsById?TournamentId=${id}`).subscribe((data: any) => {
-          debugger;
           if (data && data.data) {
-            debugger;
             this.model.TournamentName = data.data.TournamentName;
             this.model.Prize = data.data.Prize;
             this.model.tournamentTypeID = data.data.TournamentTypeID;
@@ -155,7 +152,6 @@ export class ListofTournamentForms {
 
   getData() {
     this.http.GetData('TournamentType').subscribe((data: any) => {
-      debugger;
       this.tournamentTypes = data.data;
       this.cdr.detectChanges();
     });

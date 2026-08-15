@@ -19,9 +19,8 @@ export class ViewPlayer implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-      debugger;
       this.teamId = Number(params.get('id'));
-   
+
     if (this.teamId) {
       this.loadPlayers(this.teamId);
     }

@@ -43,7 +43,6 @@ export class SignalrService {
     });
 
     this.hubConnection.on('UpdateLiveScore', (data: any) => {
-      debugger;
       this.liveMatchSubject.next(data);
     });
   }

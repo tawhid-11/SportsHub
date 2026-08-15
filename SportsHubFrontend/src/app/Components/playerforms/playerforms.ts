@@ -52,7 +52,6 @@ export class PlayerForm implements OnInit {
   }
   loadPlayerData(id: number) {
     this.dataService.GetData(`Player/GetPlayerById?PlayerID=${id}`).subscribe((res: any) => {
-      debugger;
       if (res && res.data) {
         this.model = res.data;
         this.cdr.detectChanges();
@@ -75,12 +74,10 @@ export class PlayerForm implements OnInit {
     });
   }
   loadTeam() {
-    debugger;
     // Load teams from API
     var user = JSON.parse(localStorage.getItem('userInfo') || '{}');
 
     this.dataService.GetData(`Teams/GetTeamIdbyUserId?id=${user.ID}`).subscribe((res: any) => {
-      debugger;
       this.teams = res.data;
       this.cdr.detectChanges();
     });
@@ -100,7 +97,6 @@ export class PlayerForm implements OnInit {
   }
   buildFormData(userId?: number): FormData {
     const formData = new FormData();
-    debugger;
     formData.append('TeamsID', this.teams.TeamsID.toString());
     formData.append('PlayerRoleID', this.model.PlayerRoleID.toString());
     formData.append('FullName', this.model.FullName.trim());
