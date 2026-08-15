@@ -50,8 +50,12 @@ export class ListofTournaments {
       this.getData();
     });
   }
+  onViewTeams(id: number) {
+    this.router.navigate(['/layout/registeredteams', id]);
+  }
+
   goToSchedule(tournamentId: number) {
-    this.router.navigate(['/layout/schedules', tournamentId],{queryParams:{from:'admin'}});
+    this.router.navigate(['/layout/schedules', tournamentId], { queryParams: { from: 'admin' } });
   }
 }
 

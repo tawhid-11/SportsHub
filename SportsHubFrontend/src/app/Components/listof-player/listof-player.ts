@@ -23,12 +23,11 @@ export class ListofPlayer implements OnInit{
 
 
     this.http.GetData(`Player/GetPlayerByTeamOwnerId?id=${user.ID}`).subscribe((res: any) => {
-      debugger;
       if (res && res.success) {
         this.players = res.data.map((player: any) => {
           return {
           ...player,
-          PlayerImage: 'https://localhost:7142/' + player.PlayerImage
+          PlayerImage: this.http.baseHost + player.PlayerImage
           };
           });
         this.cdr.detectChanges();
@@ -44,13 +43,11 @@ export class ListofPlayer implements OnInit{
 
   // 🔹 Edit Player
   onEdit(id: number) {
-    debugger;
     this.router.navigate(['teamownerlayout/playerforms'], {queryParams: { id }});
   }
 
   // 🔹 Delete Player
   onDelete(id: number) {
-    debugger;
     if (!confirm('Are you sure you want to delete this player?')) {
       return;
     }

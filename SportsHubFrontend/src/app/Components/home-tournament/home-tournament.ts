@@ -49,7 +49,6 @@ export class HomeTournament implements OnInit {
 
   // 🔥 ONLY NEW METHOD ADDED
   registerNow(tournament: any): void {
-    debugger;
     this.router.navigate(['/teams'], { queryParams: { id: tournament.TournamentID } });
   }
 

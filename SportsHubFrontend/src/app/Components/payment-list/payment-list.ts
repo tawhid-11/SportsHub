@@ -55,6 +55,7 @@ export class PaymentList implements OnInit {
           // Map data to include both new and legacy field names
           this.payments = paymentData.map((p: any) => ({
             ...p,
+            Id: p.Id || p.ID || p.id, // Ensure Id is captured regardless of casing
             // Map new fields to legacy fields for backward compatibility
             teamName: p.TeamName || p.teamName,
             tournamentName: p.TournamentName || p.tournamentName,
@@ -88,7 +89,7 @@ export class PaymentList implements OnInit {
         const paymentStatus = (p.PaymentStatus || p.paymentStatus || '').toLowerCase();
         // Map status values
         if (status === 'completed') {
-          return paymentStatus === 'completed' || paymentStatus === 'success' || paymentStatus === 'confirmed';
+          return paymentStatus === 'completed' || paymentStatus === 'success' || paymentStatus === 'confirmed' || paymentStatus === 'paid';
         } else if (status === 'pending') {
           return paymentStatus === 'pending' || paymentStatus === 'initiated';
         } else if (status === 'failed') {
@@ -107,6 +108,7 @@ export class PaymentList implements OnInit {
       case 'completed':
       case 'success':
       case 'confirmed':
+      case 'paid':
         return 'badge bg-success';
       case 'pending':
       case 'initiated':
@@ -138,7 +140,7 @@ export class PaymentList implements OnInit {
   getCompletedCount(): number {
     return this.payments.filter(p => {
       const status = (p.PaymentStatus || p.paymentStatus || '').toLowerCase();
-      return status === 'completed' || status === 'success' || status === 'confirmed';
+      return status === 'completed' || status === 'success' || status === 'confirmed' || status === 'paid';
     }).length;
   }
 
@@ -154,5 +156,27 @@ export class PaymentList implements OnInit {
       const status = (p.PaymentStatus || p.paymentStatus || '').toLowerCase();
       return status === 'failed';
     }).length;
+  }
+
+  markAsPaid(id?: number): void {
+    if (!id || !confirm('Are you sure you want to mark this payment as PAID? This will allow the team to participate in the tournament.')) return;
+
+    // We use query parameter pattern which is standard in this project's controllers
+    this.http.PostData('Payment/UpdateToPaid?id=' + id, {}).subscribe({
+      next: (res: any) => {
+        if (res.success) {
+          alert('Payment reconciled successfully!');
+          this.loadPayments();
+        } else {
+          alert('Failed: ' + (res.message || res.Message || 'Unknown error from server'));
+        }
+      },
+      error: (err) => {
+        console.error('Reconciliation error:', err);
+        const status = err.status || 'Unknown';
+        const detail = err.error?.message || err.error?.Message || err.message || 'No detail available';
+        alert(`Server Error (${status}): ${detail}`);
+      }
+    });
   }
 }

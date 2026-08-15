@@ -7,7 +7,7 @@
     <div class="team-column">
       <h4>{{ matchDetails?.TeamAName }}</h4>
       <div *ngFor="let player of teamAPlayers">
-        <img [src]="'https://localhost:7142'+player.PlayerImage || 'assets/default-player.png'" alt="{{player.PlayerName}}">
+        <img [src]="'https://localhost:7142'+player.PlayerImage" onerror="this.src='assets/image/SportsHub.png'" alt="{{player.PlayerName}}">
         <span class="player-name">{{ player.PlayerName }}</span>
         <span class="player-role">{{ player.RoleName }}</span>
         <!-- <span *ngIf="player.IsCaptain" class="captain">(c)</span>
@@ -18,7 +18,7 @@
     <div class="team-column">
       <h4>{{ matchDetails?.TeamBName }}</h4>
       <div *ngFor="let player of teamBPlayers">
-        <img [src]="'https://localhost:7142'+player.PlayerImage || 'assets/default-player.png'" alt="{{player.PlayerName}}">
+        <img [src]="'https://localhost:7142'+player.PlayerImage" onerror="this.src='assets/image/SportsHub.png'" alt="{{player.PlayerName}}">
         <span class="player-name">{{ player.PlayerName }}</span>
         <span class="player-role">{{ player.RoleName }}</span>
         <!-- <span *ngIf="player.IsCaptain" class="captain">(c)</span>
@@ -33,7 +33,7 @@
     <div class="team-column">
       <h4>{{ matchDetails?.TeamAName }}</h4>
       <div *ngFor="let player of teamAPlayers">
-        <img [src]="+'https://localhost:7142'+player.PlayerImage || 'assets/default-player.png'" alt="{{player.PlayerName}}">
+        <img [src]="'https://localhost:7142'+player.PlayerImage" onerror="this.src='assets/image/SportsHub.png'" alt="{{player.PlayerName}}">
         <span class="player-name">{{ player.PlayerName }}</span>
         <span class="player-role">{{ player.Role }}</span>
       </div>
@@ -42,7 +42,7 @@
     <div class="team-column">
       <h4>{{ matchDetails?.TeamBName }}</h4>
       <div *ngFor="let player of teamBPlayers">
-        <img [src]="'https://localhost:7142'+player.PlayerImage || 'assets/default-player.png'" alt="{{player.PlayerName}}">
+        <img [src]="'https://localhost:7142'+player.PlayerImage" onerror="this.src='assets/image/SportsHub.png'" alt="{{player.PlayerName}}">
         <span class="player-name">{{ player.PlayerName }}</span>
         <span class="player-role">{{ player.RoleName }}</span>
       </div>

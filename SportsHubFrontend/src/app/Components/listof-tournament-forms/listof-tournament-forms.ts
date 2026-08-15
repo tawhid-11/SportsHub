@@ -44,8 +44,10 @@ export class ListofTournamentForms {
             this.model.RegistrationFee = data.data.RegistrationFee;
             this.model.FieldFee = data.data.FieldFee;
             this.model.MaxTeams = data.data.MaxTeams;
-            this.model.NumberOfGroups = data.data.NumberOfGroups || 2;
-            this.model.TeamsPerGroup = data.data.TeamsPerGroup || 4;
+            this.model.NumberOfGroups = data.data.NumberOfGroups;
+            this.model.TeamsPerGroup = data.data.TeamsPerGroup;
+            this.model.StartTimeMorning = data.data.StartTimeMorning || '10:00';
+            this.model.StartTimeAfternoon = data.data.StartTimeAfternoon || '14:00';
             this.model.ContactNumber = '0' + data.data.ContactNumber;
             this.cdr.detectChanges();
           }
@@ -126,9 +128,9 @@ export class ListofTournamentForms {
     }
 
     if (this.isGroupStage()) {
-      const groups = this.model.NumberOfGroups || 2;
-      const perGroup = this.model.TeamsPerGroup || 4;
-      if (groups * perGroup > this.model.MaxTeams) {
+      const groups = this.model.NumberOfGroups;
+      const perGroup = this.model.TeamsPerGroup;
+      if (groups && perGroup && (groups * perGroup > this.model.MaxTeams)) {
         this.errorMessage = `Configuration error: ${groups} groups x ${perGroup} teams exceeds Max Teams (${this.model.MaxTeams}).`;
         return false;
       }

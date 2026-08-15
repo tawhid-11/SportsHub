@@ -30,7 +30,7 @@ export class AdminDashboard implements OnInit {
       next: (res: any) => {
         console.log('Dashboard response:', res);
         if (res && res.success && res.data) {
-          debugger;
+
           // Handle both uppercase and lowercase property names
           this.statistics = {
             totalTeams: res.data.totalTeams || res.data.TotalTeams || 0,
@@ -43,7 +43,7 @@ export class AdminDashboard implements OnInit {
           console.warn('Invalid response format:', res);
         }
         this.loading = false;
-         this.cdr.detectChanges();
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error loading statistics:', err);

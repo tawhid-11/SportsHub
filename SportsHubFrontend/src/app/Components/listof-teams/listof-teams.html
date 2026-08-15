@@ -29,7 +29,7 @@
           <td>{{ item.TeamName }}</td>
           <td>{{ item.ShortName }}</td>
           <td class="text-center">
-            <img *ngIf="item.TeamLogo" [src]="'https://localhost:7142'+item.TeamLogo" alt="Team Logo" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+            <img *ngIf="item.TeamLogo" [src]="'https://localhost:7142'+item.TeamLogo" alt="Team Logo" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;" onerror="this.src='assets/image/SportsHub.png'">
             <span *ngIf="!item.TeamLogo" class="text-muted">-</span>
           </td>
           <td>{{ item.TeamOwnerName }}</td>

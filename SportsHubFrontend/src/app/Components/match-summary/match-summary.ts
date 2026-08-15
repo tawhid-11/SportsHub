@@ -30,12 +30,12 @@ export class MatchSummary implements OnInit {
 
   getSummary() {
     this.http.GetData(`LiveMatch/GetMatchSummary?matchId=${this.matchId}`).subscribe((res: any) => {
-      this.summary = res;
+      this.summary = res.data;
        this.cdr.detectChanges();
     });
   }
 
   goBack() {
-    this.router.navigate(['/layout/matches']);
+    this.router.navigate(['/']);
   }
 }

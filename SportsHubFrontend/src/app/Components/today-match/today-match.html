@@ -1,37 +1,76 @@
-<div class="container my-4">
-
-  <h2 class="mb-4 text-center">Today's Matches</h2>
-
-  <!-- Skeleton Loader -->
-  <div *ngIf="loading">
-    <div *ngFor="let i of [1,2,3]" class="card mb-3 p-3 skeleton">
-      <div class="skeleton-line mb-2"></div>
-      <div class="skeleton-line w-75"></div>
+<div class="fixtures-container">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+      <h2 class="section-title mb-0">Daily Fixtures</h2>
+      <div class="dropdown" *ngIf="!loading">
+        <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" (click)="fetchTodayMatches()">
+          <i class="bi bi-arrow-clockwise me-1"></i> REFRESH
+        </button>
+      </div>
     </div>
-  </div>
 
-  <div class="row" *ngIf="!loading && matches.length">
-    <div class="col-md-6" *ngFor="let match of matches">
-      <div class="card mb-3 shadow-sm">
-        <div class="card-body">
-          <h5 class="card-title">{{match.TeamAName}} vs {{match.TeamBName}}</h5>
-          <p class="card-text">
-            <strong>Tournament:</strong> {{match.TournamentName}} <br>
-            <strong>Match Date:</strong> {{match.MatchDate | date:'short'}}
-          </p>
-          <button class="btn btn-primary btn-sm" (click)="startMatch(match.TeamScheduleID)">
-            Start Match
-          </button>
+    <!-- Skeleton Loader -->
+    <div *ngIf="loading" class="row">
+      <div class="col-md-6 mb-4" *ngFor="let i of [1,2,3,4]">
+        <div class="skeleton-card"></div>
+      </div>
+    </div>
+
+    <!-- Matches Grid -->
+    <div class="row" *ngIf="!loading && matches.length">
+      <div class="col-md-6" *ngFor="let match of matches">
+        <div class="fixture-card animate-fade-in">
+          <div class="fixture-header">
+            <span class="tournament-badge"><i class="bi bi-trophy-fill me-1"></i> {{match.TournamentName}}</span>
+            <span class="match-status" 
+                  [ngClass]="match.MatchStatus === 'Live' ? 'status-live' : 'status-upcoming'">
+              {{ match.MatchStatus === 'Live' ? '🔴 LIVE' : 'UPCOMING' }}
+            </span>
+          </div>
+
+          <div class="fixture-body">
+            <div class="vs-matchup">
+              <!-- Team A -->
+              <div class="team-box">
+                <div class="team-logo-placeholder shadow-sm">
+                  <img *ngIf="match.TeamALogo" [src]="'https://localhost:7142' + match.TeamALogo" class="w-100 h-100 rounded-4 object-fit-cover shadow-xs">
+                  <i *ngIf="!match.TeamALogo" class="bi bi-shield-shaded"></i>
+                </div>
+                <h5 class="team-name-lg">{{match.TeamAName}}</h5>
+              </div>
+
+              <!-- VS Badge -->
+              <div class="vs-divider shadow-sm">VS</div>
+
+              <!-- Team B -->
+              <div class="team-box">
+                <div class="team-logo-placeholder shadow-sm">
+                   <img *ngIf="match.TeamBLogo" [src]="'https://localhost:7142' + match.TeamBLogo" class="w-100 h-100 rounded-4 object-fit-cover shadow-xs">
+                   <i *ngIf="!match.TeamBLogo" class="bi bi-shield-shaded font-blue"></i>
+                </div>
+                <h5 class="team-name-lg">{{match.TeamBName}}</h5>
+              </div>
+            </div>
+          </div>
+
+          <div class="fixture-footer mt-2 border-top">
+            <div class="match-meta text-muted">
+                <i class="bi bi-calendar3 me-1"></i> {{match.MatchDate | date:'MMM dd, HH:mm'}}
+            </div>
+            <button class="btn-start" (click)="startMatch(match.TeamScheduleID)">
+              {{ match.MatchStatus === 'Live' ? 'CONTINUE SCORING' : 'START MATCH' }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- Empty State -->
+    <div *ngIf="!loading && matches.length === 0" class="text-center py-5">
+      <div class="display-1 text-light mb-4"><i class="bi bi-calendar-x"></i></div>
+      <h3 class="text-secondary fw-bold">No Matches Scheduled</h3>
+      <p class="text-muted">There are no upcoming or live matches for today.</p>
+      <button class="btn btn-indigo rounded-pill px-4 mt-3" (click)="fetchTodayMatches()">RELOAD DATA</button>
+    </div>
   </div>
-
-  <div *ngIf="!loading && matches.length === 0" class="alert alert-info text-center">
-    No matches scheduled for today.
-  </div>
-
-  <!-- Players List -->
- 
-
 </div>

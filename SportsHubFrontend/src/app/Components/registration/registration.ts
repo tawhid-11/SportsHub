@@ -67,8 +67,8 @@ export class Registration {
       return false;
     }
 
-    if (this.registerData.password.length < 6) {
-      this.errorMessage = 'Password must be at least 6 characters long.';
+    if (this.registerData.password.length < 8) {
+      this.errorMessage = 'Password must be at least 8 characters long.';
       return false;
     }
 

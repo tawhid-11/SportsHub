@@ -1,0 +1,138 @@
+<div class="dashboard-container">
+  <!-- Welcome Banner -->
+  <div class="welcome-banner mb-4" *ngIf="teamInfo">
+    <h2 class="mb-0">Welcome to {{ teamInfo.TeamName }} Dashboard</h2>
+    <p class="text-muted mb-0">Manage your team and players effectively.</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3 text-muted">Loading your team dashboard...</p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="row g-4 mb-4" *ngIf="!loading && teamInfo">
+    <!-- Total Players Card -->
+    <div class="col-md-4">
+      <div class="stat-card player-card">
+        <div class="stat-icon">
+          <i class="bi bi-people-fill"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">{{ playersCount }}</h3>
+          <p class="stat-label">Registered Players</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Tournaments Card -->
+    <div class="col-md-4">
+      <div class="stat-card tournament-card">
+        <div class="stat-icon">
+          <i class="bi bi-trophy-fill"></i>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-number">View</h3>
+          <p class="stat-label">Playing Tournaments</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Profile Overview -->
+    <div class="col-md-4" *ngIf="teamInfo.TeamLogo">
+        <div class="stat-card team-logo-card">
+            <div class="team-brand">
+                <img [src]="'https://localhost:7142/' + teamInfo.TeamLogo" class="team-logo img-fluid" alt="Team Logo">
+                <div class="ms-3">
+                    <h5 class="mb-0 fw-bold">{{ teamInfo.ShortName }}</h5>
+                    <small class="text-muted">Since {{ teamInfo.FoundedYear }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Recent Matches Section -->
+  <div class="row g-4 mb-4" *ngIf="!loading && recentMatches.length > 0">
+    <div class="col-12">
+        <div class="performance-card shadow-sm border-0 p-4 bg-white rounded-3">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="mb-0 fw-bold"><i class="bi bi-graph-up-arrow me-2 text-primary"></i>Recent Performance</h4>
+                <button class="btn btn-sm btn-outline-primary rounded-pill px-3" routerLink="/teamownerlayout/playingtournament">View All Matches</button>
+            </div>
+            
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr class="text-secondary small">
+                            <th>DATE</th>
+                            <th>OPPOSITION</th>
+                            <th class="text-center">RESULT</th>
+                            <th class="text-end">ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let m of recentMatches">
+                            <td>{{ m.ScheduledDate | date:'mediumDate' }}</td>
+                            <td class="fw-semibold">vs {{ m.Opponent }}</td>
+                            <td class="text-center">
+                                <span class="badge" [ngClass]="{
+                                    'bg-success-subtle text-success': m.Result === 'Won',
+                                    'bg-danger-subtle text-danger': m.Result === 'Lost',
+                                    'bg-warning-subtle text-warning': m.Result === 'Draw' || m.Result === 'Live',
+                                    'bg-secondary-subtle text-secondary': m.Result === 'Finished'
+                                }">
+                                    {{ m.Result }}
+                                </span>
+                            </td>
+                            <td class="text-end">
+                                <button class="btn btn-light btn-sm rounded-circle" [routerLink]="['/view-live-score', m.CricketMatchID]" title="View Scorecard">
+                                    <i class="bi bi-eye-fill"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions Section -->
+  <div class="row g-4 mt-4" *ngIf="!loading">
+    <div class="col-12">
+      <div class="quick-actions-card shadow-sm border-0 p-4 bg-white rounded-3">
+        <h4 class="mb-4 fw-bold">Quick Actions</h4>
+        <div class="row g-3">
+          <div class="col-md-3 col-sm-6">
+            <a routerLink="/teamownerlayout/playerforms" class="action-btn add-player-btn">
+              <i class="bi bi-person-plus-fill me-2"></i>
+              <span>Add Player</span>
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <a routerLink="/teamownerlayout/tournamentregistration" class="action-btn register-tournament-btn">
+              <i class="bi bi-plus-circle-fill me-2"></i>
+              <span>Register Tournament</span>
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <a routerLink="/teamownerlayout/player" class="action-btn manage-players-btn">
+              <i class="bi bi-list-task me-2"></i>
+              <span>List Players</span>
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <a routerLink="/teamownerlayout/playingtournament" class="action-btn matches-btn">
+              <i class="bi bi-calendar-event-fill me-2"></i>
+              <span>My Matches</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

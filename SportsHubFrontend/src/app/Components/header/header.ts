@@ -8,8 +8,13 @@ import { SignalrService } from '../../Service/SignalrService';
   styleUrl: './header.css',
 })
 export class Header {
-  constructor(private signalR:SignalrService) {
+  constructor(private signalR: SignalrService) {
     this.signalR.startConnection();
   }
   @Output() menu = new EventEmitter<void>();
+
+  getUserName(): string {
+    const user = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    return user.Name || 'Admin';
+  }
 }

@@ -110,6 +110,118 @@
         </div>
       </div>
     </div>
+
+    <!-- Sports Performance Stats Card -->
+    <div class="profile-card mt-4" *ngIf="playerStats">
+      <div class="row text-center mb-3">
+        <div class="col-12">
+          <h4 class="fw-bold mb-3" style="color: var(--primary)">Performance Statistics</h4>
+          <span class="badge bg-secondary mb-3">Matches Played: {{ playerStats.MatchesPlayed }}</span>
+        </div>
+      </div>
+      
+      <div class="row align-items-center">
+        <!-- Batting Stats -->
+        <div class="col-md-6 border-end">
+          <h5 class="text-center mb-4"><i class="bi bi-person-arms-up text-primary me-2"></i>Batting</h5>
+          <div class="d-flex justify-content-around">
+            <div class="text-center">
+              <h3 class="fw-bold text-dark">{{ playerStats.TotalRuns }}</h3>
+              <p class="text-muted small">Runs</p>
+            </div>
+            <div class="text-center">
+              <h3 class="fw-bold text-dark">{{ playerStats.HighestScore }}</h3>
+              <p class="text-muted small">Highest</p>
+            </div>
+            <div class="text-center">
+              <h3 class="fw-bold text-dark">{{ playerStats.StrikeRate }}</h3>
+              <p class="text-muted small">Strike Rate</p>
+            </div>
+            <div class="text-center">
+              <h3 class="fw-bold text-dark">{{ playerStats.BallsFaced }}</h3>
+              <p class="text-muted small">Balls</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bowling Stats -->
+        <div class="col-md-6">
+          <h5 class="text-center mb-4"><i class="bi bi-bullseye text-danger me-2"></i>Bowling</h5>
+          <div class="d-flex justify-content-around">
+            <div class="text-center">
+              <h3 class="fw-bold text-dark">{{ playerStats.TotalWickets }}</h3>
+              <p class="text-muted small">Wickets</p>
+            </div>
+            <div class="text-center">
+              <h3 class="fw-bold text-dark">{{ playerStats.Economy }}</h3>
+              <p class="text-muted small">Economy</p>
+            </div>
+            <div class="text-center">
+              <h3 class="fw-bold text-dark">{{ playerStats.OversBowled }}</h3>
+              <p class="text-muted small">Overs</p>
+            </div>
+            <div class="text-center">
+              <h3 class="fw-bold text-dark">{{ playerStats.RunsConceded }}</h3>
+              <p class="text-muted small">Runs Given</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Match History Card -->
+    <div class="profile-card mt-4 mb-4" *ngIf="matchHistory && matchHistory.length > 0">
+      <div class="row mb-3">
+        <div class="col-12">
+          <h4 class="fw-bold mb-3 d-flex align-items-center" style="color: var(--primary)">
+            <i class="bi bi-clock-history me-2"></i> Match History
+          </h4>
+        </div>
+      </div>
+      
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="bg-light">
+            <tr>
+              <th>Date</th>
+              <th>Match Details</th>
+              <th class="text-center">Batting</th>
+              <th class="text-center">Bowling</th>
+              <th class="text-end">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let m of matchHistory">
+              <td class="text-muted small">
+                {{ m.ScheduledDate | date:'mediumDate' }}
+              </td>
+              <td>
+                <div class="fw-bold text-dark">{{ m.TeamA }} vs {{ m.TeamB }}</div>
+                <div class="small text-muted">Stadium Ground</div>
+              </td>
+              <td class="text-center">
+                <span class="badge bg-indigo-subtle text-indigo p-2" *ngIf="m.RunsScored > 0 || m.BallsFaced > 0">
+                  {{ m.RunsScored }} ({{ m.BallsFaced }})
+                </span>
+                <span class="text-muted small" *ngIf="m.RunsScored === 0 && m.BallsFaced === 0">DNB</span>
+              </td>
+              <td class="text-center">
+                <span class="badge bg-danger-subtle text-danger p-2" *ngIf="m.WicketsTaken > 0">
+                  {{ m.WicketsTaken }}-{{ m.RunsConceded }}
+                </span>
+                <span class="text-muted small" *ngIf="m.WicketsTaken === 0">No Wickets</span>
+              </td>
+              <td class="text-end">
+                <button class="btn btn-outline-primary btn-sm rounded-pill px-3" [routerLink]="['/view-live-score', m.CricketMatchID]">
+                  View Scorecard
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </div>
 
   <!-- No User Info State -->

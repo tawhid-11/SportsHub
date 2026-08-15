@@ -104,6 +104,26 @@
             </div>
           </div>
 
+          <div class="col-12 mt-4">
+            <div class="card bg-light border-0">
+              <div class="card-body">
+                <h6 class="fw-bold mb-3"><i class="bi bi-clock me-2"></i>Match Logistics</h6>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label small fw-bold">Morning Slot Start Time</label>
+                    <input type="time" class="form-control" name="StartTimeMorning" [(ngModel)]="model.StartTimeMorning">
+                    <div class="form-text small">Standard is 10:00 AM</div>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label small fw-bold">Afternoon Slot Start Time</label>
+                    <input type="time" class="form-control" name="StartTimeAfternoon" [(ngModel)]="model.StartTimeAfternoon">
+                    <div class="form-text small">Standard is 02:00 PM</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Misc -->
           <div class="col-md-6">
             <label class="form-label">Location</label>

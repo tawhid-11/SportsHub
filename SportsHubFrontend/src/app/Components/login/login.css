@@ -1,52 +1,77 @@
 /* Full viewport background */
 .login-wrapper {
   min-height: 100vh;
-  background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85)),
               url('/assets/image/backgroundimg.png') no-repeat center center / cover;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
+  position: relative;
   overflow: hidden;
 }
 
 /* Card */
 .login-card {
-  background: linear-gradient(135deg, #ffb9eb, #afe0ff);
-  border-radius: 20px;
-  padding: 25px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  padding: 40px;
   width: 100%;
-  max-width: 380px; /* slightly smaller */
-  box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+  max-width: 420px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-5px);
 }
 
 /* Logo */
 .logo-img {
-  width: 100px;
-  height: 100px;
+  width: 90px;
+  height: 90px;
   object-fit: cover;
-  border-radius: 50%;
-  border: 3px solid #16b51e;
+  border-radius: 20px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin-bottom: 15px;
 }
 
 /* Input fields */
 .form-control {
-  border-radius: 30px 0 0 30px;
-  border: 1px solid #ccc;
-  padding: 12px 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px 0 0 12px !important;
+  padding: 14px 20px;
+  color: #fff !important;
+  transition: all 0.3s ease;
 }
 
 .input-group-text {
-  border-radius: 0 30px 30px 0;
-  border: 1px solid #ccc;
-  color: #555;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0 12px 12px 0 !important;
+  color: #94a3b8;
 }
 
-.form-control:focus,
-.input-group-text:focus {
-  box-shadow: 0 0 5px #4dff7c;
-  border-color: #4dff7c;
-  outline: none;
+.form-control::placeholder {
+  color: #64748b;
+}
+
+.form-control:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #0ea5e9;
+  box-shadow: none;
+}
+
+.form-control:focus + .input-group-text,
+.input-group:focus-within .input-group-text {
+  border-color: #0ea5e9;
+  color: #0ea5e9;
 }
 
 /* Cursor pointer for eye icon */
@@ -56,17 +81,27 @@
 
 /* Login button */
 .btn-login {
-  border-radius: 30px;
-  padding: 12px;
-  font-weight: 600;
-  color: #fff;
-  background: linear-gradient(135deg, #1515a7, #57bfff);
+  background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
   border: none;
-  transition: 0.3s ease;
+  border-radius: 12px;
+  padding: 14px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #fff;
+  box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.3);
+  transition: all 0.3s ease;
 }
 
-.btn-login:hover {
-  opacity: 0.9;
+.btn-login:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgba(14, 165, 233, 0.4);
+  filter: brightness(1.1);
+}
+
+.btn-login:disabled {
+  background: #334155;
+  box-shadow: none;
+  opacity: 0.6;
 }
 
 /* Divider */
@@ -77,21 +112,16 @@
 }
 
 .divider span {
-  background: #fff;
-  padding: 0 10px;
-  font-size: 12px;
-  color: #555;
+  background: transparent;
+  padding: 0 15px;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .divider::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: #ddd;
-  z-index: -1;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* Social buttons */
@@ -117,17 +147,16 @@
 
 /* Signup link */
 .signup-link {
-  cursor: pointer;
-  color: #01b501cc;
-  font-weight: 600;
-  font-size: 16px;
+  color: #0ea5e9;
+  font-weight: 700;
   text-decoration: none;
-  padding: 2px 8px;
-  border-radius: 8px;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
 }
 
 .signup-link:hover {
-  background-color: rgba(1,181,1,0.1);
+  color: #38bdf8;
+  border-bottom-color: #0ea5e9;
 }
 
 /* Responsive adjustments */

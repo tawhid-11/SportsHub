@@ -26,7 +26,7 @@ export class AdminPlayersList {
         this.players = res.data.map((player: any) => {
           return {
             ...player,
-            PlayerImage: player.PlayerImage ? 'https://localhost:7142' + player.PlayerImage : null
+            PlayerImage: player.PlayerImage ? this.http.baseHost + player.PlayerImage : null
           };
         });
         this.cdr.detectChanges();

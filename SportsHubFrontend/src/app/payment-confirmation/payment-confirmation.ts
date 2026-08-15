@@ -1,9 +1,8 @@
 
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-
+import { Httpclientservice } from '../Service/httpclientservice';
 
 @Component({
   selector: 'app-payment-confirmation',
@@ -20,12 +19,11 @@ export class PaymentConfirmation implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private http: HttpClient,
+    private http: Httpclientservice,
     private router: Router
   ) { }
 
   ngOnInit(): void {
-    debugger;
     const paymentId = this.route.snapshot.queryParamMap.get('paymentID');
     const status = this.route.snapshot.queryParamMap.get('status');
 
@@ -38,22 +36,14 @@ export class PaymentConfirmation implements OnInit {
   }
 
   confirmPayment(paymentId: string) {
-    this.http.get<any>('https://localhost:7142/api/Teams/Success_URL?paymemtId=' + paymentId)
+    this.http.GetData('Teams/Success_URL?paymemtId=' + paymentId)
       .subscribe({
         next: (res) => {
           this.loading = false;
-  this.successMessage = 'Tournament registration confirmed successfully!';
-            setTimeout(() => {
-              this.router.navigate(['/']);
-            }, 3000);
-          // if (res.success || res.statusCode === '0000') {
-          //   this.successMessage = 'Tournament registration confirmed successfully!';
-          //   setTimeout(() => {
-          //     this.router.navigate(['/']);
-          //   }, 3000);
-          // } else {
-          //   this.errorMessage = 'Payment verification failed: ' + (res.statusMessage || 'Unknown error');
-          // }
+          this.successMessage = 'Tournament registration confirmed successfully!';
+          setTimeout(() => {
+            this.router.navigate(['/']);
+          }, 3000);
         },
         error: () => {
           this.loading = false;

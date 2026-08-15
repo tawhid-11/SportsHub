@@ -1,136 +1,147 @@
-.points-page {
-  background: #0f172a;
-  min-height: 100vh;
-  font-family: 'Inter', sans-serif;
+.points-container {
+    padding: 30px;
+    background: #f1f5f9;
+    min-height: 100vh;
 }
 
-.btn-back {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #94a3b8;
-  padding: 8px 16px;
-  border-radius: 10px;
-  transition: all 0.3s ease;
+.standings-card {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    margin-bottom: 40px;
+    border: 1px solid #e2e8f0;
 }
 
-.btn-back:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  transform: translateX(-5px);
+.group-header {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: white;
+    padding: 16px 24px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.letter-spacing-1 {
-  letter-spacing: 1px;
+.tournament-info {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94a3b8;
+    margin-bottom: 20px;
+    font-weight: 700;
 }
 
-.glass-card {
-  background: rgba(30, 41, 59, 0.5);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 20px;
-  overflow: hidden;
+.points-table-premium {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.table-dark-header {
-  background: #1e293b;
+.points-table-premium th {
+    background: #f8fafc;
+    padding: 14px 16px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    border-bottom: 2px solid #e2e8f0;
 }
 
-.table th {
-  padding: 1.25rem 1rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: #94a3b8;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.05);
+.points-table-premium th:first-child { text-align: left; padding-left: 24px; }
+
+.points-table-premium td {
+    padding: 16px;
+    text-align: center;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.95rem;
+    color: #334155;
 }
 
-.table td {
-  padding: 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
+.points-table-premium td:first-child { text-align: left; padding-left: 24px; }
 
-.logo-box {
-  width: 40px;
-  height: 40px;
-  background: #fff;
-  border-radius: 10px;
-  padding: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.logo-box img {
-  max-width: 100%;
-  max-height: 100%;
-}
-
+/* Rank Column */
 .rank-badge {
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #334155;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: #f1f5f9;
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-right: 12px;
 }
 
-.rank-badge.qualified {
-  background: #10b981;
-  color: white;
+tr:nth-child(1) .rank-badge { background: #fef3c7; color: #92400e; box-shadow: 0 0 10px rgba(251, 191, 36, 0.4); }
+tr:nth-child(2) .rank-badge { background: #f1f5f9; color: #475569; }
+tr:nth-child(3) .rank-badge { background: #fff7ed; color: #9a3412; }
+
+/* Team Column */
+.team-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.pts-badge {
-  background: rgba(14, 165, 233, 0.1);
-  color: #0ea5e9;
-  padding: 4px 12px;
-  border-radius: 8px;
-  font-weight: 700;
+.team-logo-sm {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 2px;
 }
 
-.nrr-value {
-  font-family: 'JetBrains Mono', monospace;
-  font-weight: 600;
+.team-name-bold {
+    font-weight: 700;
+    color: #1e293b;
 }
 
-.legend-box {
-  background: rgba(30, 41, 59, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.05);
+/* Specific Highlighted Columns */
+.pts-col {
+    background: #f8fafc;
+    font-weight: 800;
+    color: #6366f1;
 }
 
-.dot-indicator {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-right: 8px;
+.nrr-col {
+    font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+    font-weight: 600;
 }
 
-.top-team {
-  background: rgba(16, 185, 129, 0.03);
+.nrr-positive { color: #10b981; }
+.nrr-negative { color: #ef4444; }
+
+/* Status Indicators */
+.l5-dots {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
 }
 
-.empty-box {
-  background: rgba(30, 41, 59, 0.3);
-  border: 2px dashed rgba(255, 255, 255, 0.05);
+.l5-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
 }
 
+.l5-w { background: #10b981; }
+.l5-l { background: #ef4444; }
+.l5-d { background: #94a3b8; }
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
-  .table th {
-    font-size: 0.65rem;
-    padding: 0.75rem 0.5rem;
-  }
-
-  .table td {
-    padding: 0.75rem 0.5rem;
-    font-size: 0.85rem;
-  }
-
-  .logo-box {
-    width: 32px;
-    height: 32px;
-  }
+    .points-table-premium th:nth-child(3),
+    .points-table-premium td:nth-child(3),
+    .points-table-premium th:nth-child(4),
+    .points-table-premium td:nth-child(4),
+    .points-table-premium th:nth-child(5),
+    .points-table-premium td:nth-child(5) {
+        display: none;
+    }
 }

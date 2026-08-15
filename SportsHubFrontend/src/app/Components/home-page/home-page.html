@@ -100,16 +100,16 @@
             <div class="team-vs">
               <div class="team">
                 <div class="logo-wrapper">
-                  <img [src]="'https://localhost:7142'+m.teamALogo" alt="Team A"
-                    onerror="this.src='assets/image/SportsHub.png'">
+                   <img [src]="'https://localhost:7142'+m.teamALogo" alt="Team A"
+                     onerror="this.src='assets/image/SportsHub.png'">
                 </div>
                 <span class="team-name">{{ m.teamAName }}</span>
               </div>
               <div class="vs-divider">VS</div>
               <div class="team">
                 <div class="logo-wrapper">
-                  <img [src]="'https://localhost:7142'+m.teamBLogo" alt="Team B"
-                    onerror="this.src='assets/image/SportsHub.png'">
+                   <img [src]="'https://localhost:7142'+m.teamBLogo" alt="Team B"
+                     onerror="this.src='assets/image/SportsHub.png'">
                 </div>
                 <span class="team-name">{{ m.teamBName }}</span>
               </div>
@@ -193,13 +193,9 @@
 
       <div class="row g-4">
         <div class="col-xl-3 col-lg-4 col-md-6" *ngFor="let g of gallery">
-          <div class="tournament-grid-card">
-            <div class="card-img-box">
-              <img [src]="'https://localhost:7142'+g.image" alt="Tournament"
-                onerror="this.src='assets/image/hero-cricket.jpg'">
-              <div class="status-overlay">
-                <span class="status-badge" [attr.data-status]="g.status">{{ g.status }}</span>
-              </div>
+          <div class="tournament-grid-card p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="status-badge" [attr.data-status]="g.status">{{ g.status }}</span>
             </div>
             <div class="card-info">
               <h3 class="tournament-title">{{ g.title }}</h3>

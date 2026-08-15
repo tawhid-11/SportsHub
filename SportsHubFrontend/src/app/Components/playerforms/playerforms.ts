@@ -26,6 +26,7 @@ export class PlayerForm implements OnInit {
     PlayerImage: '',
     Description: '',
     Phone: '',
+    Email: '',
     IsActive: true
   };
   selectedImage: File | null = null;
@@ -109,6 +110,7 @@ export class PlayerForm implements OnInit {
     formData.append('BattingStyle', this.model.BattingStyle || '');
     formData.append('BowlingStyle', this.model.BowlingStyle || '');
     formData.append('Description', this.model.Description || '');
+    formData.append('Email', this.model.Email || '');
 
     // Add userId if provided (for new player registration)
     if (userId) {
@@ -161,6 +163,12 @@ export class PlayerForm implements OnInit {
       return false;
     }
 
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!this.model.Email || !emailPattern.test(this.model.Email)) {
+      alert('Please enter a valid email address for the player.');
+      return false;
+    }
+
     return true;
   }
 
@@ -185,45 +193,19 @@ export class PlayerForm implements OnInit {
         }
       });
     } else {
-      // CREATE - First register user, then create player
-      // Step 1: Register user with UserType = "Player"
-      const userData = {
-        name: this.model.FullName.trim(),
-        email: `${this.model.Phone}@player.sportshub.local`, // Generate email from phone
-        phone: this.model.Phone.trim(),
-        userType: 'Player',
-        password: this.model.Phone.trim() // Use phone as password
-      };
-
-      this.dataService.PostData('UserInfo/Register', userData).subscribe({
-        next: (userResponse: any) => {
-          if (userResponse && userResponse.success && userResponse.data) {
-            // Get userId from registration response
-            const userId = userResponse.data.UserId || userResponse.data.ID || userResponse.data.id;
-
-            if (!userId) {
-              alert('User registration failed: User ID not received');
-              return;
-            }
-
-            // Step 2: Create player with userId
-            this.dataService.PostData('Player/Player', this.buildFormData(userId)).subscribe({
-              next: (playerResponse: any) => {
-                alert('Player created successfully!');
-                this.router.navigate(['/teamownerlayout/player']);
-              },
-              error: (err: any) => {
-                console.error('Error creating player:', err);
-                alert('Player creation failed: ' + (err.error?.message || err.message || 'Unknown error'));
-              }
-            });
+      // CREATE - Combined backend logic handles registration and email
+      this.dataService.PostData('Player/Player', this.buildFormData()).subscribe({
+        next: (playerResponse: any) => {
+          if (playerResponse.success) {
+            alert(playerResponse.Message || 'Player created successfully!');
+            this.router.navigate(['/teamownerlayout/player']);
           } else {
-            alert('User registration failed: ' + (userResponse?.message || 'Unknown error'));
+            alert('Error: ' + playerResponse.Message);
           }
         },
         error: (err: any) => {
-          console.error('Error registering user:', err);
-          alert('User registration failed: ' + (err.error?.message || err.error?.Message || err.message || 'Unknown error'));
+          console.error('Error creating player:', err);
+          alert('Player creation failed: ' + (err.error?.message || err.message || 'Unknown error'));
         }
       });
     }

@@ -35,7 +35,7 @@ export class StartMatch implements OnInit {
   strickerPlayers: any[] = [];
   BowlerStrickerPlayers: any[] = []
   scheduleId!: number;
-  matchStep: number = 1; // 1-Setup, 2-Players, 3-Scoring
+  matchStep: number = 1; // 1-Setup, 2-Squad Selection, 3-Opening Players, 4-Scoring
   cricketMatch: any;
   // Match setup
   tossWonBy = '';
@@ -50,7 +50,12 @@ export class StartMatch implements OnInit {
 
   activeTab: string = 'live';
   fullScorecard: any = null;
-  squads: any = null;
+  squads: any = null; // Used for the Live View tab
+
+  // Squad Selection State
+  teamASquad: any[] = [];
+  teamBSquad: any[] = [];
+  maxPlayingXI = 11;
 
   constructor(private route: ActivatedRoute, private http: Httpclientservice, private cdr: ChangeDetectorRef, private signalR: SignalrService, private router: Router) {
     this.route.paramMap.subscribe(params => {
@@ -96,54 +101,190 @@ export class StartMatch implements OnInit {
   GetCricketMatchByTeamScheduleId() {
     this.http.GetData(`CricketMatch/GetByTeamScheduleId?teamScheduleId=${this.scheduleId}`).subscribe((res: any) => {
       if (res.data == null) {
+        this.matchStep = 1;
         return;
       } else {
         this.cricketMatch = res.data;
         this.loadBattingAndBowlingTeams();
-        if (this.cricketMatch.CricketMatchID != null && this.cricketMatch.StrikerPlayerID == null) {
-          this.matchStep = 2;
-          this.cdr.detectChanges();
-          return;
-        } else if (this.cricketMatch.CricketMatchID != null && this.cricketMatch.StrikerPlayerID != null) {
-          this.matchStep = 3;
-          // Pre-fill selection if match is already live
+
+        // Pre-populate toss setup fields from existing match
+        this.tossWonBy = this.cricketMatch.TossWinnerTeamID;
+        this.optedTo = this.cricketMatch.TossChoice || 'Bat';
+        this.overs = this.cricketMatch.Overs;
+        this.umpire = this.cricketMatch.Umpire || '';
+        this.venueName = this.cricketMatch.Venue || '';
+        
+        // Logical flow check
+        if (this.cricketMatch.StrikerPlayerID != null) {
+          this.matchStep = 4; // Scoring
           this.striker = this.cricketMatch.StrikerPlayerID;
           this.nonStriker = this.cricketMatch.NonStrikerPlayerID;
           this.bowler = this.cricketMatch.BowlerPlayerID;
-
-          // Fetch current score
-          if (this.cricketMatch.CricketMatchID) {
-            this.getLiveScore(this.cricketMatch.CricketMatchID);
-          }
-
-          this.cdr.detectChanges();
-          return;
+          this.getLiveScore(this.cricketMatch.CricketMatchID);
+        } else {
+          // Check if squads are already saved
+          this.http.GetData(`LiveMatch/GetSquads?matchId=${this.cricketMatch.CricketMatchID}`).subscribe((res: any) => {
+            const sq = res.data;
+            const hasSquadA = sq.TeamAPlayers && sq.TeamAPlayers.some((p: any) => p.IsPlaying);
+            const hasSquadB = sq.TeamBPlayers && sq.TeamBPlayers.some((p: any) => p.IsPlaying);
+            
+            if (hasSquadA && hasSquadB) {
+              this.matchStep = 3; // Opening Players
+              this.squads = sq;
+              this.filterPlayingXI(sq);
+            } else {
+              this.matchStep = 2; // Squad Selection
+              this.squads = sq;
+              this.teamASquad = sq.TeamAPlayers || [];
+              this.teamBSquad = sq.TeamBPlayers || [];
+              this.maxPlayingXI = sq.MatchPlayer || 11;
+            }
+            this.cdr.detectChanges();
+          });
         }
-
+        this.cdr.detectChanges();
       }
-
     });
   }
 
+
+  filterPlayingXI(sq: any) {
+    this.strickerPlayers = sq.TeamAPlayers.filter((p: any) => p.IsPlaying);
+    this.BowlerStrickerPlayers = sq.TeamBPlayers.filter((p: any) => p.IsPlaying);
+    
+    // Reverse if it's 2nd innings or toss choice requires it
+    this.loadBattingAndBowlingTeamsForScoring(sq);
+  }
+
+  loadBattingAndBowlingTeamsForScoring(sq: any) {
+    const tossWinnerId = Number(this.cricketMatch.TossWinnerTeamID);
+    const tossChoice = this.cricketMatch.TossChoice;
+    const currentInnings = this.cricketMatch.CurrentInnings || 1;
+    const teamAId = Number(this.teamSchedule.TeamAID);
+    const teamBId = Number(this.teamSchedule.TeamBID);
+
+    let battingTeamId;
+    if (tossChoice === 'Bat') {
+      battingTeamId = (currentInnings === 1) ? tossWinnerId : (tossWinnerId === teamAId ? teamBId : teamAId);
+    } else {
+      battingTeamId = (currentInnings === 1) ? (tossWinnerId === teamAId ? teamBId : teamAId) : tossWinnerId;
+    }
+
+    if (battingTeamId === teamAId) {
+      this.strickerPlayers = sq.TeamAPlayers.filter((p: any) => p.IsPlaying);
+      this.BowlerStrickerPlayers = sq.TeamBPlayers.filter((p: any) => p.IsPlaying);
+    } else {
+      this.strickerPlayers = sq.TeamBPlayers.filter((p: any) => p.IsPlaying);
+      this.BowlerStrickerPlayers = sq.TeamAPlayers.filter((p: any) => p.IsPlaying);
+    }
+  }
+
   startMatchSetup() {
-    if (!this.tossWonBy || !this.overs || this.overs <= 0 || !this.umpire || !this.venueName) {
-      alert("Please fill all fields correctly. Overs must be greater than 0.");
+    if (this.tossWonBy === null || this.tossWonBy === '' || this.tossWonBy === undefined) {
+      alert("Please select Toss Won By team.");
+      return;
+    }
+    if (!this.overs || Number(this.overs) <= 0) {
+      alert("Please enter a valid number of Overs (must be greater than 0).");
+      return;
+    }
+    if (!this.umpire || !this.venueName) {
+      alert("Please fill in Umpire Name and Venue Name.");
       return;
     }
 
-    this.http.PostData('CricketMatch/Insert', {
+    const payload = {
       TeamScheduleID: this.scheduleId,
       TossWinnerTeamID: this.tossWonBy,
       TossChoice: this.optedTo,
-      Overs: this.overs,
+      Overs: Number(this.overs),
       Umpire: this.umpire,
       Venue: this.venueName
-    }).subscribe((res: any) => {
-      this.matchStep = 2;
-      this.loadPlayers(this.teamSchedule.TeamAID, 'striker');
-      this.loadPlayers(this.teamSchedule.TeamBID, 'bowler');
-      this.GetCricketMatchByTeamScheduleId();
-      this.cdr.detectChanges();
+    };
+
+    // If match already exists, UPDATE it; otherwise INSERT
+    if (this.cricketMatch && this.cricketMatch.CricketMatchID) {
+      const updatePayload = { ...payload, CricketMatchID: this.cricketMatch.CricketMatchID };
+      this.http.PutData('CricketMatch/Update', updatePayload).subscribe({
+        next: (res: any) => {
+          this.GetCricketMatchByTeamScheduleId();
+        },
+        error: (err: any) => {
+          alert('Failed to update match: ' + (err?.error?.Message || err?.message || 'Unknown error'));
+        }
+      });
+    } else {
+      this.http.PostData('CricketMatch/Insert', payload).subscribe({
+        next: (res: any) => {
+          this.GetCricketMatchByTeamScheduleId();
+        },
+        error: (err: any) => {
+          alert('Failed to create match: ' + (err?.error?.Message || err?.message || 'Unknown error'));
+        }
+      });
+    }
+  }
+
+  togglePlaying(player: any, teamSquad: any[]) {
+    // Check if we already have max players
+    const currentlyPlaying = teamSquad.filter(p => p.IsPlaying).length;
+    if (!player.IsPlaying && currentlyPlaying >= this.maxPlayingXI) {
+      alert(`You can only select ${this.maxPlayingXI} players in the Playing XI.`);
+      return;
+    }
+    player.IsPlaying = !player.IsPlaying;
+    if (!player.IsPlaying) {
+      player.IsCaptain = false;
+      player.IsWicketKeeper = false;
+    }
+  }
+
+  getPlayingCount(teamSquad: any[]): number {
+    return teamSquad ? teamSquad.filter(p => p.IsPlaying).length : 0;
+  }
+
+  setRole(player: any, teamSquad: any[], role: 'Captain' | 'WicketKeeper') {
+    if (!player.IsPlaying) {
+      alert("Only playing players can be assigned roles.");
+      return;
+    }
+
+    if (role === 'Captain') {
+      teamSquad.forEach(p => p.IsCaptain = false);
+      player.IsCaptain = true;
+    } else {
+      teamSquad.forEach(p => p.IsWicketKeeper = false);
+      player.IsWicketKeeper = true;
+    }
+  }
+
+  saveSquads() {
+    const playA = this.teamASquad.filter(p => p.IsPlaying).length;
+    const playB = this.teamBSquad.filter(p => p.IsPlaying).length;
+
+    if (playA < 1 || playB < 1) {
+      alert("Please select at least one player in the Playing XI for both teams.");
+      return;
+    }
+
+    const payloadA = {
+      CricketMatchID: this.cricketMatch.CricketMatchID,
+      TeamID: this.teamSchedule.TeamAID,
+      Players: this.teamASquad
+    };
+
+    const payloadB = {
+      CricketMatchID: this.cricketMatch.CricketMatchID,
+      TeamID: this.teamSchedule.TeamBID,
+      Players: this.teamBSquad
+    };
+
+    // Save Team A
+    this.http.PostData('LiveMatch/SaveSquad', payloadA).subscribe(() => {
+      // Save Team B
+      this.http.PostData('LiveMatch/SaveSquad', payloadB).subscribe(() => {
+        this.GetCricketMatchByTeamScheduleId();
+      });
     });
   }
 
@@ -164,7 +305,7 @@ export class StartMatch implements OnInit {
       NonStrikerPlayerID: this.nonStriker,
       BowlerPlayerID: this.bowler
     }).subscribe((res: any) => {
-      this.matchStep = 3;
+      this.matchStep = 4;
       this.signalR.StartMatch(this.cricketMatch.CricketMatchID);
       this.cdr.detectChanges();
     });
@@ -245,8 +386,8 @@ export class StartMatch implements OnInit {
 
   getLiveScore(matchId: number) {
     this.http.GetData(`LiveMatch/GetLiveScore?matchId=${matchId}`).subscribe((res: any) => {
-      if (res) {
-        this.updateCurrentScore(res);
+      if (res && res.data) {
+        this.updateCurrentScore(res.data);
       }
     });
   }
@@ -370,7 +511,8 @@ export class StartMatch implements OnInit {
     };
 
     this.http.PostData('LiveMatch/AddBall', payload).subscribe({
-      next: (res: any) => {
+      next: (response: any) => {
+        const res = response.data;
         console.log('Ball scored', res);
 
         // Update local score from backend response
@@ -383,7 +525,7 @@ export class StartMatch implements OnInit {
           const currentInnings = this.cricketMatch.CurrentInnings || 1;
           if (currentInnings === 1) {
             alert("Innings Over! Transitions to 2nd Innings.");
-            this.matchStep = 2; // Return to player selection step
+            this.matchStep = 3; // Return to opening players selection (Step 3)
             this.striker = '';
             this.nonStriker = '';
             this.bowler = '';
@@ -515,15 +657,39 @@ export class StartMatch implements OnInit {
 
   getFullScorecard() {
     this.http.GetData(`LiveMatch/GetFullScorecard?matchId=${this.cricketMatch.CricketMatchID}`).subscribe((res: any) => {
-      this.fullScorecard = res;
+      this.fullScorecard = res.data;
       this.cdr.detectChanges();
     });
   }
 
   getSquads() {
     this.http.GetData(`LiveMatch/GetSquads?matchId=${this.cricketMatch.CricketMatchID}`).subscribe((res: any) => {
-      this.squads = res;
+      this.squads = res.data;
       this.cdr.detectChanges();
+    });
+  }
+
+  undoLastBall() {
+    if (!confirm("Are you sure you want to undo the last ball?")) return;
+
+    this.http.PostData('LiveMatch/UndoLastBall', this.cricketMatch.CricketMatchID).subscribe({
+      next: (res: any) => {
+        // Re-fetch match data to sync players and steps
+        this.GetCricketMatchByTeamScheduleId();
+        // Refresh live score
+        if (this.cricketMatch?.CricketMatchID) {
+          this.getLiveScore(this.cricketMatch.CricketMatchID);
+        }
+        
+        // Reset UI states
+        this.extras = { wide: false, noBall: false, byes: false, wicket: false };
+        this.showNewBowlerSelection = false;
+        this.showPlayerOutDropdown = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        alert(err.error?.Message || "Failed to undo ball.");
+      }
     });
   }
 }

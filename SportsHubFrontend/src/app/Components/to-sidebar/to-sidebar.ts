@@ -9,22 +9,34 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './to-sidebar.css',
 })
 export class ToSidebar {
-@Input() collapsed = false;
+  @Input() collapsed = false;
   @Output() toggle = new EventEmitter<void>();
+  hasLogo = true;
+
   constructor(private router: Router) {}
 
   nav: any[] = [
-{ label: 'Register Tournament',icon: '🏆', route: '/teamownerlayout/tournamentregistration' }, 
-{ label: 'Player',        icon: '🧑', route: '/teamownerlayout/player' },
-{ label: 'Playing Tournament',   icon: '🏏', route: '/teamownerlayout/playingtournament' },
-// { label: 'Logout',         icon: '🚪', route: '/login' },
-];
+    { label: 'My Dashboard', icon: 'bi bi-grid-1x2-fill', route: '/teamownerlayout' }, 
+    { label: 'Tournament Entry', icon: 'bi bi-trophy-fill', route: '/teamownerlayout/tournamentregistration' }, 
+    { label: 'Squad Management', icon: 'bi bi-people-fill', route: '/teamownerlayout/player' },
+    { label: 'Active Matches', icon: 'bi bi-cricket-fill', route: '/teamownerlayout/playingtournament' },
+  ];
 
-logout(){
-  debugger;
-  localStorage.removeItem('userInfo');
-  this.router.navigate(['login']);
-  // window.location.href = 'login';
-}
-}
+  getUserName(): string {
+    const user = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    return user.Name || 'Team Owner';
+  }
 
+  getUserInitials(): string {
+    const name = this.getUserName();
+    return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+  }
+
+  logout() {
+    if (confirm("Are you sure you want to logout?")) {
+      localStorage.removeItem('userInfo');
+      localStorage.removeItem('jwtToken');
+      this.router.navigate(['login']);
+    }
+  }
+}

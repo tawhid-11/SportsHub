@@ -1,7 +1,7 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Httpclientservice } from '../../Service/httpclientservice';
 
 @Component({
   selector: 'app-player-role-list',
@@ -9,21 +9,20 @@ import { CommonModule } from '@angular/common';
   templateUrl: './player-role-list.html',
   styleUrl: './player-role-list.css',
 })
-export class PlayerRoleList {
+export class PlayerRoleList implements OnInit {
    playerRoles: any[] = [];
 
   constructor(
-    private http: HttpClient, private cdr:ChangeDetectorRef, private router: Router ) {}
+    private http: Httpclientservice, private cdr:ChangeDetectorRef, private router: Router ) {}
 
   ngOnInit(): void {
     this.getPlayerRoles();
   }
 
  getPlayerRoles(): void {
-  this.http.get<any[]>('https://localhost:7142/api/PlayerRole')
+  this.http.GetData('PlayerRole')
     .subscribe({
       next: (res:any) => {
-       debugger;
         this.playerRoles = res.data || [];
         this.cdr.detectChanges(); 
       },
@@ -42,7 +41,7 @@ export class PlayerRoleList {
   onDelete(id: number): void {
     if (!confirm('Are you sure you want to delete this role?')) return;
 
-    this.http.delete(`https://localhost:7142/api/PlayerRole/${id}`)
+    this.http.DeleteData(`PlayerRole`, id)
       .subscribe({
         next: () => {
           alert('Player role deleted successfully');

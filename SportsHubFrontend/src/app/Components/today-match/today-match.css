@@ -1,28 +1,175 @@
-/* src/app/components/today-matches/today-matches.component.css */
-
-/* Skeleton Loader */
-.skeleton {
-  background-color: #f0f0f0;
-  border-radius: 8px;
-  height: 60px;
-  position: relative;
-  overflow: hidden;
+.fixtures-container {
+    padding: 30px;
+    background: #f8fafc;
+    min-height: 100vh;
 }
 
-.skeleton-line {
-  height: 15px;
-  width: 50%;
-  background-color: #ddd;
-  margin: 8px 0;
-  border-radius: 5px;
-  animation: shimmer 1.5s infinite;
+.section-title {
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 30px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 10px;
 }
 
-.skeleton-line.w-75 {
-  width: 75%;
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 60px; height: 4px;
+    background: #6366f1;
+    border-radius: 2px;
 }
 
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+/* Fixture Card */
+.fixture-card {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-bottom: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.fixture-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    border-color: #6366f1;
+}
+
+.fixture-header {
+    background: #f8fafc;
+    padding: 12px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tournament-badge {
+    color: #6366f1;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.match-status {
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 50px;
+    text-transform: uppercase;
+}
+
+.status-upcoming { background: #dcfce7; color: #166534; }
+.status-live { background: #fee2e2; color: #991b1b; animation: pulse-live 1.5s infinite; }
+
+@keyframes pulse-live {
+    0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; }
+}
+
+.fixture-body {
+    padding: 25px;
+}
+
+.vs-matchup {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.team-box {
+    flex: 1;
+    text-align: center;
+}
+
+.team-logo-placeholder {
+    width: 70px;
+    height: 70px;
+    background: #f1f5f9;
+    border-radius: 16px;
+    margin: 0 auto 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #cbd5e1;
+    border: 2px dashed #e2e8f0;
+}
+
+.team-name-lg {
+    font-weight: 800;
+    color: #0f172a;
+    font-size: 1.1rem;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.vs-divider {
+    color: #64748b;
+    font-weight: 900;
+    font-size: 0.9rem;
+    background: #f1f5f9;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: -20px;
+}
+
+.fixture-footer {
+    padding: 20px;
+    background: #fafafb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.match-meta {
+    font-size: 0.85rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-start {
+    background: #6366f1;
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.btn-start:hover {
+    background: #4f46e5;
+    transform: scale(1.05);
+}
+
+/* Skeleton */
+.skeleton-card {
+    height: 250px;
+    background: linear-gradient(90deg, #f1f5f9 25%, #f8fafc 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 20px;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }

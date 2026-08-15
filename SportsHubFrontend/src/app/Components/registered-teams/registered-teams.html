@@ -1,10 +1,18 @@
 <div class="container mt-4">
   <div class="card shadow-sm">
-    <div class="card-header bg-dark text-white">
-      <h5 class="mb-0">Registered Teams</h5>
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">Registered Teams - {{ tournament?.TournamentName }}</h5>
+      <button *ngIf="groups.length > 0" class="btn btn-sm btn-success fw-bold" (click)="saveAssignments()">
+        <i class="bi bi-save me-1"></i> Save Group Assignments
+      </button>
     </div>
 
     <div class="card-body p-0">
+      <div *ngIf="groups.length > 0" class="p-3 bg-light border-bottom">
+        <span class="badge bg-primary me-2">Group Stage Active</span>
+        <small class="text-muted">Teams will be randomized if groups are not assigned manually.</small>
+      </div>
+
       <table class="table table-hover table-striped align-middle mb-0">
         <thead class="table-light">
           <tr class="text-center">
@@ -12,6 +20,7 @@
             <th>Logo</th>
             <th>Team Name</th>
             <th>Short Name</th>
+            <th *ngIf="groups.length > 0">Assign Group</th>
             <th>Team Owner</th>
             <th>Action</th>
           </tr>
@@ -30,8 +39,15 @@
 
             <td class="fw-semibold">{{ team.TeamName }}</td>
             <td>{{ team.ShortName }}</td>
-            <td>{{ team.TeamOwnerName }}</td>
+            
+            <td *ngIf="groups.length > 0">
+              <select class="form-select form-select-sm mx-auto" style="max-width: 120px;" [(ngModel)]="team.GroupId">
+                <option [ngValue]="null">Select Group</option>
+                <option *ngFor="let g of groups" [ngValue]="g">Group {{ g }}</option>
+              </select>
+            </td>
 
+            <td>{{ team.TeamOwnerName }}</td>
             
             <td>
               <button class="btn btn-sm btn-outline-primary"

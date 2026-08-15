@@ -5,22 +5,20 @@ import { Injectable } from '@angular/core';
 import * as signalR from '@microsoft/signalr';
 import { BehaviorSubject, Subject } from 'rxjs';
 
+import { Environment } from '../Environment/environment.model';
+
 @Injectable({
   providedIn: 'root'
 })
 export class SignalrService {
-  signalRurl = 'https://localhost:7142/hubs';
+  signalRurl = '';
   private hubConnection!: signalR.HubConnection;
   private liveMatchSubject = new Subject<any>();
   liveMatch$ = this.liveMatchSubject.asObservable();
 
-
-
-
-
-
   constructor() {
-
+    var env = new Environment();
+    this.signalRurl = env.baseHost + 'hubs';
   }
 
   // Initialize the connection

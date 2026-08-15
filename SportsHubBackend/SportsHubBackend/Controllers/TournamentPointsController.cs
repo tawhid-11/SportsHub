@@ -72,12 +72,36 @@ namespace SportsHubBackend.Controllers
                     int teamB = (int)matchInfo.TeamBID;
                     int? winnerId = (int?)matchInfo.WinnerTeamID;
 
+                    // 1.5 Get Match Stats for NRR
+                    var statsQuery = @"
+                        SELECT 
+                            SUM(CASE WHEN p.TeamsID = @TeamAID THEN m.Run ELSE 0 END) as RunsA,
+                            COUNT(CASE WHEN p.TeamsID = @TeamAID AND m.BallType != 'Wide' THEN 1 END) as BallsA,
+                            SUM(CASE WHEN p.TeamsID = @TeamBID THEN m.Run ELSE 0 END) as RunsB,
+                            COUNT(CASE WHEN p.TeamsID = @TeamBID AND m.BallType != 'Wide' THEN 1 END) as BallsB,
+                            -- Opposing stats for conceded calculation
+                            SUM(CASE WHEN p_bowl.TeamsID = @TeamAID THEN m.Run ELSE 0 END) as ConcA,
+                            COUNT(CASE WHEN p_bowl.TeamsID = @TeamAID AND m.BallType NOT IN ('Wide', 'NoBall') THEN 1 END) as BowledA,
+                            SUM(CASE WHEN p_bowl.TeamsID = @TeamBID THEN m.Run ELSE 0 END) as ConcB,
+                            COUNT(CASE WHEN p_bowl.TeamsID = @TeamBID AND m.BallType NOT IN ('Wide', 'NoBall') THEN 1 END) as BowledB
+                        FROM MatchBallByBall m
+                        JOIN Overs o ON m.OverId = o.Id
+                        JOIN Players p ON m.StrikerPlayerID = p.PlayerID
+                        JOIN Players p_bowl ON m.BowlerPlayerID = p_bowl.PlayerID
+                        WHERE o.CricketMatchID = @matchId";
+
+                    var stats = await connection.QueryFirstOrDefaultAsync<dynamic>(statsQuery, new { matchId, TeamAID = teamA, TeamBID = teamB });
+
                     // 2. Update standings for Team A
                     var pA = new DynamicParameters();
                     pA.Add("Flag", 2);
                     pA.Add("TournamentID", tournamentId);
                     pA.Add("TeamsID", teamA);
                     pA.Add("WinnerTeamID", winnerId);
+                    pA.Add("RunsScored", (int)(stats?.RunsA ?? 0));
+                    pA.Add("BallsFaced", (int)(stats?.BallsA ?? 0));
+                    pA.Add("RunsConceded", (int)(stats?.ConcA ?? 0));
+                    pA.Add("BallsBowled", (int)(stats?.BowledA ?? 0));
                     await connection.ExecuteAsync("SP_TournamentPointTable", pA, commandType: CommandType.StoredProcedure);
 
                     // 3. Update standings for Team B
@@ -86,9 +110,13 @@ namespace SportsHubBackend.Controllers
                     pB.Add("TournamentID", tournamentId);
                     pB.Add("TeamsID", teamB);
                     pB.Add("WinnerTeamID", winnerId);
+                    pB.Add("RunsScored", (int)(stats?.RunsB ?? 0));
+                    pB.Add("BallsFaced", (int)(stats?.BallsB ?? 0));
+                    pB.Add("RunsConceded", (int)(stats?.ConcB ?? 0));
+                    pB.Add("BallsBowled", (int)(stats?.BowledB ?? 0));
                     await connection.ExecuteAsync("SP_TournamentPointTable", pB, commandType: CommandType.StoredProcedure);
 
-                    return Ok(new { success = true, message = "Standings updated successfully" });
+                    return Ok(new { success = true, message = "Standings and NRR updated successfully" });
                 }
             }
             catch (Exception ex)

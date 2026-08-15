@@ -1,40 +1,46 @@
 <div class="summary-container" *ngIf="summary">
-  <div class="card shadow-lg p-4">
-    <div class="header text-center mb-4">
-      <h1 class="display-5 fw-bold text-primary">Match Summary</h1>
-      <div class="winner-badge p-3 bg-success text-white rounded shadow-sm" *ngIf="summary.winnerMessage">
-        <h2 class="mb-0">{{ summary.winnerMessage }}</h2>
+  <div class="summary-card-premium animate-fade-in shadow-lg">
+    <div class="header text-center">
+      <span class="summary-header-badge shadow-sm"><i class="bi bi-award me-1"></i> FINAL RESULT</span>
+      <div class="result-banner-premium shadow-lg animate-bounce-in">
+        <h2 class="mb-0 fw-800"><i class="bi bi-trophy-fill me-2"></i> {{ (summary.winnerMessage || 'Match Finished').toUpperCase() }}</h2>
       </div>
     </div>
 
-    <div class="row g-4">
+    <!-- Comparison Grid -->
+    <div class="innings-comparison">
       <!-- 1st Innings -->
-      <div class="col-md-6">
-        <div class="innings-card p-3 border rounded bg-light">
-          <h3 class="h5 border-bottom pb-2">{{ summary.innings1TeamName }}</h3>
-          <div class="d-flex justify-content-between align-items-center mt-3">
-            <span class="fs-4 fw-bold">{{ summary.innings1.totalRuns }} - {{ summary.innings1.wickets }}</span>
-            <span class="text-muted">({{ summary.innings1.overs }} ov)</span>
-          </div>
-        </div>
+      <div class="innings-box shadow-xs">
+        <h3 class="team-name-summary text-secondary">{{ summary.innings1TeamName }}</h3>
+        <span class="score-text-summary bg-indigo-subtle rounded-4 p-3 mb-2">{{ summary.innings1.totalRuns }} - {{ summary.innings1.wickets }}</span>
+        <span class="overs-text-summary uppercase small text-indigo">{{ summary.innings1.overs }} OVERS</span>
       </div>
+
+      <!-- VS -->
+      <div class="temp-vs-divider h1 fw-900 border-start border-end py-4">VS</div>
 
       <!-- 2nd Innings -->
-      <div class="col-md-6">
-        <div class="innings-card p-3 border rounded bg-light">
-          <h3 class="h5 border-bottom pb-2">{{ summary.innings2TeamName }}</h3>
-          <div class="d-flex justify-content-between align-items-center mt-3">
-            <span class="fs-4 fw-bold">{{ summary.innings2.totalRuns }} - {{ summary.innings2.wickets }}</span>
-            <span class="text-muted">({{ summary.innings2.overs }} ov)</span>
-          </div>
-        </div>
+      <div class="innings-box shadow-xs">
+        <h3 class="team-name-summary text-danger">{{ summary.innings2TeamName }}</h3>
+        <span class="score-text-summary bg-danger-subtle rounded-4 p-3 mb-2">{{ (summary.innings2.totalRuns || 0) }} - {{ (summary.innings2.wickets || 0) }}</span>
+        <span class="overs-text-summary uppercase small text-danger">{{ (summary.innings2.overs || '0.0') }} OVERS</span>
       </div>
     </div>
 
-    <div class="text-center mt-5">
-      <button class="btn btn-outline-primary btn-lg px-5" (click)="goBack()">
-        <i class="bi bi-arrow-left me-2"></i> Back to Matches
+    <div class="text-center mt-5 summary-actions">
+      <button class="btn btn-indigo btn-lg px-5 rounded-pill shadow-lg fw-bold" (click)="goBack()">
+        <i class="bi bi-house-door-fill me-2"></i> GO HOME
+      </button>
+      <button class="btn-premium-outline btn-lg px-5 rounded-pill shadow-xs fw-bold" (click)="goBack()">
+        <i class="bi bi-share-fill me-2"></i> SHARE RESULT
       </button>
     </div>
   </div>
+</div>
+
+<div *ngIf="!summary" class="text-center py-5">
+    <div class="spinner-grow text-indigo" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Loading summary...</span>
+    </div>
+    <h3 class="mt-4 fw-bold text-indigo">Processing match results...</h3>
 </div>

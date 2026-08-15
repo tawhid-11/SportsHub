@@ -2,6 +2,7 @@ using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using SportsHubBackend.DBContext;
 using System.Data;
+using SportsHubBackend.Model;
 
 namespace SportsHubBackend.Controllers
 {
@@ -23,49 +24,25 @@ namespace SportsHubBackend.Controllers
             {
                 using (var connection = _context.CreateConnection())
                 {
-                    // Get total teams count
-                    var totalTeams = await connection.QueryFirstOrDefaultAsync<int>(
-                        "SELECT COUNT(*) FROM Teams WHERE IsActive = 1"
+                    var parameter = new DynamicParameters();
+                    parameter.Add("@Flag", 1);
+                    var stats = await connection.QueryFirstOrDefaultAsync<Model.DashboardStats>(
+                        "SP_Dashboard", 
+                        parameter, 
+                        commandType: CommandType.StoredProcedure
                     );
 
-                    // Get total tournaments count
-                    var totalTournaments = await connection.QueryFirstOrDefaultAsync<int>(
-                        "SELECT COUNT(*) FROM Tournaments"
-                    );
-
-                    // Get total players count
-                    var totalPlayers = await connection.QueryFirstOrDefaultAsync<int>(
-                        "SELECT COUNT(*) FROM Players WHERE IsActive = 1"
-                    );
-
-                    // Get total matches played (finished matches)
-                    var totalMatches = await connection.QueryFirstOrDefaultAsync<int>(
-                        "SELECT COUNT(*) FROM CricketMatch WHERE MatchStatus = 'Finished'"
-                    );
-
-                    var statistics = new
-                    {
-                        totalTeams = totalTeams,
-                        totalTournaments = totalTournaments,
-                        totalPlayers = totalPlayers,
-                        totalMatches = totalMatches
-                    };
-
-                    return Ok(new
-                    {
-                        success = true,
-                        message = "Statistics fetched successfully",
-                        data = statistics
-                    });
+                    return Ok(ApiResponse<dynamic>.Ok("Statistics fetched successfully", new {
+                            totalTeams = stats?.TotalTeams ?? 0,
+                            totalTournaments = stats?.TotalTournaments ?? 0,
+                            totalPlayers = stats?.TotalPlayers ?? 0,
+                            totalMatches = stats?.TotalMatches ?? 0
+                        }));
                 }
             }
             catch (Exception ex)
             {
-                return BadRequest(new
-                {
-                    success = false,
-                    message = "Error - " + ex.Message
-                });
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
         }
     }

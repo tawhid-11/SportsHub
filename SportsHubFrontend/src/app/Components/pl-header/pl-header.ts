@@ -7,5 +7,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
   styleUrl: './pl-header.css',
 })
 export class PlHeader {
-@Output() menu = new EventEmitter<void>();
+  @Output() menu = new EventEmitter<void>();
+
+  getUserName(): string {
+    const user = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    return user.Name || 'Player';
+  }
 }

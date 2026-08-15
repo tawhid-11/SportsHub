@@ -36,11 +36,14 @@ export class Login {
     }
     this.httpService.PostData('UserInfo/Login', this.loginData).subscribe(
       (response: any) => {
-        localStorage.setItem('userInfo', JSON.stringify(response.data));
-        if (response.data && (response.data.Success == 1 || response.data.Success === true)) {
+        if (response.success && response.data) {
+          localStorage.setItem('userInfo', JSON.stringify(response.data));
+          if (response.token) {
+            localStorage.setItem('jwtToken', response.token);
+          }
+          
           const user = response.data;
           const userType = (user.UserType || user.userType || '').toLowerCase();
-          debugger;
           if (userType === 'admin') {
             this.router.navigate(['/layout']);
           } else if (userType === 'teamowner') {

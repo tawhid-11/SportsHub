@@ -210,7 +210,7 @@ export class HomePage implements OnInit {
   }
 
   viewTournament(tournament: any) {
-    this.router.navigate(['/all-tournaments']);
+    this.router.navigate(['/tournament-details', tournament.id]);
   }
 
   navigateToSchedule(tournamentId: number) {
@@ -241,11 +241,11 @@ export class HomePage implements OnInit {
   }
 
   viewSchedule(tournament: any) {
-    this.router.navigate(['/tournament-schedule', tournament.id]);
+    this.router.navigate(['/tournament-details', tournament.id], { queryParams: { tab: 'schedule' } });
   }
 
   viewPointsTable(tournament: any) {
-    this.router.navigate(['/tournament-points', tournament.id]);
+    this.router.navigate(['/tournament-details', tournament.id], { queryParams: { tab: 'points' } });
   }
 
   getCurrentUrl(): boolean {

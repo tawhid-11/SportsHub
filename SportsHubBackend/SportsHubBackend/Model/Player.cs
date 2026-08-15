@@ -1,4 +1,4 @@
-﻿public class Player
+public class Player
 {
     public int PlayerID { get; set; }
     public int TeamsID { get; set; }
@@ -12,6 +12,7 @@
     public string? NickName { get; set; }
     public string? BattingStyle { get; set; }
     public string? BowlingStyle { get; set; }
+    public string? Email { get; set; }
     public bool? IsActive { get; set; }
     public IFormFile? PlayerImage { get; set; }
 }

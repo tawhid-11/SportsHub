@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -169,6 +169,10 @@ namespace SportsHubBackend.Controllers
                 perameter.Add("UpdatedBy", tournament.UpdatedBy, DbType.Int32);
                 perameter.Add("UpdatedAt", tournament.UpdatedAt, DbType.DateTime);
                 perameter.Add("IsActive", tournament.IsActive, DbType.Boolean);
+                perameter.Add("NumberOfGroups", tournament.NumberOfGroups, DbType.Int32);
+                perameter.Add("TeamsPerGroup", tournament.TeamsPerGroup, DbType.Int32);
+                perameter.Add("StartTimeMorning", tournament.StartTimeMorning, DbType.String);
+                perameter.Add("StartTimeAfternoon", tournament.StartTimeAfternoon, DbType.String);
 
 
                 using (var connetion = _context.CreateConnection())
@@ -229,6 +233,10 @@ namespace SportsHubBackend.Controllers
                 perameter.Add("UpdatedBy", tournament.UpdatedBy, DbType.Int32);
                 perameter.Add("UpdatedAt", tournament.UpdatedAt, DbType.DateTime);
                 perameter.Add("IsActive", tournament.IsActive, DbType.Boolean);
+                perameter.Add("NumberOfGroups", tournament.NumberOfGroups, DbType.Int32);
+                perameter.Add("TeamsPerGroup", tournament.TeamsPerGroup, DbType.Int32);
+                perameter.Add("StartTimeMorning", tournament.StartTimeMorning, DbType.String);
+                perameter.Add("StartTimeAfternoon", tournament.StartTimeAfternoon, DbType.String);
 
                 using (var connetion = _context.CreateConnection())
                 {
@@ -348,6 +356,40 @@ namespace SportsHubBackend.Controllers
         }
 
 
+        [HttpPost("UpdateGroupAssignment")]
+        public async Task<IActionResult> UpdateGroupAssignment([FromBody] List<TeamGroupAssignment> assignments)
+        {
+            try
+            {
+                using (var connection = _context.CreateConnection())
+                {
+                    foreach (var item in assignments)
+                    {
+                        var parameter = new DynamicParameters();
+                        parameter.Add("TournamentId", item.TournamentId);
+                        parameter.Add("TeamId", item.TeamId);
+                        parameter.Add("GroupId", item.GroupId);
+
+                        await connection.ExecuteAsync(
+                            "UPDATE TournamentTeamMapping SET GroupId = @GroupId WHERE TournamentId = @TournamentId AND TeamId = @TeamId",
+                            parameter
+                        );
+                    }
+                    return Ok(new { success = true, message = "Groups assigned successfully" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = "Error - " + ex.Message });
+            }
+        }
+    }
+
+    public class TeamGroupAssignment
+    {
+        public int TournamentId { get; set; }
+        public int TeamId { get; set; }
+        public int GroupId { get; set; }
     }
 }
 

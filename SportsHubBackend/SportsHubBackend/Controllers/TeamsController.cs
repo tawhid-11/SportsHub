@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -34,24 +34,13 @@ namespace SportsHubBackend.Controllers
                 perameter.Add("Flag", 1);
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryAsync<dynamic>("SP_Teams", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "Teams fetched successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    var result = await connetion.QueryAsync<Teams>("SP_Teams", perameter, commandType: CommandType.StoredProcedure);
+                    return Ok(ApiResponse<IEnumerable<Teams>>.Ok("Teams fetched successfully", result));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
 
 
@@ -68,24 +57,13 @@ namespace SportsHubBackend.Controllers
                 perameter.Add("@TeamsID", TeamsID);
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryFirstOrDefaultAsync<dynamic>("SP_Teams", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "Teams fetched successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    var result = await connetion.QueryFirstOrDefaultAsync<Teams>("SP_Teams", perameter, commandType: CommandType.StoredProcedure);
+                    return Ok(ApiResponse<Teams>.Ok("Teams fetched successfully", result));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
         }
         [HttpPost("teams")]
@@ -196,23 +174,12 @@ namespace SportsHubBackend.Controllers
                         Console.WriteLine($"Failed to send email: {emailEx.Message}");
                     }
 
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "Teams added successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    return Ok(ApiResponse<dynamic>.Ok("Teams added successfully", result));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
 
            
@@ -239,7 +206,7 @@ namespace SportsHubBackend.Controllers
                     
                     if (result == null)
                     {
-                        return BadRequest(new { success = false, Message = "Failed to create tournament team mapping in database." });
+                        return BadRequest(ApiResponse.Error("Failed to create tournament team mapping in database."));
                     }
 
                     var tName = (string)result.TournamentName;
@@ -262,18 +229,13 @@ namespace SportsHubBackend.Controllers
                     }
                     else
                     {
-                        return BadRequest(new { success = false, Message = "bKash payment initiation failed: " + bkash.Message });
+                        return BadRequest(ApiResponse.Error("bKash payment initiation failed: " + bkash.Message));
                     }
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
 
 
@@ -317,14 +279,8 @@ namespace SportsHubBackend.Controllers
 
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryAsync<dynamic>("SP_Teams", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "Tournament updated successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    await connetion.ExecuteAsync("SP_Teams", perameter, commandType: CommandType.StoredProcedure);
+                    return Ok(ApiResponse.Ok("Tournament updated successfully"));
                 }
             }
             catch (Exception ex)
@@ -350,24 +306,13 @@ namespace SportsHubBackend.Controllers
                 perameter.Add("TeamsID", TeamsID);
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryAsync<dynamic>("SP_Teams", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "Teams deleted successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    await connetion.ExecuteAsync("SP_Teams", perameter, commandType: CommandType.StoredProcedure);
+                    return Ok(ApiResponse.Ok("Teams deleted successfully"));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
         }
         [HttpGet("GetTeamIdbyUserId")]
@@ -381,23 +326,12 @@ namespace SportsHubBackend.Controllers
                 using (var connetion = _context.CreateConnection())
                 {
                     var result = await connetion.QueryFirstOrDefaultAsync<dynamic>("SP_Teams", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "Payers fetched successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    return Ok(ApiResponse<dynamic>.Ok("Payers fetched successfully", result));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
 
 
@@ -414,23 +348,12 @@ namespace SportsHubBackend.Controllers
                 using (var connetion = _context.CreateConnection())
                 {
                     var result = await connetion.QueryAsync<dynamic>("SP_Teams", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "Team Showing successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    return Ok(ApiResponse<IEnumerable<dynamic>>.Ok("Team Showing successfully", result));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
 
 
@@ -447,23 +370,12 @@ namespace SportsHubBackend.Controllers
                 using (var connetion = _context.CreateConnection())
                 {
                     var result = await connetion.QueryAsync<dynamic>("SP_Teams", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "Player Showing successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    return Ok(ApiResponse<IEnumerable<dynamic>>.Ok("Player Showing successfully", result));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
 
 
@@ -500,23 +412,46 @@ namespace SportsHubBackend.Controllers
                         ORDER BY t.TeamsID DESC";
 
                     var result = await connection.QueryAsync<dynamic>(query);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "Teams with tournament information fetched successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    return Ok(ApiResponse<dynamic>.Ok("Teams with tournament information fetched successfully", result));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
+            }
+        }
+
+        [HttpGet("GetTeamRecentPerformance")]
+        public async Task<IActionResult> GetTeamRecentPerformance(int teamId)
+        {
+            try
+            {
+                using (var connection = _context.CreateConnection())
                 {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                    var query = @"
+                        SELECT TOP 5
+                            cm.CricketMatchID,
+                            ts.ScheduledDate,
+                            CASE WHEN ts.TeamAID = @TeamID THEN tB.TeamName ELSE tA.TeamName END as Opponent,
+                            CASE WHEN cm.WinnerTeamID = @TeamID THEN 'Won' 
+                                 WHEN cm.WinnerTeamID IS NULL AND cm.MatchStatus = 'Finished' THEN 'Draw'
+                                 WHEN cm.WinnerTeamID IS NOT NULL AND cm.WinnerTeamID != @TeamID THEN 'Lost'
+                                 ELSE cm.MatchStatus END as Result,
+                            cm.MatchStatus
+                        FROM CricketMatch cm
+                        JOIN TeamSchedule ts ON cm.TeamScheduleID = ts.TeamScheduleID
+                        JOIN Teams tA ON ts.TeamAID = tA.TeamsID
+                        JOIN Teams tB ON ts.TeamBID = tB.TeamsID
+                        WHERE ts.TeamAID = @TeamID OR ts.TeamBID = @TeamID
+                        ORDER BY ts.ScheduledDate DESC";
+
+                    var result = await connection.QueryAsync<dynamic>(query, new { TeamID = teamId });
+                    return Ok(ApiResponse<dynamic>.Ok("Recent performance fetched successfully", result));
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
         }
     }

@@ -25,8 +25,8 @@ export class Teams implements OnInit {
 
   ) {
     this.route.queryParams.subscribe(params => {
-      debugger;
       const id = params['id'];
+
 
       if (id) {
         this.id = id;
@@ -70,8 +70,8 @@ export class Teams implements OnInit {
     }
     this.httpService.PostData('UserInfo/Register', data).subscribe(
       (response: any) => {
-        debugger;
         console.log('User registration successful:', response);
+
         const userId = response.data.UserId || response.data.ID || response.data.id;
 
         const formData = new FormData();
@@ -90,8 +90,8 @@ export class Teams implements OnInit {
         formData.append('IsActive', this.teamForm.value.IsActive.toString());
         this.httpService.PostData('Teams/teams', formData).subscribe({
           next: (res: any) => {
-            debugger;
             if (this.id && this.id > 0) {
+
               this.httpService.PostData('Teams/TournamentTeamMapping', { TournamentId: this.id, TeamId: res.data.TeamsID, userId: userId }).subscribe({
                 next: (res: any) => {
                   if (res.paymentUrl && res.paymentUrl != '') {

@@ -1,410 +1,293 @@
-/* ================= ROOT THEME ================= */
-:root {
-  --bg-dark: #0b0f14;
-  --bg-card: #111827;
-  --border-soft: #1f2937;
-  --accent: #22c55e;
-  --danger: #ef4444;
-  --text-main: #e5e7eb;
-  --text-muted: #9ca3af;
+.live-match-container {
+    padding: 30px;
+    background: #f8fafc;
+    min-height: 100vh;
 }
 
-/* ================= PAGE BASE ================= */
-body {
-  background: #ffffff;
-  color: #1a202c;
-  font-family: "Segoe UI", system-ui, sans-serif;
+.match-header-premium {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: white;
+    padding: 60px 40px;
+    border-radius: 32px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 40px;
+    box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.4);
 }
 
-/* ================= HEADER ================= */
-.header {
-  background: #f87f7f;
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 10;
+.match-header-premium::before {
+    content: 'LIVE';
+    position: absolute;
+    top: 20px; right: 40px;
+    background: #ef4444;
+    color: white;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 900;
+    letter-spacing: 1px;
+    animation: pulse-live 1s infinite;
 }
 
-.header .back {
-  font-size: 22px;
-  cursor: pointer;
-  color: white;
+@keyframes pulse-live {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+    100% { opacity: 1; transform: scale(1); }
 }
 
-.header .title {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  color: white;
+.team-display-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
 }
 
-/* ================= TABS ================= */
-.tabs-container {
-  display: flex;
-  background: #f87f7f;
-  padding: 0 8px;
-  gap: 4px;
-  position: sticky;
-  top: 54px;
-  /* header height */
-  z-index: 9;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+.team-box-premium {
+    flex: 1;
 }
 
-.tab {
-  flex: 1;
-  text-align: center;
-  padding: 12px 0;
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.7);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  border-bottom: 3px solid transparent;
+.team-name-xl {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0;
+    text-transform: uppercase;
 }
 
-.tab.active {
-  color: white;
-  border-bottom-color: white;
+.vs-badge-lg {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(4px);
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 1.25rem;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: #94a3b8;
 }
 
-/* ================= CONTENT AREA ================= */
-.content-area {
-  min-height: calc(100vh - 100px);
-  background: white;
-  color: #1a202c;
+.score-summary-lg {
+    font-size: 5rem;
+    font-weight: 800;
+    margin: 20px 0;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 20px;
 }
+
+.overs-display {
+    font-size: 1.75rem;
+    color: #6366f1;
+    font-weight: 600;
+}
+
+.batting-team-label {
+    background: #6366f1;
+    color: white;
+    padding: 6px 20px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+/* Tabs */
+.user-tabs {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+
+.tab-pill {
+    padding: 10px 24px;
+    border-radius: 50px;
+    border: none;
+    background: white;
+    color: #64748b;
+    font-weight: 700;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.tab-pill.active {
+    background: #6366f1;
+    color: white;
+    box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+}
+
+/* Stats */
+.modern-table-card {
+    background: white;
+    border-radius: 24px;
+    padding: 30px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+}
+
+.player-row-premium {
+    display: flex;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.player-row-premium.active {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 16px 12px;
+}
+
+.recent-balls-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 20px 0;
+}
+
+.ball-premium {
+    width: 42px; height: 42px;
+    background: #e2e8f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+
+.ball-wicket { background: #ef4444; color: white; }
+.ball-four { background: #10b981; color: white; border: 2px solid #059669; }
+.ball-six { background: #6366f1; color: white; border: 2px solid #4f46e5; }
+.ball-extra { background: #fef3c7; color: #92400e; }
+
+/* Scorecard Sections */
+.inn-header-premium {
+    background: #f8fafc;
+    padding: 15px 25px;
+    border-radius: 16px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+/* Match Result Alert */
+.winner-banner {
+    background: #dcfce7;
+    color: #166534;
+    padding: 25px;
+    border-radius: 20px;
+    text-align: center;
+    font-weight: 800;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    border: 2px dashed #22c55e;
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Info Grid */
+.info-grid {
+    display: grid;
+    gap: 0;
+}
+
+.info-item span:first-child {
+    letter-spacing: 0.5px;
+}
+
+/* Ball History Circles */
+.ball-history-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+    border: 1px solid #e2e8f0;
+    transition: all 0.2s;
+}
+
+.ball-history-circle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Squad Highlights */
+.player-item-row {
+    transition: all 0.2s;
+    border: 1px solid transparent;
+}
+
+.player-item-row.hover-light:hover {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+}
+
+.playing-xi {
+    background: #f0fdf4 !important;
+}
+
+.text-indigo {
+    color: #6366f1 !important;
+}
+
+.bg-indigo-subtle {
+    background-color: #e0e7ff !important;
+}
+
+.fw-800 { font-weight: 800; }
+.fw-900 { font-weight: 900; }
+.letter-spacing-1 { letter-spacing: 1px; }
 
 .animate-fade-in {
-  animation: fadeIn 0.4s ease-out;
+    animation: fadeIn 0.4s ease-out;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-/* ================= SCORE BOX ================= */
-.score-box {
-  background: linear-gradient(160deg, #f8fafc, #f1f5f9);
-  margin: 12px;
-  border-radius: 16px;
-  padding: 16px;
-  display: flex;
-  justify-content: space-between;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  border: 1px solid #e2e8f0;
+.over-num-box {
+    background: #f8fafc;
+    padding: 12px;
+    border-radius: 16px;
+    min-width: 80px;
+    border: 1px solid #e2e8f0;
 }
 
-.score-left .team {
-  font-size: 14px;
-  color: #64748b;
-  font-weight: 600;
+.overs-history-container {
+    max-height: 600px;
+    overflow-y: auto;
 }
 
-.score-left .runs {
-  font-size: 34px;
-  font-weight: 800;
-  color: #1a202c;
+/* Scrollbar for overs */
+.overs-history-container::-webkit-scrollbar {
+    width: 6px;
 }
-
-.score-left .overs {
-  font-size: 14px;
-  color: #64748b;
+.overs-history-container::-webkit-scrollbar-track {
+    background: #f1f5f9;
 }
-
-.score-right {
-  text-align: right;
-  font-size: 14px;
-}
-
-/* ================= TARGET ================= */
-.note {
-  margin: 12px;
-  border-radius: 12px;
-  background: #fff5f5;
-}
-
-/* ================= THIS OVER ================= */
-.this-over-section {
-  background: #f8fafc;
-}
-
-.ball-circle {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: white;
-  border: 1px solid #e2e8f0;
-  font-size: 12px;
-}
-
-.ball-wicket {
-  background: #ef4444;
-  color: white;
-  border-color: #dc2626;
-}
-
-.ball-four {
-  background: #22c55e;
-  color: white;
-  border-color: #16a34a;
-}
-
-.ball-six {
-  background: #eab308;
-  color: white;
-  border-color: #ca8a04;
-}
-
-.ball-extra {
-  background: #f1f5f9;
-  color: #64748b;
-}
-
-/* ================= SECTIONS ================= */
-.section {
-  margin: 14px;
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  border: 1px solid #f1f5f9;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.section h4 {
-  font-size: 15px;
-  font-weight: 800;
-  margin-bottom: 16px;
-  color: #1a202c;
-  border-left: 4px solid #f87f7f;
-  padding-left: 12px;
-}
-
-/* ================= TABLE ================= */
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-thead th {
-  color: #64748b;
-  font-weight: 700;
-  padding: 8px;
-  font-size: 11px;
-  text-transform: uppercase;
-  text-align: left;
-}
-
-tbody tr {
-  border-top: 1px solid #f1f5f9;
-}
-
-tbody td {
-  padding: 12px 8px;
-  font-size: 13px;
-}
-
-/* ================= PLAYER ================= */
-.player-cell {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.player-img {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid #e2e8f0;
-}
-
-/* ================= SCORECARD SPECIFIC ================= */
-.scorecard-innings {
-  margin-bottom: 24px;
-}
-
-.innings-header {
-  background: #f1f5f9;
-  padding: 12px 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.innings-header .team-name {
-  font-weight: 800;
-  font-size: 16px;
-}
-
-.innings-header .innings-score {
-  font-weight: 700;
-  color: #64748b;
-}
-
-.card-table {
-  width: 100%;
-}
-
-.card-table thead {
-  background: #f8fafc;
-}
-
-.card-table th {
-  padding: 10px 8px;
-  font-size: 11px;
-}
-
-.card-table td {
-  padding: 12px 8px;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.player-info .name {
-  font-weight: 700;
-  font-size: 14px;
-}
-
-.player-info .dismissal {
-  font-size: 11px;
-  color: #64748b;
-}
-
-.fow-section {
-  padding: 16px;
-}
-
-.fow-title {
-  font-weight: 700;
-  font-size: 13px;
-  margin-bottom: 6px;
-}
-
-.no-margin {
-  margin: 0 !important;
-  border-radius: 0 !important;
-  border: none !important;
-}
-
-/* ================= SQUADS ================= */
-.squads-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.squad-column {
-  flex: 1;
-  min-width: 300px;
-  padding: 16px;
-  border-right: 1px solid #f1f5f9;
-}
-
-.team-label {
-  color: #f87f7f;
-  font-weight: 800;
-  margin-bottom: 16px;
-  padding-bottom: 4px;
-  border-bottom: 2px solid #f1f5f9;
-}
-
-.player-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid #f8fafc;
-}
-
-.player-item .avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  background: #f1f5f9;
-}
-
-.player-item .info .name {
-  font-weight: 600;
-  font-size: 14px;
-}
-
-.player-item .info .role {
-  font-size: 11px;
-  color: #64748b;
-}
-
-/* ================= INFO CARD ================= */
-.info-card {
-  padding: 24px !important;
-}
-
-.info-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.info-row .label {
-  color: #64748b;
-  font-weight: 600;
-}
-
-.info-row .value {
-  font-weight: 700;
-}
-
-/* ================= RESULT CARD ================= */
-.result-card {
-  background: linear-gradient(135deg, #059669, #10b981);
-  margin: 12px;
-  padding: 24px 16px;
-  border-radius: 16px;
-  text-align: center;
-  color: white;
-  box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
-  animation: slideDown 0.5s ease-out;
-}
-
-.result-label {
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 2px;
-  opacity: 0.9;
-  margin-bottom: 8px;
-}
-
-.winner-message {
-  font-size: 24px;
-  font-weight: 800;
-  line-height: 1.2;
-}
-
-@keyframes slideDown {
-  from {
-    transform: translateY(-20px);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.overs-history-container::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
 }

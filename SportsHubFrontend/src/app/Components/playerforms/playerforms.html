@@ -46,11 +46,17 @@
           </div>
 
           <!-- Phone Number -->
-          <div class="col-md-6" *ngIf="!isEditMode">
+          <div class="col-md-6">
             <label class="form-label">Phone Number <span class="text-danger">*</span></label>
-            <input type="tel" name="Phone" class="form-control" [(ngModel)]="model.Phone" 
-                   placeholder="Enter phone number" required>
-            <small class="text-muted">This will be used for user registration</small>
+            <input type="tel" name="Phone" class="form-control" [(ngModel)]="model.Phone" required>
+          </div>
+
+          <!-- Email Address -->
+          <div class="col-md-6" *ngIf="!isEditMode">
+            <label class="form-label">Email Address <span class="text-danger">*</span></label>
+            <input type="email" name="Email" class="form-control" [(ngModel)]="model.Email" 
+                   placeholder="Enter player's email" required>
+            <small class="text-muted">A login account will be created and sent to this email.</small>
           </div>
 
           <!-- Date of Birth -->

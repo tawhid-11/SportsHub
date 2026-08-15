@@ -3,6 +3,8 @@ import { playerProfile } from './Components/player-profile/player-profile';
 import { UserLiveScore } from './Components/user-live-score/user-live-score';
 import { MatchSummary } from './Components/match-summary/match-summary';
 import { TournamentPoints } from './Components/tournament-points/tournament-points';
+import { PlayerDetails } from './Components/player-details/player-details';
+import { TournamentDetails } from './Components/tournament-details/tournament-details';
 
 import { Login } from './Components/login/login';
 import { Registration } from './Components/registration/registration';
@@ -34,8 +36,12 @@ import { PaymentList } from './Components/payment-list/payment-list';
 import { UserInfoList } from './Components/user-info-list/user-info-list';
 import { ListofTeams } from './Components/listof-teams/listof-teams';
 import { AdminPlayersList } from './Components/admin-players-list/admin-players-list';
+import { ToDashboard } from './Components/to-dashboard/to-dashboard';
 
 import { LiveMatchesComponent } from './Components/live-matches/live-matches';
+import { ForgotPassword } from './Components/forgot-password/forgot-password';
+import { authGuard } from './auth.guard';
+
 
 export const routes: Routes = [
   // home page
@@ -48,15 +54,19 @@ export const routes: Routes = [
       { path: 'match-summary/:id', component: MatchSummary },
       { path: 'tournament-schedule/:id', component: Schedule },
       { path: 'tournament-points/:id', component: TournamentPoints },
-      { path: 'matchdetails/:id', component: MatchDetails }
+      { path: 'matchdetails/:id', component: MatchDetails },
+      { path: 'player-details/:id', component: PlayerDetails },
+      { path: 'tournament-details/:id', component: TournamentDetails }
     ]
   }, { path: 'login', component: Login },
   { path: 'register', component: Registration },
+  { path: 'forgot-password', component: ForgotPassword },
   { path: 'payment-confirmation', component: PaymentConfirmation },
 
   // Admin part
   {
-    path: 'layout', component: Layout, children: [
+    path: 'layout', component: Layout, canActivate: [authGuard], children: [
+
       { path: '', component: AdminDashboard },
       { path: 'user-Dashboard', component: UserInfoList },
       { path: 'tournaments', component: ListofTournaments },
@@ -73,11 +83,14 @@ export const routes: Routes = [
       { path: 'match-summary/:id', component: MatchSummary },
       { path: 'payments', component: PaymentList },
       { path: 'teams', component: ListofTeams },
+      { path: 'registeredteams/:id', component: RegisteredTeams },
       { path: 'players', component: AdminPlayersList }]
   },
   // Teamowner
   {
-    path: 'teamownerlayout', component: TeamOwnerLayout, children: [
+    path: 'teamownerlayout', component: TeamOwnerLayout, canActivate: [authGuard], children: [
+
+      { path: '', component: ToDashboard },
       { path: 'player', component: ListofPlayer },
       { path: 'playerforms', component: PlayerForm },
       { path: 'playingtournament', component: PlayingTournament },
@@ -89,9 +102,10 @@ export const routes: Routes = [
   },
   // Player Dashboard
   {
-    path: 'PlayerDashboard', component: PlayerDashboard, children: [
-      { path: 'profile', component: playerProfile }
+    path: 'PlayerDashboard', component: PlayerDashboard, canActivate: [authGuard], children: [
 
+      { path: '', redirectTo: 'profile', pathMatch: 'full' },
+      { path: 'profile', component: playerProfile }
     ]
   }
 ];

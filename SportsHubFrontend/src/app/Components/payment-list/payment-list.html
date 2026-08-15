@@ -39,6 +39,7 @@
           <th scope="col">Payment Status</th>
           <th scope="col">Transaction ID</th>
           <th scope="col">Created Date</th>
+          <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -57,6 +58,17 @@
             {{ payment.bkashTransactionId || payment.bkashPaymentId || 'N/A' }}
           </td>
           <td class="text-nowrap">{{ formatDate(payment.CreatedDate) }}</td>
+          <td class="text-center">
+            <button 
+              *ngIf="(payment.PaymentStatus || payment.paymentStatus || '').toLowerCase() === 'pending' || (payment.PaymentStatus || payment.paymentStatus || '').toLowerCase() === 'initiated'"
+              class="btn btn-sm btn-success fw-bold" 
+              (click)="markAsPaid(payment.Id)">
+              <i class="bi bi-check-circle me-1"></i> Mark as Paid
+            </button>
+            <span *ngIf="(payment.PaymentStatus || payment.paymentStatus || '').toLowerCase() === 'paid' || (payment.PaymentStatus || payment.paymentStatus || '').toLowerCase() === 'confirmed'" class="text-success small fw-bold">
+              <i class="bi bi-patch-check-fill"></i> Verified
+            </span>
+          </td>
         </tr>
       </tbody>
     </table>

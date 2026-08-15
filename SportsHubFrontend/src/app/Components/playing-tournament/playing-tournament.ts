@@ -27,8 +27,8 @@ export class PlayingTournament implements OnInit {
       .subscribe({
         next: (res:any) =>{
           this.tournaments = res.data;
-          debugger;
           this.cdr.detectChanges();
+
         } ,
         error: err => console.error('Failed to load tournaments', err)
       });

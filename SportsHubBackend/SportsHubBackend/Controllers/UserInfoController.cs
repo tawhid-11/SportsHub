@@ -1,8 +1,12 @@
-﻿using Dapper;
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using SportsHubBackend.DBContext;
 using SportsHubBackend.Model;
 using System.Data;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace SportsHubBackend.Controllers
 {
@@ -11,10 +15,12 @@ namespace SportsHubBackend.Controllers
     public class UserInfoController : ControllerBase
     {
         private readonly DapperContext _context;
+        private readonly IConfiguration _configuration;
 
-        public UserInfoController(DapperContext context)
+        public UserInfoController(DapperContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // ===================== LOGIN =====================
@@ -35,12 +41,43 @@ namespace SportsHubBackend.Controllers
                     commandType: CommandType.StoredProcedure
                 );
 
-                return Ok(new
+                if (result != null)
                 {
-                    success = true,
-                    message = "Login successful",
-                    data = result
-                });
+                    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
+                    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+                    
+                    var userType = ((IDictionary<string, object>)result).ContainsKey("UserType") 
+                                            ? ((IDictionary<string, object>)result)["UserType"]?.ToString() 
+                                            : "User";
+
+                    var claims = new[]
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, request.Email ?? ""),
+                        new Claim(ClaimTypes.Email, request.Email ?? ""),
+                        new Claim(ClaimTypes.Role, userType ?? "User")
+                    };
+
+                    var token = new JwtSecurityToken(
+                        issuer: _configuration["Jwt:Issuer"],
+                        audience: _configuration["Jwt:Audience"],
+                        claims: claims,
+                        expires: DateTime.Now.AddHours(2),
+                        signingCredentials: credentials);
+
+                    var jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+                    return Ok(new
+                    {
+                        success = true,
+                        message = "Login successful",
+                        token = jwtToken,
+                        data = result
+                    });
+                }
+                else
+                {
+                    throw new Exception("Invalid Username or Password");
+                }
             }
             catch (Exception ex)
             {
@@ -56,6 +93,11 @@ namespace SportsHubBackend.Controllers
         [HttpPost("Register")]
         public async Task<IActionResult> Register([FromBody] Registration request)
         {
+            if (string.IsNullOrEmpty(request.Password) || request.Password.Length < 8)
+            {
+                return BadRequest(new { success = false, message = "Password must be at least 8 characters long." });
+            }
+
             try
             {
                 var parameter = new DynamicParameters();

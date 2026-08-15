@@ -1,20 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { SignalrService } from '../../Service/SignalrService';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Httpclientservice } from '../../Service/httpclientservice';
 
 @Component({
   selector: 'app-user-live-score',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './user-live-score.html',
   styleUrl: './user-live-score.css',
 })
 export class UserLiveScore implements OnInit {
   matchId: number = 0;
   matchTitle: string = 'Live Match';
-  activeTab: string = 'live'; // info, live, scorecard, squads
+  activeTab: string = 'live'; // info, live, scorecard, squad, overs
+
+  matchInfo: any = null;
+  oversDetails: any[] = [];
 
   score: any = {
     runs: 0,
@@ -64,8 +67,8 @@ export class UserLiveScore implements OnInit {
 
   getInitialScore() {
     this.http.GetData(`LiveMatch/GetLiveScore?matchId=${this.matchId}`).subscribe((res: any) => {
-      if (res) {
-        this.updateUI(res);
+      if (res && res.data) {
+        this.updateUI(res.data);
       }
     });
   }
@@ -102,6 +105,7 @@ export class UserLiveScore implements OnInit {
     const b = data.BowlerStats ?? data.bowlerStats;
     if (b) {
       this.bowling.push({
+        PlayerID: b.PlayerID || b.playerId || b.id,
         name: b.PlayerName || b.playerName || 'Bowler',
         image: b.PlayerImage || b.playerImage || '',
         overs: b.Overs ?? b.overs ?? '0.0',
@@ -117,6 +121,7 @@ export class UserLiveScore implements OnInit {
 
   addBatsman(s: any, isStriker: boolean) {
     this.batting.push({
+      PlayerID: s.PlayerID || s.playerId || s.id,
       name: s.PlayerName || s.playerName || 'Batsman',
       image: s.PlayerImage || s.playerImage || '',
       runs: s.Runs ?? s.runs ?? 0,
@@ -132,22 +137,40 @@ export class UserLiveScore implements OnInit {
     this.activeTab = tab;
     if (tab === 'scorecard') {
       this.getFullScorecard();
-    } else if (tab === 'squads') {
+    } else if (tab === 'squad') {
       this.getSquads();
+    } else if (tab === 'info') {
+      this.getMatchInfo();
+    } else if (tab === 'overs') {
+      this.getOversDetails();
     }
     this.cdr.detectChanges();
   }
 
+  getMatchInfo() {
+    this.http.GetData(`LiveMatch/GetMatchInfo?matchId=${this.matchId}`).subscribe((res: any) => {
+      this.matchInfo = res.data;
+      this.cdr.detectChanges();
+    });
+  }
+
+  getOversDetails() {
+    this.http.GetData(`LiveMatch/GetOversDetails?matchId=${this.matchId}`).subscribe((res: any) => {
+      this.oversDetails = res.data;
+      this.cdr.detectChanges();
+    });
+  }
+
   getFullScorecard() {
     this.http.GetData(`LiveMatch/GetFullScorecard?matchId=${this.matchId}`).subscribe((res: any) => {
-      this.fullScorecard = res;
+      this.fullScorecard = res.data;
       this.cdr.detectChanges();
     });
   }
 
   getSquads() {
     this.http.GetData(`LiveMatch/GetSquads?matchId=${this.matchId}`).subscribe((res: any) => {
-      this.squads = res;
+      this.squads = res.data;
       this.cdr.detectChanges();
     });
   }

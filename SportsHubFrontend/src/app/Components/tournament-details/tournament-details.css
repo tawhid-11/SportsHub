@@ -1,0 +1,143 @@
+.tournament-details-container {
+    background-color: #f8fafc;
+    min-height: 100vh;
+}
+
+.tournament-hero {
+    background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.tournament-hero::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: radial-gradient(circle at 70% 30%, rgba(79, 70, 229, 0.4) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.display-4 {
+    font-weight: 800;
+    letter-spacing: -2px;
+}
+
+.fw-800 {
+    font-weight: 800;
+}
+
+.bg-indigo-subtle {
+    background: rgba(79, 70, 229, 0.1);
+}
+
+.text-indigo {
+    color: #4338ca;
+}
+
+.tabs-nav-premium .tab-item {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 10px 0;
+    position: relative;
+    transition: all 0.3s ease;
+    letter-spacing: 0.05em;
+}
+
+.tabs-nav-premium .tab-item.active {
+    color: white;
+}
+
+.tabs-nav-premium .tab-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #4f46e5;
+    border-radius: 3px;
+}
+
+.team-card {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.team-card:hover {
+    transform: translateY(-8px);
+}
+
+.squad-list-scroll {
+    max-height: 350px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.squad-item {
+    transition: all 0.2s ease;
+}
+
+.squad-item:hover {
+    background-color: #f1f5f9;
+    transform: translateX(4px);
+}
+
+.status-pill {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+    padding: 5px 12px;
+    background: #f1f5f9;
+    border-radius: 20px;
+}
+
+.status-pill.active {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.scroll-x-mobile {
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+.uppercase {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.hover-link:hover {
+    color: #4f46e5 !important;
+}
+
+/* Stats specific styles */
+.leader-item {
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.leader-item:hover {
+    transform: translateX(8px);
+    background-color: #f8fafc !important;
+    border-color: #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.bg-warning-subtle { background-color: #fffbeb; }
+.bg-info-subtle { background-color: #f0f9ff; }
+.text-warning-emphasis { color: #92400e; }
+.text-info-emphasis { color: #075985; }
+
+.fw-800 { font-weight: 800; }

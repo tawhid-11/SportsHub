@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SportsHubBackend.DBContext;
@@ -322,6 +322,37 @@ namespace SportsHubBackend.Controllers
                     success = false,
                     Message = "Database setup failed: " + ex.Message
                 });
+            }
+        }
+        [HttpPost("UpdateToPaid")]
+        public async Task<IActionResult> MarkAsPaid(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                {
+                    return BadRequest(new { success = false, message = "Invalid payment ID: " + id });
+                }
+
+                using (var connection = _context.CreateConnection())
+                {
+                    // Update the status to 'Paid' (This is what the scheduler searches for)
+                    var query = "UPDATE TournamentTeamMapping SET PaymentStatus = 'Paid', PaymentDate = GETDATE(), bkashTransactionId = 'MANUAL_ADMIN' WHERE Id = @Id";
+                    var rowsAffected = await connection.ExecuteAsync(query, new { Id = id });
+
+                    if (rowsAffected > 0)
+                    {
+                        return Ok(new { success = true, message = "Payment marked as paid successfully" });
+                    }
+                    else
+                    {
+                        return Ok(new { success = false, message = "No records found for ID: " + id });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { success = false, message = "Database Error: " + ex.Message });
             }
         }
     }

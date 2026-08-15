@@ -2,10 +2,12 @@
   <div class="login-card shadow-lg p-4">
 
     <!-- Logo & Header -->
-    <div class="text-center mb-4">
-      <img src="assets/image/SportsHub.png" alt="SportsHub Logo" class="logo-img mb-2">
-      <h3 class="fw-bold">SPORTSHUB</h3>
-      <p class="text-muted small">Login to access all features</p>
+    <div class="text-center mb-5">
+      <div class="logo-container mb-3">
+        <img src="assets/image/SportsHub.png" alt="SportsHub Logo" class="logo-img">
+      </div>
+      <h2 class="fw-800 text-white letter-spacing-2">SPORTSHUB</h2>
+      <p class="text-indigo-subtle small">Management platform for elite athletes</p>
     </div>
 
     <!-- Login Form -->
@@ -15,13 +17,13 @@
       <div class="mb-3 input-group input-group-lg">
         <input
           type="email"
-          class="form-control rounded-start"
-          placeholder="Email"
+          class="form-control"
+          placeholder="Email address"
           name="email"
           [(ngModel)]="loginData.email"
           required
         />
-        <span class="input-group-text bg-white rounded-end">
+        <span class="input-group-text">
           <i class="bi bi-envelope-fill"></i>
         </span>
       </div>
@@ -30,14 +32,14 @@
       <div class="mb-3 input-group input-group-lg">
         <input
           [type]="showPassword ? 'text' : 'password'"
-          class="form-control rounded-start"
+          class="form-control"
           placeholder="Password"
           name="password"
           [(ngModel)]="loginData.password"
           required
         />
         <span
-          class="input-group-text bg-white cursor-pointer rounded-end"
+          class="input-group-text cursor-pointer"
           (click)="togglePassword()"
         >
           <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'"></i>
@@ -47,9 +49,9 @@
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div class="form-check">
           <input type="checkbox" class="form-check-input" id="rememberMe" />
-          <label class="form-check-label small" for="rememberMe">Remember me</label>
+          <label class="form-check-label small text-white-50" for="rememberMe">Remember me</label>
         </div>
-        <a href="#" class="small text-decoration-none">Forgot password?</a>
+        <a routerLink="/forgot-password" class="small text-indigo-subtle text-decoration-none">Forgot password?</a>
       </div>
 
       <!-- Login Button -->
@@ -66,9 +68,9 @@
     <div class="divider my-3"><span>or continue with</span></div>
 
     <!-- Register Link -->
-    <p class="text-center small mb-0">
+    <p class="text-center small mb-0 text-white-50">
       Don’t have an account?
-      <a routerLink="/register" class="signup-link">Register</a>
+      <a routerLink="/register" class="signup-link">Join the movement</a>
     </p>
 
   </div>

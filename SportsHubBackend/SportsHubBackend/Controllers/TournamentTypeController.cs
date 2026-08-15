@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SportsHubBackend.DBContext;
@@ -27,24 +27,13 @@ namespace SportsHubBackend.Controllers
                 perameter.Add("Flag", 1);
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryAsync<dynamic>("SP_TournamentsType", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "TournamentType fetched successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    var result = await connetion.QueryAsync<TournamentType>("SP_TournamentsType", perameter, commandType: CommandType.StoredProcedure);
+                    return Ok(ApiResponse<IEnumerable<TournamentType>>.Ok("TournamentType fetched successfully", result));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
 
 
@@ -60,24 +49,13 @@ namespace SportsHubBackend.Controllers
                 perameter.Add("Id", id);
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryFirstOrDefaultAsync<dynamic>("SP_TournamentsType", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "TournamentType fetched successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    var result = await connetion.QueryFirstOrDefaultAsync<TournamentType>("SP_TournamentsType", perameter, commandType: CommandType.StoredProcedure);
+                    return Ok(ApiResponse<TournamentType>.Ok("TournamentType fetched successfully", result));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
         }
 
@@ -93,24 +71,13 @@ namespace SportsHubBackend.Controllers
 
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryAsync<dynamic>("SP_TournamentsType", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "TournamentType added successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    await connetion.ExecuteAsync("SP_TournamentsType", perameter, commandType: CommandType.StoredProcedure);
+                    return Ok(ApiResponse.Ok("TournamentType added successfully"));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
 
             //var query = @"
@@ -133,25 +100,13 @@ namespace SportsHubBackend.Controllers
 
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryAsync<dynamic>("SP_TournamentsType", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "TournamentType updated successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    await connetion.ExecuteAsync("SP_TournamentsType", perameter, commandType: CommandType.StoredProcedure);
+                    return Ok(ApiResponse.Ok("TournamentType updated successfully"));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
-
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
         }
 
@@ -167,24 +122,13 @@ namespace SportsHubBackend.Controllers
                 perameter.Add("Id", id);
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryAsync<dynamic>("SP_TournamentsType", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "TournamentType deleted successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    await connetion.ExecuteAsync("SP_TournamentsType", perameter, commandType: CommandType.StoredProcedure);
+                    return Ok(ApiResponse.Ok("TournamentType deleted successfully"));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
         }
 

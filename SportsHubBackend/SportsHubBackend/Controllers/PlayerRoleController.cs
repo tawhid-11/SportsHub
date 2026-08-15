@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SportsHubBackend.DBContext;
@@ -27,24 +27,13 @@ namespace SportsHubBackend.Controllers
                 perameter.Add("Flag", 1);
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryAsync<dynamic>("SP_PlayerRole", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "Player Role fetched successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    var result = await connetion.QueryAsync<PlayerRole>("SP_PlayerRole", perameter, commandType: CommandType.StoredProcedure);
+                    return Ok(ApiResponse<IEnumerable<PlayerRole>>.Ok("Player Role fetched successfully", result));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
 
 
@@ -60,24 +49,13 @@ namespace SportsHubBackend.Controllers
                 perameter.Add("PLayerRoleID", PLayerRoleID);
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryFirstOrDefaultAsync<dynamic>("SP_PlayerRole", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "Player Role fetched successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    var result = await connetion.QueryFirstOrDefaultAsync<PlayerRole>("SP_PlayerRole", perameter, commandType: CommandType.StoredProcedure);
+                    return Ok(ApiResponse<PlayerRole>.Ok("Player Role fetched successfully", result));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
         }
 
@@ -96,24 +74,13 @@ namespace SportsHubBackend.Controllers
 
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryAsync<dynamic>("SP_PlayerRole", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "PlayerRole added successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    await connetion.ExecuteAsync("SP_PlayerRole", perameter, commandType: CommandType.StoredProcedure);
+                    return Ok(ApiResponse.Ok("PlayerRole added successfully"));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
         }
         [HttpPut("UpdatePlayerRole/{PlayerRoleID}")]
@@ -131,27 +98,18 @@ namespace SportsHubBackend.Controllers
 
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryAsync<dynamic>(
+                    await connetion.ExecuteAsync(
                         "SP_PlayerRole",
                         perameter,
                         commandType: CommandType.StoredProcedure
                     );
 
-                    return Ok(new
-                    {
-                        success = true,
-                        Message = "Player Role updated successfully",
-                        Data = result
-                    });
+                    return Ok(ApiResponse.Ok("Player Role updated successfully"));
                 }
             }
             catch (Exception ex)
             {
-                return BadRequest(new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message
-                });
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
         }
 
@@ -168,24 +126,13 @@ namespace SportsHubBackend.Controllers
                 perameter.Add("PLayerRoleID", PLayerRoleID);
                 using (var connetion = _context.CreateConnection())
                 {
-                    var result = await connetion.QueryAsync<dynamic>("SP_PlayerRole", perameter, commandType: CommandType.StoredProcedure);
-                    var rdata = new
-                    {
-                        success = true,
-                        Message = "Player Role deleted successfully",
-                        Data = result
-                    };
-                    return Ok(rdata);
+                    await connetion.ExecuteAsync("SP_PlayerRole", perameter, commandType: CommandType.StoredProcedure);
+                    return Ok(ApiResponse.Ok("Player Role deleted successfully"));
                 }
             }
             catch (Exception ex)
             {
-                var rdata = new
-                {
-                    success = false,
-                    Message = "Error - " + ex.Message,
-                };
-                return BadRequest(rdata);              
+                return BadRequest(ApiResponse.Error("Error - " + ex.Message));
             }
         }
     }

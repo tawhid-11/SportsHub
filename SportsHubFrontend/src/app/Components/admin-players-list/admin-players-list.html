@@ -27,7 +27,7 @@
         <tr *ngFor="let item of players">
           <td>{{ item.TeamName || '-' }}</td>
           <td class="text-center">
-            <img *ngIf="item.PlayerImage" [src]="item.PlayerImage" alt="Player Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
+            <img *ngIf="item.PlayerImage" [src]="item.PlayerImage" alt="Player Image" style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;" onerror="this.src='assets/image/SportsHub.png'">
             <span *ngIf="!item.PlayerImage" class="text-muted">-</span>
           </td>
           <td>{{ item.FullName }}</td>

@@ -1,36 +1,48 @@
 <aside class="sidebar" [class.collapsed]="collapsed">
-      <div class="brand">
-        <div class="logo">
-          <img src="assets/image/SportsHub.png" height="40" alt="SportsHub Logo">
-        </div>
-        <div class="title" *ngIf="!collapsed">SportsHub</div>
-
-        <button class="collapse-btn" (click)="toggle.emit()"
-          [attr.aria-label]="collapsed ? 'Expand sidebar' : 'Collapse sidebar'">
-          {{ collapsed ? '»' : '«' }}
-        </button>
+  <div class="brand">
+    <div class="logo-container">
+      <div class="logo">
+        <img src="assets/image/SportsHub.png" height="24" alt="" onerror="this.style.display='none'">
+        <i class="bi bi-trophy-fill text-white" *ngIf="!hasLogo"></i>
       </div>
-      <nav class="nav">
-        <a
-          class="nav-item"
-          *ngFor="let item of nav"
-          [routerLink]="item.route"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
-          <span class="icon">{{ item.icon || '•' }}</span>
-          <span class="label" *ngIf="!collapsed">{{ item.label }}</span>
-        </a>
-        <a class="nav-item" (click)="logout()" 
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }">
-        <span class="icon">🚪</span>
-          <span class="label" *ngIf="!collapsed">LogOut</span>
+      <div class="title" *ngIf="!collapsed">SportsHub</div>
+      <button class="collapse-btn" (click)="toggle.emit()">
+        <i class="bi" [ngClass]="collapsed ? 'bi-chevron-right' : 'bi-chevron-left'"></i>
+      </button>
+    </div>
+  </div>
 
-      </a>
-      </nav>
+  <nav class="nav">
+    <a
+      class="nav-item"
+      *ngFor="let item of nav"
+      [routerLink]="item.route"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      [title]="item.label"
+    >
+      <span class="icon">
+        <i [class]="item.icon"></i>
+      </span>
+      <span class="label" *ngIf="!collapsed">{{ item.label }}</span>
+    </a>
 
-      <div class="bottom" *ngIf="!collapsed">
-        <small>Md. Tauhid Islam</small>
+    <!-- Logout at bottom -->
+    <a class="nav-item logout-item" (click)="logout()" title="Logout">
+      <span class="icon"><i class="bi bi-box-arrow-right"></i></span>
+      <span class="label" *ngIf="!collapsed">Sign Out</span>
+    </a>
+  </nav>
+
+  <div class="bottom" *ngIf="!collapsed">
+    <div class="user-profile">
+      <div class="avatar-sm">
+        {{ getUserInitials() }}
       </div>
-    </aside>
+      <div class="user-info-mini">
+        <span class="user-name-mini">{{ getUserName() }}</span>
+        <span class="user-role-mini text-uppercase">Team Owner Portal</span>
+      </div>
+    </div>
+  </div>
+</aside>

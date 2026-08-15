@@ -29,29 +29,29 @@ export class RegisterTournament implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.tournaments = res.data;
-          debugger;
           this.cdr.detectChanges();
+
         },
         error: err => console.error('Failed to load tournaments', err)
       });
   }
 
   loadTeam() {
-    debugger;
     // Load teams from API
+
     var user = JSON.parse(localStorage.getItem('userInfo') || '{}');
 
     this.http.GetData(`Teams/GetTeamIdbyUserId?id=${user.ID}`).subscribe((res: any) => {
-      debugger;
       this.teams = res.data;
       this.cdr.detectChanges();
+
     });
 
 
   }
   goToRegister(TournamentId: number) {
-    debugger;
     var user = JSON.parse(localStorage.getItem('userInfo') || '{}');
+
     this.http.PostData('Teams/TournamentTeamMapping', {
       TournamentId: TournamentId,
       TeamId: this.teams.TeamsID,

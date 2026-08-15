@@ -1,0 +1,287 @@
+<div class="tournament-details-container pb-5">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3 text-muted">Gathering tournament details...</p>
+  </div>
+
+  <!-- Content -->
+  <div *ngIf="!loading && tournamentInfo" class="animate-fade-in">
+    
+    <!-- Hero Header -->
+    <div class="tournament-hero shadow-sm mb-4">
+      <div class="container py-5 d-flex align-items-center gap-4">
+          <div class="tournament-logo-box bg-white p-3 rounded-circle shadow">
+              <img [src]="'https://localhost:7142' + tournamentInfo.Image" class="img-fluid rounded-circle" style="width: 100px; height: 100px; object-fit: cover" onerror="this.src='assets/image/hero-cricket.jpg'">
+          </div>
+          <div class="text-white">
+              <span class="badge bg-white text-primary mb-2 uppercase fw-bold">{{ tournamentInfo.Status }}</span>
+              <h1 class="display-4 fw-800 m-0">{{ tournamentInfo.TournamentName }}</h1>
+              <div class="d-flex gap-3 mt-2 opacity-75">
+                  <span class="small"><i class="bi bi-geo-alt me-1"></i>{{ tournamentInfo.Location }}</span>
+                  <span class="small"><i class="bi bi-calendar3 me-1"></i>{{ tournamentInfo.StartDate | date:'mediumDate' }}</span>
+              </div>
+          </div>
+      </div>
+      
+      <!-- Tabs Nav -->
+      <div class="tabs-nav-premium border-top border-white border-opacity-10 py-3">
+          <div class="container d-flex gap-4 scroll-x-mobile">
+              <button class="tab-item" [class.active]="activeTab === 'overview'" (click)="switchTab('overview')">OVERVIEW</button>
+              <button class="tab-item" [class.active]="activeTab === 'teams'" (click)="switchTab('teams')">TEAMS & SQUADS</button>
+              <button class="tab-item" [class.active]="activeTab === 'schedule'" (click)="switchTab('schedule')">SCHEDULE</button>
+              <button class="tab-item" [class.active]="activeTab === 'points'" (click)="switchTab('points')">STANDINGS</button>
+              <button class="tab-item" [class.active]="activeTab === 'stats'" (click)="switchTab('stats')">STATS</button>
+          </div>
+      </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        
+        <!-- Tab: Overview -->
+        <div *ngIf="activeTab === 'overview'" class="tab-content animate-fade-in">
+            <div class="row g-4">
+                <div class="col-md-8">
+                    <div class="glass-card mb-4 p-4 border-0 rounded-4 bg-white shadow-sm">
+                        <h4 class="fw-bold mb-4">Tournament Information</h4>
+                        <div class="row g-4">
+                            <div class="col-md-6 info-item">
+                                <label class="text-muted small uppercase fw-bold d-block mb-1">Max Teams</label>
+                                <div class="h5 fw-bold">{{ tournamentInfo.MaxTeams }}</div>
+                            </div>
+                            <div class="col-md-6 info-item">
+                                <label class="text-muted small uppercase fw-bold d-block mb-1">Match Format</label>
+                                <div class="h5 fw-bold">{{ tournamentInfo.MatchPlayer }}-A-Side</div>
+                            </div>
+                            <div class="col-md-6 info-item">
+                                <label class="text-muted small uppercase fw-bold d-block mb-1">Registration Fee</label>
+                                <div class="h5 fw-bold text-success">{{ tournamentInfo.RegistrationFee | currency:'BDT ' }}</div>
+                            </div>
+                            <div class="col-md-6 info-item">
+                                <label class="text-muted small uppercase fw-bold d-block mb-1">Registration Deadline</label>
+                                <div class="h5 fw-bold text-danger">{{ tournamentInfo.RegistrationDeadLine | date:'mediumDate' }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stats Preview in Overview -->
+                    <div class="glass-card p-4 border-0 rounded-4 bg-white shadow-sm" *ngIf="topBatters.length > 0 || topBowlers.length > 0">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold m-0">Top Performers</h4>
+                            <button class="btn btn-link text-primary p-0 fw-bold text-decoration-none" (click)="switchTab('stats')">Full Stats <i class="bi bi-arrow-right"></i></button>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-6" *ngIf="topBatters.length > 0">
+                                <div class="p-3 rounded-4 bg-warning-subtle border border-warning-subtle">
+                                    <small class="text-uppercase fw-800 text-warning-emphasis d-block mb-2">Leading Batter</small>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img [src]="'https://localhost:7142'+topBatters[0].Image" class="rounded-circle border border-2 border-white" style="width: 40px; height: 40px; object-fit: cover" onerror="this.src='assets/image/SportsHub.png'">
+                                        <div class="overflow-hidden">
+                                            <div class="fw-bold text-truncate small">{{ topBatters[0].Name }}</div>
+                                            <div class="h5 fw-800 m-0">{{ topBatters[0].TotalRuns }} <small class="fw-normal fs-6">runs</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6" *ngIf="topBowlers.length > 0">
+                                <div class="p-3 rounded-4 bg-info-subtle border border-info-subtle">
+                                    <small class="text-uppercase fw-800 text-info-emphasis d-block mb-2">Top Bowler</small>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <img [src]="'https://localhost:7142'+topBowlers[0].Image" class="rounded-circle border border-2 border-white" style="width: 40px; height: 40px; object-fit: cover" onerror="this.src='assets/image/SportsHub.png'">
+                                        <div class="overflow-hidden">
+                                            <div class="fw-bold text-truncate small">{{ topBowlers[0].Name }}</div>
+                                            <div class="h5 fw-800 m-0">{{ topBowlers[0].TotalWickets }} <small class="fw-normal fs-6">wickets</small></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card p-4 border-0 rounded-4 bg-white shadow-sm h-100">
+                        <h5 class="fw-bold mb-3">Venue Particulars</h5>
+                        <div class="d-flex align-items-center mb-4 p-3 rounded-3 bg-light">
+                            <i class="bi bi-geo-alt-fill text-primary display-5 me-3"></i>
+                            <div>
+                                <div class="fw-bold">{{ tournamentInfo.Location }}</div>
+                                <small class="text-muted">Primary Stadium Ground</small>
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-3">Official Contact</h5>
+                        <div class="p-3 rounded-3 border-start border-4 border-primary bg-light">
+                            <div class="fw-bold">{{ tournamentInfo.ContactNumber }}</div>
+                            <small class="text-muted">General Manager Support</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Teams & Squads -->
+        <div *ngIf="activeTab === 'teams'" class="tab-content animate-fade-in">
+            <div class="row g-4">
+                <div class="col-md-4" *ngFor="let team of teams">
+                    <div class="team-card bg-white shadow-sm border-0 rounded-4 overflow-hidden h-100">
+                        <div class="team-header bg-light p-4 text-center border-bottom">
+                            <img [src]="'https://localhost:7142' + team.TeamLogo" class="rounded shadow-sm mb-3" style="width: 80px; height: 80px; object-fit: contain" onerror="this.src='assets/image/SportsHub.png'">
+                            <h5 class="fw-bold m-0 text-indigo">{{ team.TeamName }}</h5>
+                            <small class="text-muted fw-bold">{{ team.ShortName }}</small>
+                        </div>
+                        <div class="p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-bold m-0 small uppercase text-muted">SQUAD LIST ({{ team.squad?.length || 0 }})</h6>
+                                <span class="badge bg-indigo-subtle text-indigo px-3">REGISTERED</span>
+                            </div>
+                            <div class="squad-list-scroll">
+                                <div class="squad-item p-2 mb-2 rounded-3 bg-light-subtle d-flex align-items-center gap-3" *ngFor="let p of team.squad">
+                                    <img [src]="'https://localhost:7142' + p.PlayerImage" class="rounded-circle border" style="width: 32px; height: 32px; object-fit: cover" onerror="this.src='assets/image/SportsHub.png'">
+                                    <div class="flex-grow-1">
+                                        <a [routerLink]="['/player-details', p.PlayerID]" class="text-decoration-none text-dark fw-bold small hover-link">{{ p.FullName }}</a>
+                                        <div class="small text-muted opacity-75" style="font-size: 0.7rem">{{ p.RoleName }}</div>
+                                    </div>
+                                    <i class="bi bi-chevron-right small opacity-50"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Schedule -->
+        <div *ngIf="activeTab === 'schedule'" class="tab-content animate-fade-in">
+            <div class="table-responsive bg-white rounded-4 shadow-sm">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-muted small fw-bold uppercase px-4">
+                        <tr>
+                            <th class="ps-4 py-3">DATE & TIME</th>
+                            <th class="py-3">MATCHUP</th>
+                            <th class="py-3">LOCATION</th>
+                            <th class="py-3">STATUS</th>
+                            <th class="pe-4 py-3 text-end">SCORECARD</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let s of schedules">
+                            <td class="ps-4">
+                                <div class="fw-bold">{{ s.ScheduledDate | date:'mediumDate' }}</div>
+                                <small class="text-muted">{{ s.ScheduledDate | date:'shortTime' }}</small>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center gap-3">
+                                    <span class="fw-bold">{{ s.TeamA }}</span>
+                                    <span class="badge bg-light text-muted fw-normal">VS</span>
+                                    <span class="fw-bold">{{ s.TeamB }}</span>
+                                </div>
+                            </td>
+                            <td><small>{{ s.Location || 'Stadium Ground' }}</small></td>
+                            <td>
+                                <span class="status-pill" [class.active]="s.MatchStatus === 'Running'">
+                                    {{ s.MatchStatus }}
+                                </span>
+                            </td>
+                            <td class="pe-4 text-end">
+                                <button class="btn btn-outline-primary btn-sm rounded-pill px-3" [routerLink]="['/view-live-score', s.CricketMatchID]">View</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab: Standings -->
+        <div *ngIf="activeTab === 'points'" class="tab-content animate-fade-in">
+            <div class="table-responsive bg-white rounded-4 shadow-sm p-4">
+                <h4 class="fw-bold mb-4">Competition Standing</h4>
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr class="text-muted small fw-bold uppercase">
+                            <th class="py-3">POS</th>
+                            <th class="py-3">TEAM</th>
+                            <th class="py-3 text-center">P</th>
+                            <th class="py-3 text-center text-success">W</th>
+                            <th class="py-3 text-center text-danger">L</th>
+                            <th class="py-3 text-center text-muted">D/NR</th>
+                            <th class="py-3 text-center text-primary">PTS</th>
+                            <th class="py-3 text-end">NRR</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let p of pointsTable; let i = index">
+                            <td class="fw-bold">{{ i + 1 }}</td>
+                            <td>
+                                <div class="d-flex align-items-center gap-2">
+                                    <img [src]="'https://localhost:7142' + p.TeamLogo" class="rounded shadow-sm" style="width: 32px; height: 32px; object-fit: contain" onerror="this.src='assets/image/SportsHub.png'">
+                                    <span class="fw-bold">{{ p.TeamName }}</span>
+                                </div>
+                            </td>
+                            <td class="text-center">{{ p.Played }}</td>
+                            <td class="text-center fw-bold">{{ p.Won }}</td>
+                            <td class="text-center">{{ p.Lost }}</td>
+                            <td class="text-center">{{ p.Draw + p.NR }}</td>
+                            <td class="text-center fw-bold text-primary">{{ p.Points }}</td>
+                            <td class="text-end fw-semibold" [class.text-success]="p.NRR > 0" [class.text-danger]="p.NRR < 0">{{ p.NRR | number:'1.3-3' }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tab: Stats -->
+        <div *ngIf="activeTab === 'stats'" class="tab-content animate-fade-in">
+            <div class="row g-4">
+                <!-- Top Batters -->
+                <div class="col-lg-6">
+                    <div class="p-4 rounded-4 bg-white border shadow-sm">
+                        <h4 class="fw-bold mb-4 d-flex align-items-center">
+                            <i class="bi bi-fire text-danger me-2"></i> Leading Batters
+                        </h4>
+                        <div class="leader-list">
+                            <div *ngIf="topBatters.length === 0" class="text-center py-4 text-muted"> No batting data yet. </div>
+                            <div *ngFor="let p of topBatters; let i = index" 
+                                 class="leader-item d-flex align-items-center p-3 mb-2 rounded-3 bg-light border-bottom clickable hover-link"
+                                 [routerLink]="['/player-details', p.PlayerID]">
+                                <div class="rank fw-bold text-primary me-3 text-center" style="width: 30px;">#{{ i + 1 }}</div>
+                                <img [src]="'https://localhost:7142'+p.Image" class="rounded-circle me-3" style="width: 45px; height: 45px; object-fit: cover;" onerror="this.src='assets/image/SportsHub.png'">
+                                <div class="player-info flex-grow-1">
+                                    <div class="fw-bold">{{ p.Name }}</div>
+                                    <div class="small text-muted">{{ p.TeamName }}</div>
+                                </div>
+                                <div class="total-runs h4 fw-bold text-dark mb-0">{{ p.TotalRuns }} <small class="fw-normal text-muted" style="font-size: 0.8rem;">Runs</small></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Bowlers -->
+                <div class="col-lg-6">
+                    <div class="p-4 rounded-4 bg-white border shadow-sm">
+                        <h4 class="fw-bold mb-4 d-flex align-items-center">
+                            <i class="bi bi-star-fill text-warning me-2"></i> Golden Bowlers
+                        </h4>
+                        <div class="leader-list">
+                            <div *ngIf="topBowlers.length === 0" class="text-center py-4 text-muted"> No bowling data yet. </div>
+                            <div *ngFor="let p of topBowlers; let i = index" 
+                                 class="leader-item d-flex align-items-center p-3 mb-2 rounded-3 bg-light border-bottom clickable hover-link"
+                                 [routerLink]="['/player-details', p.PlayerID]">
+                                <div class="rank fw-bold text-warning me-3 text-center" style="width: 30px;">#{{ i + 1 }}</div>
+                                <img [src]="'https://localhost:7142'+p.Image" class="rounded-circle me-3" style="width: 45px; height: 45px; object-fit: cover;" onerror="this.src='assets/image/SportsHub.png'">
+                                <div class="player-info flex-grow-1">
+                                    <div class="fw-bold">{{ p.Name }}</div>
+                                    <div class="small text-muted">{{ p.TeamName }}</div>
+                                </div>
+                                <div class="total-wickets h4 fw-bold text-dark mb-0">{{ p.TotalWickets }} <small class="fw-normal text-muted" style="font-size: 0.8rem;">Wickets</small></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using SportsHubBackend.DBContext;
 using SportsHubBackend.Model;
@@ -217,32 +217,30 @@ namespace SportsHubBackend.Controllers
             }
         }
         [HttpPut("UpdatePlayersByCricketMatchID")]
-        public async Task<IActionResult> UpdateLivePlayers(CricketMatch model)
+        public async Task<IActionResult> UpdateLivePlayers([FromBody] CricketMatch model)
         {
             try
             {
-                var parameter = new DynamicParameters();
-                parameter.Add("@Flag", 6);
-                parameter.Add("@CricketMatchID", model.CricketMatchID);
-                parameter.Add("@StrikerPlayerID", model.StrikerPlayerID);
-                parameter.Add("@NonStrikerPlayerID", model.NonStrikerPlayerID);
-                parameter.Add("@BowlerPlayerID", model.BowlerPlayerID);
-
-
                 using (var connection = _context.CreateConnection())
                 {
-                    var result = await connection.QueryFirstOrDefaultAsync<dynamic>(
-                        "SP_CricketMatch",
-                        parameter,
-                        commandType: CommandType.StoredProcedure
-                    );
+                    var sql = @"UPDATE CricketMatch 
+                                SET StrikerPlayerID = @StrikerPlayerID,
+                                    NonStrikerPlayerID = @NonStrikerPlayerID,
+                                    BowlerPlayerID = @BowlerPlayerID
+                                WHERE CricketMatchID = @CricketMatchID";
 
-                    return Ok(new
+                    var rowsAffected = await connection.ExecuteAsync(sql, new
                     {
-                        success = true,
-                        Message = "Players updated successfully",
-                        Data = result
+                        model.StrikerPlayerID,
+                        model.NonStrikerPlayerID,
+                        model.BowlerPlayerID,
+                        model.CricketMatchID
                     });
+
+                    if (rowsAffected == 0)
+                        return NotFound(new { success = false, Message = "Match not found." });
+
+                    return Ok(new { success = true, Message = "Players updated successfully" });
                 }
             }
             catch (Exception ex)
@@ -393,5 +391,77 @@ namespace SportsHubBackend.Controllers
         }
 
 
+        [HttpGet("GetUpcomingMatches")]
+        public async Task<IActionResult> GetUpcomingMatches()
+        {
+            try
+            {
+                using (var connection = _context.CreateConnection())
+                {
+                    var query = @"
+                        SELECT TOP 6
+                            ts.TeamScheduleID,
+                            ts.ScheduledDate,
+                            ts.Location,
+                            ta.TeamName as TeamAName,
+                            tb.TeamName as TeamBName,
+                            ta.TeamLogo as TeamALogo,
+                            tb.TeamLogo as TeamBLogo,
+                            tr.TournamentName
+                        FROM TeamSchedule ts
+                        JOIN Teams ta ON ts.TeamAID = ta.TeamsID
+                        JOIN Teams tb ON ts.TeamBID = tb.TeamsID
+                        JOIN Tournaments tr ON ts.TournamentID = tr.TournamentID
+                        LEFT JOIN CricketMatch cm ON ts.TeamScheduleID = cm.TeamScheduleID
+                        WHERE (cm.CricketMatchID IS NULL OR cm.MatchStatus != 'Finished')
+                        AND ts.ScheduledDate >= CAST(GETDATE() AS DATE)
+                        ORDER BY ts.ScheduledDate ASC";
+
+                    var result = await connection.QueryAsync<dynamic>(query);
+                    return Ok(new { success = true, Data = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
+
+        [HttpGet("GetRecentResults")]
+        public async Task<IActionResult> GetRecentResults()
+        {
+            try
+            {
+                using (var connection = _context.CreateConnection())
+                {
+                    var query = @"
+                        SELECT TOP 6
+                            cm.CricketMatchID,
+                            ts.ScheduledDate,
+                            ta.TeamName as TeamAName,
+                            tb.TeamName as TeamBName,
+                            ta.TeamLogo as TeamALogo,
+                            tb.TeamLogo as TeamBLogo,
+                            cm.WinnerTeamID,
+                            cm.WinnerMessage,
+                            (SELECT TeamName FROM Teams WHERE TeamsID = cm.WinnerTeamID) as WinnerName,
+                            tr.TournamentName
+                        FROM CricketMatch cm
+                        JOIN TeamSchedule ts ON cm.TeamScheduleID = ts.TeamScheduleID
+                        JOIN Teams ta ON ts.TeamAID = ta.TeamsID
+                        JOIN Teams tb ON ts.TeamBID = tb.TeamsID
+                        JOIN Tournaments tr ON ts.TournamentID = tr.TournamentID
+                        WHERE cm.MatchStatus = 'Finished'
+                        ORDER BY ts.ScheduledDate DESC";
+
+                    var result = await connection.QueryAsync<dynamic>(query);
+                    return Ok(new { success = true, Data = result });
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { success = false, message = ex.Message });
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace SportsHubBackend.Model
+namespace SportsHubBackend.Model
 {
     public class Tournaments
     {
@@ -21,8 +21,11 @@
         public int? CreatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public int? UpdatedBy { get; set; }
-        public  bool? IsActive { get; set; }
+        public bool? IsActive { get; set; }
         public string? Prize { get; set; }
-        
+        public int? NumberOfGroups { get; set; }
+        public int? TeamsPerGroup { get; set; }
+        public string? StartTimeMorning { get; set; } // e.g., "10:00"
+        public string? StartTimeAfternoon { get; set; } // e.g., "14:00"
     }
 }
